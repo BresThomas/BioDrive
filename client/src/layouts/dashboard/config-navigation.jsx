@@ -36,6 +36,11 @@ const navConfig = [
     title: 'Not found',
     path: '/404',
     icon: icon('ic_disabled'),
+  },  
+  {
+    title: 'Transactions',
+    path: '/transactions',
+    icon: icon('ic_disabled'),
   },
 ];
 

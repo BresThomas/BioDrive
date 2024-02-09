@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
+import TransactionsPage from '../pages/transactions';
 
 export const IndexPage = lazy(() => import('../pages/app'));
 export const BlogPage = lazy(() => import('../pages/blog'));
@@ -36,6 +37,10 @@ export default function Router() {
     {
       path: '404',
       element: <Page404 />,
+    },    
+    {
+      path: 'transactions',
+      element: <TransactionsPage />,
     },
     {
       path: '*',

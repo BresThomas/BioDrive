@@ -13,6 +13,11 @@ const navConfig = [
     icon: icon('ic_analytics'),
   },
   {
+    title: 'Transactions',
+    path: '/transactions',
+    icon: icon('tanker-truck'),
+  },
+  {
     title: 'user',
     path: '/user',
     icon: icon('ic_user'),
@@ -37,11 +42,6 @@ const navConfig = [
     path: '/404',
     icon: icon('ic_disabled'),
   },  
-  {
-    title: 'Transactions',
-    path: '/transactions',
-    icon: icon('ic_disabled'),
-  },
 ];
 
 export default navConfig;

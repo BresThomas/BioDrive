@@ -1,10 +1,20 @@
+import { useState } from 'react';
 import { faker } from '@faker-js/faker';
 import Grid from '@mui/material/Unstable_Grid2';
 
+import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import LoadingButton from '@mui/lab/LoadingButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Iconify from '../../components/iconify';
+import { useRouter } from '../../routes/hooks';
+
+
 
 import { RouterLink } from '../../routes/components';
 
@@ -17,6 +27,15 @@ import AppOrderTimeline from '../overview/app-order-timeline';
 // ----------------------------------------------------------------------
 
 export default function TransactionsView() {
+
+  const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClick = () => {
+    router.push('/dashboard');
+  };
+
   const renderHeader = (
     <Box
       component="header"
@@ -31,6 +50,54 @@ export default function TransactionsView() {
     >
       <Logo />
     </Box>
+  );
+
+  
+
+  const renderForm = (
+    <Grid container spacing={2} alignItems="center">
+      <Grid item xs={2.5} md={1.5}>
+        <TextField fullWidth name="email" label="Email address" />
+      </Grid>
+      <Grid item xs={2.5} md={1.5}>
+        <TextField fullWidth name="email" label="Email address" />
+      </Grid>
+      <Grid item xs={2.5} md={1.5}>
+        <TextField fullWidth name="email" label="Email address" />
+      </Grid>
+      <Grid item xs={2.5} md={1.5}>
+        <TextField fullWidth name="email" label="Email address" />
+      </Grid>
+      <Grid item xs={2.5} md={3}>
+        <TextField
+          fullWidth
+          name="password"
+          label="Password"
+          type={showPassword ? 'text' : 'password'}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                </IconButton>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Grid>
+      <Grid item xs={5} md={3}>
+        <LoadingButton
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          onClick={handleClick}
+        >
+          Login
+        </LoadingButton>
+      </Grid>
+    </Grid>
   );
 
   return (
@@ -82,6 +149,10 @@ export default function TransactionsView() {
           </Button>
         </Box>
       </Container>
+
+      {renderForm}
+
+  
     </>
   );
 }

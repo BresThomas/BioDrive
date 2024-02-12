@@ -7,6 +7,7 @@ import { alpha } from '@mui/material/styles';
 export const grey = {
   0: '#FFFFFF',
   100: '#F9FAFB',
+  // 100: '#CBDFC8',
   200: '#F4F6F8',
   300: '#DFE3E8',
   400: '#C4CDD5',
@@ -114,6 +115,14 @@ export function palette() {
       paper: '#FFFFFF',
       default: grey[100],
       neutral: grey[200],
+    },
+    background2: {
+      paper: '#F9FAFB',
+      default: '#F9FAFB',
+      neutral: '#F9FAFB',      
+      // paper: '#CBDFC8',
+      // default: '#CBDFC8',
+      // neutral: '#CBDFC8',
     },
     action: {
       ...base.action,

@@ -26,7 +26,7 @@ import AppOrderTimeline from '../overview/app-order-timeline';
 
 // ----------------------------------------------------------------------
 
-export default function TransactionsView() {
+export default function TransactionsViewTransactionsView() {
 
   const router = useRouter();
 
@@ -56,36 +56,14 @@ export default function TransactionsView() {
 
   const renderForm = (
     <Grid container spacing={2} alignItems="center">
-      <Grid item xs={2.5} md={1.5}>
+      <Grid item xs={15} md={10}>
         <TextField fullWidth name="email" label="Email address" />
-      </Grid>
-      <Grid item xs={2.5} md={1.5}>
         <TextField fullWidth name="email" label="Email address" />
-      </Grid>
-      <Grid item xs={2.5} md={1.5}>
         <TextField fullWidth name="email" label="Email address" />
-      </Grid>
-      <Grid item xs={2.5} md={1.5}>
         <TextField fullWidth name="email" label="Email address" />
-      </Grid>
-      <Grid item xs={2.5} md={3}>
-        <TextField
-          fullWidth
-          name="password"
-          label="Password"
-          type={showPassword ? 'text' : 'password'}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                  <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Grid>
-      <Grid item xs={5} md={3}>
+        <Button href="/" size="large" variant="contained" component={RouterLink}>
+            Clear
+        </Button>
         <LoadingButton
           fullWidth
           size="large"
@@ -94,7 +72,7 @@ export default function TransactionsView() {
           color="inherit"
           onClick={handleClick}
         >
-          Login
+          Submit
         </LoadingButton>
       </Grid>
     </Grid>

@@ -29,12 +29,22 @@ export default function PostSearch({ posts }) {
         },
       }}
       options={posts}
+      // getOptionLabel={(post) => (
+      //   post.title &&
+      //   post.cover && (
+      //     <img
+      //       src={post.cover}
+      //       alt={`Cover ${post.title}`}
+      //       style={{ width: 20, height: 20, marginRight: 5 }}
+      //     />
+      //   )
+      // )}
       getOptionLabel={(post) => post.title}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       renderInput={(params) => (
         <TextField
           {...params}
-          placeholder="Search post..."
+          placeholder="Produit"
           InputProps={{
             ...params.InputProps,
             startAdornment: (

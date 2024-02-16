@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';
@@ -11,7 +12,11 @@ import { alpha } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
+import InputAdornment from '@mui/material/InputAdornment';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
+import PostSearch from '../blog/post-search';
 import Iconify from '../../components/iconify';
 import { RouterLink } from '../../routes/components';
 import { usePathname, useRouter } from '../../routes/hooks';
@@ -29,66 +34,127 @@ import AppConversionRates from '../overview/app-conversion-rates';
 
 import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
+import { posts } from '../../_mock/blog';
 // ----------------------------------------------------------------------
 
 
+const paymentModes = ['Cartes bancaire', 'Liquide'];
 export default function DashboardView() {
     const router = useRouter();
 
     const handleClick = () => {
       router.push('/dashboard');
     };
+
+    const [paymentMode, setPaymentMode] = useState('');
     
     const renderForm = (
       <Stack spacing={3} direction="row" alignItems="center">
-        <Typography variant="h4">Sign in to Minimal</Typography>
+        <Typography variant="h6">Demande de réappro</Typography>
     
         <Stack spacing={3} direction="row" alignItems="center">
-          <TextField name="email" label="Email address" />
-          <TextField name="email" label="Email address" />
-          <TextField name="email" label="Email address" />
+          <PostSearch posts={posts} />
+          <TextField name="email" label="Quantité" />
+          <TextField name="email" label="Adresse livraison" />
+          <TextField name="email" label="Date livraison" />
+          <TextField name="email" label="Prix" />
         </Stack>
     
         <LoadingButton
-          sx={{ width: '25%' }}
+          sx={{ width: '22.5%' }}
           size="large"
           type="submit"
           variant="contained"
           color="inherit"
           onClick={handleClick}
         >
-          Login
+          Submit
         </LoadingButton>
+      </Stack>
+    );    
+    
+    const cashRegisterForm = (
+      <Stack spacing={3} alignItems="left">
+        <Typography variant="h6">Enregistrement d&apos;un paiement 🧾</Typography>
+    
+        <Stack spacing={3} direction="row" alignItems="center">
+          <PostSearch posts={posts} />
+          <Select
+        value={paymentMode}
+        onChange={(event) => setPaymentMode(event.target.value)}
+        displayEmpty
+        startAdornment={(
+          <InputAdornment position="start">
+            <Iconify icon="eva:credit-card-fill" />
+          </InputAdornment>
+        )}
+      >
+        <MenuItem value="" disabled>
+          Mode de paiement
+        </MenuItem>
+        {paymentModes.map((mode) => (
+          <MenuItem key={mode} value={mode}>{mode}</MenuItem>
+        ))}
+          </Select>
+          <TextField name="email" label="Montant (€)" />
+    
+        <LoadingButton
+          sx={{ width: '22.5%' }}
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          onClick={handleClick}
+          >
+          Submit
+        </LoadingButton>
+          </Stack>
       </Stack>
     );
 
   return (
     <Container maxWidth="xxl">
-        <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-          Hi, Welcome back 👋
-        </Typography>
 
 
       <Grid container spacing={3}>
-        <Grid item xs={36} sm={12} md={7} xl={6}>
+        <Grid item xs={36} sm={12} md={7} xl={7}>
+          <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
+            ERP 👋
+          </Typography>
           <Stack direction="row" spacing={2} sx={{ p: 2 }}>
             {navConfig.map((item) => (
               <NavItem key={item.title} item={item} />
             ))}
           </Stack>
+
         <Grid container spacing={3}>
+
           <Grid xs={12} sm={6} md={3}>
-          <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-            <Card
-              sx={{
-                p: 3,
-                width: 1,
-              }}
-            >
-              {renderForm}
-            </Card>
-          </Stack>
+            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+              <Card
+                sx={{
+                  p: 3,
+                  width: 1,
+                }}
+              >
+                {renderForm}
+              </Card>
+            </Stack>
           </Grid>
+
+          <Grid xs={12} md={6} lg={4}>
+            <AppNewsUpdate
+              title="Derniers réapprovisionnements"
+              list={[...Array(5)].map((_, index) => ({
+                id: faker.string.uuid(),
+                title: faker.person.jobTitle(),
+                description: faker.commerce.productDescription(),
+                image: `/assets/images/covers/cover_${index + 1}.jpg`,
+                postedAt: faker.date.recent(),
+              }))}
+            />
+          </Grid>
+
           <Grid xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title="Weekly Sales"
@@ -172,20 +238,6 @@ export default function DashboardView() {
             />
           </Grid>
 
-
-          <Grid xs={12} md={6} lg={4}>
-            <AppNewsUpdate
-              title="News Update"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
-            />
-          </Grid>
-
           <Grid xs={12} md={6} lg={4}>
             <AppOrderTimeline
               title="Order Timeline"
@@ -246,43 +298,34 @@ export default function DashboardView() {
           </Grid>
         </Grid>
         </Grid>
-        <Grid item xs={12} sm={12} md={5} xl={6}>
-
+        <Grid item xs={12} sm={12} md={5} xl={5}>
+              <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
+              Caisse
+              </Typography>
           <Grid container spacing={3}>
-
-          <Grid item>
-                  <AppCurrentVisits
-                    title="Current Visits"
-                    chart={{
-                      series: [
-                        { label: 'America', value: 4344 },
-                        { label: 'Asia', value: 5435 },
-                        { label: 'Europe', value: 1443 },
-                        { label: 'Africa', value: 4443 },
-                      ],
+            <Grid item >
+              <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+                  <Card
+                    sx={{
+                      p: 3,
+                      width: 1,
                     }}
-                  />
-              </Grid>      
-              <Grid item>
-                      <AppConversionRates
-                        title="Conversion Rates"
-                        subheader="(+43%) than last year"
-                        chart={{
-                          series: [
-                            { label: 'Italy', value: 400 },
-                            { label: 'Japan', value: 430 },
-                            { label: 'China', value: 448 },
-                            { label: 'Canada', value: 470 },
-                            { label: 'France', value: 540 },
-                            { label: 'Germany', value: 580 },
-                            { label: 'South Korea', value: 690 },
-                            { label: 'Netherlands', value: 1100 },
-                            { label: 'United States', value: 1200 },
-                            { label: 'United Kingdom', value: 1380 },
-                          ],
-                        }}
-                      />
-              </Grid>
+                  >
+                    {cashRegisterForm}
+                  </Card>
+                  <Grid xs={12.4} md={12.6} lg={12.4}>
+                    <AppNewsUpdate
+                      title="Panier du client 🛒"
+                      list={[...Array(5)].map((_, index) => ({
+                        id: faker.string.uuid(),
+                        title: faker.person.jobTitle(),
+                        description: faker.commerce.productDescription(),
+                        image: `/assets/images/covers/cover_${index + 1}.jpg`,
+                      }))}
+                    />
+                  </Grid>
+                </Stack>    
+              </Grid>  
             </Grid>
           </Grid>
       </Grid>

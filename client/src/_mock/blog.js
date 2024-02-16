@@ -3,12 +3,12 @@ import { faker } from '@faker-js/faker';
 // ----------------------------------------------------------------------
 
 const POST_TITLES = [
-  'Whiteboard Templates By Industry Leaders',
-  'Tesla Cybertruck-inspired camper trailer for Tesla fans who can’t just wait for the truck!',
-  'Designify Agency Landing Page Design',
-  '✨What is Done is Done ✨',
-  'Fresh Prince',
-  'Six Socks Studio',
+  'COCA-COLA Boisson gazeuse aux extraits végétaux zéro boîtes 6x33cl',
+  'VICO Chips la Classique nature maxi format 400g',
+  'SODEBO Sandwich suédois jambon cheddar 1 portion 135g',
+  'SODEBO Sandwich mega baguette viennois poulet œuf mayo 1 portion 270g',
+  'FUZE TEA Thé vert glacé saveur mangue et camomille 1,25l',
+  'DAUNAT Mini sandwich au jambon et à l\'emmental 130g',
   'vincenzo de cotiis’ crossing over showcases a research on contamination',
   'Simple, Great Looking Animations in Your Project | Video Tutorial',
   '40 Free Serif Fonts for Digital Designers',
@@ -32,7 +32,7 @@ const POST_TITLES = [
 export const posts = [...Array(23)].map((_, index) => ({
   id: faker.string.uuid(),
   cover: `/assets/images/covers/cover_${index + 1}.jpg`,
-  title: POST_TITLES[index + 1],
+  title: POST_TITLES[index],
   createdAt: faker.date.past(),
   view: faker.number.int(99999),
   comment: faker.number.int(99999),

@@ -20,6 +20,7 @@ import PostSearch from '../blog/post-search';
 import Iconify from '../../components/iconify';
 import { RouterLink } from '../../routes/components';
 import { usePathname, useRouter } from '../../routes/hooks';
+import Popup from '../../components/popup/popup';
 
 
 import AppTasks from '../overview/app-tasks';
@@ -35,6 +36,7 @@ import AppConversionRates from '../overview/app-conversion-rates';
 import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
 import { posts } from '../../_mock/blog';
+
 // ----------------------------------------------------------------------
 
 
@@ -88,7 +90,7 @@ export default function DashboardView() {
           color="inherit"
           onClick={handleClick}
           >
-          Submit
+          Ajouter
         </LoadingButton>
           </Stack>
       </Stack>
@@ -99,7 +101,9 @@ export default function DashboardView() {
         <Typography variant="h6">Enregistrement d&apos;un paiement 🧾</Typography>
     
         <Stack spacing={3} direction="row" alignItems="center">
-          <PostSearch posts={posts} />
+        <Typography variant="h6">Somme total à régler:</Typography>
+        <Typography variant="h6">10.45€</Typography>
+          
           <Select
         value={paymentMode}
         onChange={(event) => setPaymentMode(event.target.value)}
@@ -117,7 +121,6 @@ export default function DashboardView() {
           <MenuItem key={mode} value={mode}>{mode}</MenuItem>
         ))}
           </Select>
-          <TextField name="email" label="Montant (€)" />
     
         <LoadingButton
           sx={{ width: '22.5%' }}
@@ -127,7 +130,7 @@ export default function DashboardView() {
           color="inherit"
           onClick={handleClick}
           >
-          Submit
+          Proceder au paiement
         </LoadingButton>
           </Stack>
       </Stack>
@@ -325,6 +328,7 @@ export default function DashboardView() {
               </Typography>
           <Grid container spacing={3}>
             <Grid item >
+            <Popup />
               <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
               <Grid xs={12.4} md={12.6} lg={12.4}>
                   <Card

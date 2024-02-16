@@ -23,12 +23,12 @@ import AppConversionRates from '../overview/app-conversion-rates';
 export default function DashboardView() {
   return (
     <Container maxWidth="xl">
-        <Typography variant="h4" sx={{ mb: 5 }}>
+        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
           Hi, Welcome back 👋
         </Typography>
 
       <Grid container spacing={3}>
-        <Grid item xs={36} sm={18} md={9}>
+        <Grid item xs={36} sm={12} md={7} xl={6}>
 
         <Grid container spacing={3}>
           <Grid xs={12} sm={6} md={3}>
@@ -55,15 +55,6 @@ export default function DashboardView() {
               total={1723315}
               color="warning"
               icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
-            />
-          </Grid>
-
-          <Grid xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="Bug Reports"
-              total={234}
-              color="error"
-              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
             />
           </Grid>
 
@@ -231,33 +222,44 @@ export default function DashboardView() {
           </Grid>
         </Grid>
         </Grid>
-        <Grid item xs={12} sm={5} md={3}>
-          <AppWidgetSummary
-              title="Bug Reports"
-              total={234}
-              color="error"
-              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_message.png" />}
-            />
-          <Grid xs={12} md={6} lg={8}>
-                  <AppConversionRates
-                    title="Conversion Rates"
-                    subheader="(+43%) than last year"
+        <Grid item xs={12} sm={12} md={5} xl={6}>
+
+          <Grid container spacing={3}>
+
+          <Grid item>
+                  <AppCurrentVisits
+                    title="Current Visits"
                     chart={{
                       series: [
-                        { label: 'Italy', value: 400 },
-                        { label: 'Japan', value: 430 },
-                        { label: 'China', value: 448 },
-                        { label: 'Canada', value: 470 },
-                        { label: 'France', value: 540 },
-                        { label: 'Germany', value: 580 },
-                        { label: 'South Korea', value: 690 },
-                        { label: 'Netherlands', value: 1100 },
-                        { label: 'United States', value: 1200 },
-                        { label: 'United Kingdom', value: 1380 },
+                        { label: 'America', value: 4344 },
+                        { label: 'Asia', value: 5435 },
+                        { label: 'Europe', value: 1443 },
+                        { label: 'Africa', value: 4443 },
                       ],
                     }}
                   />
-            </Grid>      
+              </Grid>      
+              <Grid item>
+                      <AppConversionRates
+                        title="Conversion Rates"
+                        subheader="(+43%) than last year"
+                        chart={{
+                          series: [
+                            { label: 'Italy', value: 400 },
+                            { label: 'Japan', value: 430 },
+                            { label: 'China', value: 448 },
+                            { label: 'Canada', value: 470 },
+                            { label: 'France', value: 540 },
+                            { label: 'Germany', value: 580 },
+                            { label: 'South Korea', value: 690 },
+                            { label: 'Netherlands', value: 1100 },
+                            { label: 'United States', value: 1200 },
+                            { label: 'United Kingdom', value: 1380 },
+                          ],
+                        }}
+                      />
+              </Grid>
+            </Grid>
           </Grid>
       </Grid>
   </Container>

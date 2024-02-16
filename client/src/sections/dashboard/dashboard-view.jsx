@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { useState } from 'react';
+import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';
@@ -8,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import ListItemButton from '@mui/material/ListItemButton';
 import Stack from '@mui/material/Stack';
-import { alpha } from '@mui/material/styles';
+import { alpha, useTheme } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
@@ -42,6 +43,7 @@ import { posts } from '../../_mock/blog';
 
 const paymentModes = ['Cartes bancaire', 'Liquide'];
 export default function DashboardView() {
+    const theme = useTheme();
     const router = useRouter();
 
     const handleClick = () => {
@@ -86,9 +88,21 @@ export default function DashboardView() {
           sx={{ width: '22.5%' }}
           size="large"
           type="submit"
+          variant="outlined"
+          color="inherit"
+          onClick={handleClick}
+          startIcon={<Iconify icon="tabler:reload" />}
+          >
+          Clear
+        </LoadingButton>        
+        <LoadingButton
+          sx={{ width: '22.5%' }}
+          size="large"
+          type="submit"
           variant="contained"
           color="inherit"
           onClick={handleClick}
+          startIcon={<Iconify icon="fluent:add-12-regular" />}
           >
           Ajouter
         </LoadingButton>

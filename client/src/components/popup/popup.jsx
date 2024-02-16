@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import IconButton  from '@mui/material/IconButton';
 
 import LoadingButton from '@mui/lab/LoadingButton';
+import Iconify from '../iconify';
 
 // ----------------------------------------------------------------------
 
@@ -30,6 +31,7 @@ const Popup = () => {
       >
         close
       </LoadingButton>
+      <Iconify icon="eva:close-fill">close</Iconify>
     </Card>
   </Grid>
   ));

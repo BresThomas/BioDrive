@@ -53,6 +53,7 @@ export default function DashboardView() {
         <Typography variant="h6">Demande de réappro</Typography>
     
         <Stack spacing={3} direction="row" alignItems="center">
+          
           <PostSearch posts={posts} />
           <TextField name="email" label="Quantité" />
           <TextField name="email" label="Adresse livraison" />
@@ -73,6 +74,26 @@ export default function DashboardView() {
       </Stack>
     );    
     
+    const addProductFrom = (
+      <Stack spacing={3} alignItems="left">
+        <Typography variant="h6">Ajout d&apos;un produit</Typography>
+    
+        <Stack spacing={3} direction="row" alignItems="center">
+          <PostSearch posts={posts} />
+        <LoadingButton
+          sx={{ width: '22.5%' }}
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          onClick={handleClick}
+          >
+          Submit
+        </LoadingButton>
+          </Stack>
+      </Stack>
+    );
+
     const cashRegisterForm = (
       <Stack spacing={3} alignItems="left">
         <Typography variant="h6">Enregistrement d&apos;un paiement 🧾</Typography>
@@ -110,7 +131,7 @@ export default function DashboardView() {
         </LoadingButton>
           </Stack>
       </Stack>
-    );
+    );    
 
   return (
     <Container maxWidth="xxl">
@@ -305,14 +326,26 @@ export default function DashboardView() {
           <Grid container spacing={3}>
             <Grid item >
               <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+              <Grid xs={12.4} md={12.6} lg={12.4}>
                   <Card
                     sx={{
                       p: 3,
                       width: 1,
                     }}
-                  >
+                    >
+                    {addProductFrom}
+                  </Card>
+                </Grid>
+                <Grid xs={12.4} md={12.6} lg={12.4}>
+                  <Card
+                    sx={{
+                      p: 3,
+                      width: 1,
+                    }}
+                    >
                     {cashRegisterForm}
                   </Card>
+                </Grid>
                   <Grid xs={12.4} md={12.6} lg={12.4}>
                     <AppNewsUpdate
                       title="Panier du client 🛒"
@@ -322,7 +355,7 @@ export default function DashboardView() {
                         description: faker.commerce.productDescription(),
                         image: `/assets/images/covers/cover_${index + 1}.jpg`,
                       }))}
-                    />
+                      />
                   </Grid>
                 </Stack>    
               </Grid>  

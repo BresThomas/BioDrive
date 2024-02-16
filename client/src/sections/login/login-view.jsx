@@ -35,7 +35,7 @@ export default function LoginView() {
 
   const renderForm = (
     <>
-      <Stack spacing={3}>
+      <Stack spacing={3} >
         <TextField name="email" label="Email address" />
 
         <TextField

@@ -8,10 +8,13 @@ import Box from '@mui/material/Box';
 import ListItemButton from '@mui/material/ListItemButton';
 import Stack from '@mui/material/Stack';
 import { alpha } from '@mui/material/styles';
+import LoadingButton from '@mui/lab/LoadingButton';
+import TextField from '@mui/material/TextField';
+import Card from '@mui/material/Card';
 
 import Iconify from '../../components/iconify';
 import { RouterLink } from '../../routes/components';
-import { usePathname } from '../../routes/hooks';
+import { usePathname, useRouter } from '../../routes/hooks';
 
 
 import AppTasks from '../overview/app-tasks';
@@ -30,9 +33,38 @@ import navConfig from '../../layouts/dashboard/config-navigation';
 
 
 export default function DashboardView() {
+    const router = useRouter();
+
+    const handleClick = () => {
+      router.push('/dashboard');
+    };
+    
+    const renderForm = (
+      <Stack spacing={3} direction="row" alignItems="center">
+        <Typography variant="h4">Sign in to Minimal</Typography>
+    
+        <Stack spacing={3} direction="row" alignItems="center">
+          <TextField name="email" label="Email address" />
+          <TextField name="email" label="Email address" />
+          <TextField name="email" label="Email address" />
+        </Stack>
+    
+        <LoadingButton
+          sx={{ width: '25%' }}
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          onClick={handleClick}
+        >
+          Login
+        </LoadingButton>
+      </Stack>
+    );
+
   return (
     <Container maxWidth="xxl">
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+        <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
           Hi, Welcome back 👋
         </Typography>
 
@@ -45,6 +77,18 @@ export default function DashboardView() {
             ))}
           </Stack>
         <Grid container spacing={3}>
+          <Grid xs={12} sm={6} md={3}>
+          <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+            <Card
+              sx={{
+                p: 3,
+                width: 1,
+              }}
+            >
+              {renderForm}
+            </Card>
+          </Stack>
+          </Grid>
           <Grid xs={12} sm={6} md={3}>
             <AppWidgetSummary
               title="Weekly Sales"

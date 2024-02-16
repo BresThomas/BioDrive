@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
 import { faker } from '@faker-js/faker';
 import Grid from '@mui/material/Unstable_Grid2';
 
@@ -22,11 +22,17 @@ import Logo from '../../components/logo';
 
 import AppOrderTimeline from '../overview/app-order-timeline';
 
-
-
 // ----------------------------------------------------------------------
 
-export default function TransactionsViewTransactionsView() {
+export default function TransactionsView() {
+
+  const [hello, setHello] = useState("");
+   
+    useEffect(() => {
+      fetch('http://localhost:3001/api')
+        .then((response) => response.json())
+        .then((data) => setHello(data.message));
+    }, []);
 
   const router = useRouter();
 
@@ -81,6 +87,7 @@ export default function TransactionsViewTransactionsView() {
   return (
     <>
       {renderHeader}
+      {hello}
 
       <Container>
         <Box

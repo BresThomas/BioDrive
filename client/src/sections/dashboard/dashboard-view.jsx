@@ -328,7 +328,6 @@ export default function DashboardView() {
               </Typography>
           <Grid container spacing={3}>
             <Grid item >
-            <Popup />
               <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
               <Grid xs={12.4} md={12.6} lg={12.4}>
                   <Card

@@ -1,10 +1,18 @@
 import { faker } from '@faker-js/faker';
+import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import ListItemButton from '@mui/material/ListItemButton';
+import Stack from '@mui/material/Stack';
+import { alpha } from '@mui/material/styles';
 
 import Iconify from '../../components/iconify';
+import { RouterLink } from '../../routes/components';
+import { usePathname } from '../../routes/hooks';
+
 
 import AppTasks from '../overview/app-tasks';
 import AppNewsUpdate from '../overview/app-news-update';
@@ -16,20 +24,26 @@ import AppTrafficBySite from '../overview/app-traffic-by-site';
 import AppCurrentSubject from '../overview/app-current-subject';
 import AppConversionRates from '../overview/app-conversion-rates';
 
-
+import { NAV } from '../../layouts/dashboard/config-layout';
+import navConfig from '../../layouts/dashboard/config-navigation';
 // ----------------------------------------------------------------------
 
 
 export default function DashboardView() {
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xxl">
         <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
           Hi, Welcome back 👋
         </Typography>
 
+
       <Grid container spacing={3}>
         <Grid item xs={36} sm={12} md={7} xl={6}>
-
+          <Stack direction="row" spacing={2} sx={{ p: 2 }}>
+            {navConfig.map((item) => (
+              <NavItem key={item.title} item={item} />
+            ))}
+          </Stack>
         <Grid container spacing={3}>
           <Grid xs={12} sm={6} md={3}>
             <AppWidgetSummary
@@ -114,42 +128,8 @@ export default function DashboardView() {
             />
           </Grid>
 
-          <Grid xs={12} md={6} lg={8}>
-            <AppConversionRates
-              title="Conversion Rates"
-              subheader="(+43%) than last year"
-              chart={{
-                series: [
-                  { label: 'Italy', value: 400 },
-                  { label: 'Japan', value: 430 },
-                  { label: 'China', value: 448 },
-                  { label: 'Canada', value: 470 },
-                  { label: 'France', value: 540 },
-                  { label: 'Germany', value: 580 },
-                  { label: 'South Korea', value: 690 },
-                  { label: 'Netherlands', value: 1100 },
-                  { label: 'United States', value: 1200 },
-                  { label: 'United Kingdom', value: 1380 },
-                ],
-              }}
-            />
-          </Grid>
 
           <Grid xs={12} md={6} lg={4}>
-            <AppCurrentSubject
-              title="Current Subject"
-              chart={{
-                categories: ['English', 'History', 'Physics', 'Geography', 'Chinese', 'Math'],
-                series: [
-                  { name: 'Series 1', data: [80, 50, 30, 40, 100, 20] },
-                  { name: 'Series 2', data: [20, 30, 40, 80, 20, 80] },
-                  { name: 'Series 3', data: [44, 76, 78, 13, 43, 10] },
-                ],
-              }}
-            />
-          </Grid>
-
-          <Grid xs={12} md={6} lg={8}>
             <AppNewsUpdate
               title="News Update"
               list={[...Array(5)].map((_, index) => ({
@@ -266,3 +246,44 @@ export default function DashboardView() {
 
   );
 }
+
+// ----------------------------------------------------------------------
+
+function NavItem({ item }) {
+  const pathname = usePathname();
+
+  const active = item.path === pathname;
+
+  return (
+    <ListItemButton
+      component={RouterLink}
+      href={item.path}
+      sx={{
+        minHeight: 44,
+        borderRadius: 0.75,
+        typography: 'body2',
+        color: 'text.secondary',
+        textTransform: 'capitalize',
+        fontWeight: 'fontWeightMedium',
+        ...(active && {
+          color: 'primary.main',
+          fontWeight: 'fontWeightSemiBold',
+          bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
+          '&:hover': {
+            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.16),
+          },
+        }),
+      }}
+    >
+      <Box component="span" sx={{ width: 24, height: 24, mr: 2 }}>
+        {item.icon}
+      </Box>
+
+      <Box component="span">{item.title} </Box>
+    </ListItemButton>
+  );
+}
+
+NavItem.propTypes = {
+  item: PropTypes.object,
+};

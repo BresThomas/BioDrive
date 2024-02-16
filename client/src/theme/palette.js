@@ -116,13 +116,11 @@ export function palette() {
       default: grey[100],
       neutral: grey[200],
     },
-    background2: {
-      paper: '#F9FAFB',
-      default: '#F9FAFB',
-      neutral: '#F9FAFB',      
-      // paper: '#CBDFC8',
-      // default: '#CBDFC8',
-      // neutral: '#CBDFC8',
+    backgroundGreen: {      
+      paper: '#CBDFC8',
+      default: '#CBDFC8',
+      neutral: '#CBDFC8',
+      main: '#CBDFC8',
     },
     action: {
       ...base.action,

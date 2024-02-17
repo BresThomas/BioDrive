@@ -136,7 +136,7 @@ export default function DashboardView() {
         <Typography variant="h6">Somme total à régler:</Typography>
         <Typography variant="h6">{products.map((product, index) => (
           <div key={index}>
-            <p>Price: {product.price}€</p>
+            <p>{product.price}€</p>
           </div>
         ))}
       

@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 
@@ -45,6 +45,24 @@ const paymentModes = ['Cartes bancaire', 'Liquide'];
 export default function DashboardView() {
     const theme = useTheme();
     const router = useRouter();
+
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api')
+        .then((response) => response.json())
+        .then((data) => {
+          // Assurez-vous que les données sont un tableau
+          if (Array.isArray(data)) {
+            setProducts(data);
+          } else {
+            console.error("Les données reçues ne sont pas un tableau.");
+          }
+        })
+        .catch((error) => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
 
     const handleClick = () => {
       router.push('/dashboard');
@@ -116,7 +134,13 @@ export default function DashboardView() {
     
         <Stack spacing={3} direction="row" alignItems="center">
         <Typography variant="h6">Somme total à régler:</Typography>
-        <Typography variant="h6">10.45€</Typography>
+        <Typography variant="h6">{products.map((product, index) => (
+          <div key={index}>
+            <p>Price: {product.price}€</p>
+          </div>
+        ))}
+      
+      </Typography>
           
           <Select
         value={paymentMode}
@@ -192,148 +216,6 @@ export default function DashboardView() {
               }))}
             />
           </Grid>
-
-          <Grid xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="Weekly Sales"
-              total={714000}
-              color="success"
-              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_bag.png" />}
-            />
-          </Grid>
-
-          <Grid xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="New Users"
-              total={1352831}
-              color="info"
-              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_users.png" />}
-            />
-          </Grid>
-
-          <Grid xs={12} sm={6} md={3}>
-            <AppWidgetSummary
-              title="Item Orders"
-              total={1723315}
-              color="warning"
-              icon={<img alt="icon" src="/assets/icons/glass/ic_glass_buy.png" />}
-            />
-          </Grid>
-
-          <Grid xs={12} md={6} lg={8}>
-            <AppWebsiteVisits
-              title="Website Visits"
-              subheader="(+43%) than last year"
-              chart={{
-                labels: [
-                  '01/01/2003',
-                  '02/01/2003',
-                  '03/01/2003',
-                  '04/01/2003',
-                  '05/01/2003',
-                  '06/01/2003',
-                  '07/01/2003',
-                  '08/01/2003',
-                  '09/01/2003',
-                  '10/01/2003',
-                  '11/01/2003',
-                ],
-                series: [
-                  {
-                    name: 'Team A',
-                    type: 'column',
-                    fill: 'solid',
-                    data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30],
-                  },
-                  {
-                    name: 'Team B',
-                    type: 'area',
-                    fill: 'gradient',
-                    data: [44, 55, 41, 67, 22, 43, 21, 41, 56, 27, 43],
-                  },
-                  {
-                    name: 'Team C',
-                    type: 'line',
-                    fill: 'solid',
-                    data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39],
-                  },
-                ],
-              }}
-            />
-          </Grid>
-
-          <Grid xs={12} md={6} lg={4}>
-            <AppCurrentVisits
-              title="Current Visits"
-              chart={{
-                series: [
-                  { label: 'America', value: 4344 },
-                  { label: 'Asia', value: 5435 },
-                  { label: 'Europe', value: 1443 },
-                  { label: 'Africa', value: 4443 },
-                ],
-              }}
-            />
-          </Grid>
-
-          <Grid xs={12} md={6} lg={4}>
-            <AppOrderTimeline
-              title="Order Timeline"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: [
-                  '1983, orders, $4220',
-                  '12 Invoices have been paid',
-                  'Order #37745 from September',
-                  'New order placed #XF-2356',
-                  'New order placed #XF-2346',
-                ][index],
-                type: `order${index + 1}`,
-                time: faker.date.past(),
-              }))}
-            />
-          </Grid>
-
-          <Grid xs={12} md={6} lg={4}>
-            <AppTrafficBySite
-              title="Traffic by Site"
-              list={[
-                {
-                  name: 'FaceBook',
-                  value: 323234,
-                  icon: <Iconify icon="eva:facebook-fill" color="#1877F2" width={32} />,
-                },
-                {
-                  name: 'Google',
-                  value: 341212,
-                  icon: <Iconify icon="eva:google-fill" color="#DF3E30" width={32} />,
-                },
-                {
-                  name: 'Linkedin',
-                  value: 411213,
-                  icon: <Iconify icon="eva:linkedin-fill" color="#006097" width={32} />,
-                },
-                {
-                  name: 'Twitter',
-                  value: 443232,
-                  icon: <Iconify icon="eva:twitter-fill" color="#1C9CEA" width={32} />,
-                },
-              ]}
-            />
-          </Grid>
-
-          <Grid xs={12} md={6} lg={8}>
-            <AppTasks
-              title="Tasks"
-              list={[
-                { id: '1', name: 'Create FireStone Logo' },
-                { id: '2', name: 'Add SCSS and JS files if required' },
-                { id: '3', name: 'Stakeholder Meeting' },
-                { id: '4', name: 'Scoping & Estimations' },
-                { id: '5', name: 'Sprint Showcase' },
-              ]}
-            />
-          </Grid>
         </Grid>
         </Grid>
         <Grid item xs={12} sm={12} md={5} xl={5}>
@@ -371,7 +253,12 @@ export default function DashboardView() {
                         title: faker.person.jobTitle(),
                         description: faker.commerce.productDescription(),
                         image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                      }))}
+                      }))}                      
+                      // list={products.map((product, index) => ({
+                      //       id: product.id || `Product${index + 1}`, // Utilisez un ID par défaut si l'ID n'est pas disponible
+                      //       title: product.name || `Product ${index + 1}`, // Utilisez un nom de produit par défaut si le nom n'est pas disponible
+                      //       price: product.price || 0, // Utilisez un prix par défaut si le prix n'est pas disponible
+                      //     }))}
                       />
                   </Grid>
                 </Stack>    

@@ -4,7 +4,8 @@
   "description": "Logiciel de station essence écologique",
   "main": "server/index.js",
   "scripts": {
-    "start": "nodemon server/index.js"
+    "start": "nodemon server/index.js",
+    "build": "react-scripts build"
   },
   "keywords": [],
   "author": "",

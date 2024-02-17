@@ -87,7 +87,6 @@ export default function TransactionsView() {
   return (
     <>
       {renderHeader}
-      {hello}
 
       <Container>
         <Box
@@ -108,7 +107,7 @@ export default function TransactionsView() {
           </Typography>
 
           <Typography sx={{ color: 'text.secondary' }}>
-            test
+          {hello}
           </Typography>
 
           <Grid xs={12} md={6} lg={8}>

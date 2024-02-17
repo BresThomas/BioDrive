@@ -54,3 +54,5 @@ packages/react-devtools-timeline/dist
 *.aac
 *.m4a
 *.mp3
+
+.env

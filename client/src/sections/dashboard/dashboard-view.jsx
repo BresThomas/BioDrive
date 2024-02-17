@@ -338,7 +338,7 @@ export default function DashboardView() {
         </Grid>
         <Grid item xs={12} sm={12} md={5} xl={5}>
               <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-              Caisse
+              Caisse 💶
               </Typography>
           <Grid container spacing={3}>
             <Grid item >

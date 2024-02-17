@@ -1,19 +1,17 @@
-// server/index.js
- 
-const cors = require("cors");
- 
-const express = require("express");
- 
-const PORT = process.env.PORT || 3001;
- 
+import express from 'express';
+import cors from 'cors';
+
+import config from './Config.js';
+
 const app = express();
- 
+
 app.use(cors());
- 
+app.use(express.json());
+
 app.get("/api", (req, res) => {
   res.json({ message: "Hello from server!" });
 });
- 
-app.listen(PORT, () => {
-  console.log(`Server listening on ${PORT}`);
-});
+
+app.listen(config.port, () =>
+  console.log(`Server is live @ ${config.hostUrl}`),
+);

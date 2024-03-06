@@ -36,10 +36,11 @@ export const createProduct = async (req, res, next) => {
         products.forEach((doc) => {
           const product = new Product(
             doc.id,
-            doc.data().name,
-            doc.data().price,
-            doc.data().retailer,
-            doc.data().amountInStock,
+            doc.data().type,
+            doc.data().nom,
+            doc.data().prixClient,
+            doc.data().prixFournisseur,
+            doc.data().test,
           );
           productArray.push(product);
         });

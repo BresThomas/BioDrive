@@ -1,10 +1,10 @@
 class Product {
-    constructor(id, name, price, retailer, amountInStock) {
+    constructor(id, type, nom, prixClient, prixFournisseur, test) {
       (this.id = id),
-        (this.name = name),
-        (this.price = price),
-        (this.retailer = retailer),
-        (this.amountInStock = amountInStock);
+      (this.type = type),
+      (this.nom = nom),
+      (this.prixClient = prixClient),
+      (this.prixFournisseur = prixFournisseur)
     }
   }
   

@@ -1,4 +1,4 @@
-class Product {
+class Produit {
     constructor(id, type, nom, prixClient, prixFournisseur, test) {
       (this.id = id),
       (this.type = type),
@@ -8,4 +8,4 @@ class Product {
     }
   }
   
-  export default Product;
+  export default Produit;

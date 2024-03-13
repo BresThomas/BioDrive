@@ -13,6 +13,8 @@ import avantageRoute from './routes/avantageRoute.js';
 import clientRoute from './routes/clientRoute.js';
 import compteEnergieRoute from './routes/compteEnergieRoute.js';
 import incidentRoute from './routes/incidentRoute.js';
+import stockRoute from './routes/stockRoute.js';
+import reapproRoute from './routes/reapproRoute.js';
 
 const app = express();
 
@@ -30,6 +32,8 @@ app.use('/api', avantageRoute);
 app.use('/api', clientRoute);
 app.use('/api', compteEnergieRoute);
 app.use('/api', incidentRoute);
+app.use('/api', stockRoute);
+app.use('/api', reapproRoute);
 
 app.get("/hello", (req, res) => {
   res.json({ message: "Hello from server!" });

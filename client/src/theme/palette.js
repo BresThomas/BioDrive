@@ -14,14 +14,15 @@ export const grey = {
   500: '#919EAB',
   600: '#637381',
   700: '#454F5B',
-  800: '#212B36',
+  800: '#192617',
   900: '#161C24',
 };
 
 export const primary = {
   lighter: '#D0ECFE',
   light: '#73BAFB',
-  main: '#1877F2',
+  // main: '#1877F2',
+  main: '#86B47E',
   dark: '#0C44AE',
   darker: '#042174',
   contrastText: '#FFFFFF',

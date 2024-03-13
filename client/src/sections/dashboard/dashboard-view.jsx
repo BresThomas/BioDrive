@@ -179,6 +179,53 @@ export default function DashboardView() {
 
 
       <Grid container spacing={3}>
+          <Grid item xs={12} sm={12} md={5} xl={5}>
+                <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
+                Caisse 💶
+                </Typography>
+            <Grid container spacing={3}>
+              <Grid item >
+                <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+                <Grid xs={12.4} md={12.6} lg={12.4}>
+                    <Card
+                      sx={{
+                        p: 3,
+                        width: 1,
+                      }}
+                      >
+                      {addProductFrom}
+                    </Card>
+                  </Grid>
+                  <Grid xs={12.4} md={12.6} lg={12.4}>
+                    <Card
+                      sx={{
+                        p: 3,
+                        width: 1,
+                      }}
+                      >
+                      {cashRegisterForm}
+                    </Card>
+                  </Grid>
+                    <Grid xs={12.4} md={12.6} lg={12.4}>
+                      <AppNewsUpdate
+                        title="Panier du client 🛒"
+                        list={[...Array(5)].map((_, index) => ({
+                          id: faker.string.uuid(),
+                          title: faker.person.jobTitle(),
+                          description: faker.commerce.productDescription(),
+                          image: `/assets/images/covers/cover_${index + 1}.jpg`,
+                        }))}                      
+                        // list={products.map((product, index) => ({
+                        //       id: product.id || `Product${index + 1}`, // Utilisez un ID par défaut si l'ID n'est pas disponible
+                        //       title: product.name || `Product ${index + 1}`, // Utilisez un nom de produit par défaut si le nom n'est pas disponible
+                        //       price: product.price || 0, // Utilisez un prix par défaut si le prix n'est pas disponible
+                        //     }))}
+                        />
+                    </Grid>
+                  </Stack>    
+                </Grid>  
+              </Grid>
+            </Grid>
         <Grid item xs={36} sm={12} md={7} xl={7}>
           <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
             ERP 👋
@@ -218,53 +265,6 @@ export default function DashboardView() {
           </Grid>
         </Grid>
         </Grid>
-        <Grid item xs={12} sm={12} md={5} xl={5}>
-              <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-              Caisse 💶
-              </Typography>
-          <Grid container spacing={3}>
-            <Grid item >
-              <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-              <Grid xs={12.4} md={12.6} lg={12.4}>
-                  <Card
-                    sx={{
-                      p: 3,
-                      width: 1,
-                    }}
-                    >
-                    {addProductFrom}
-                  </Card>
-                </Grid>
-                <Grid xs={12.4} md={12.6} lg={12.4}>
-                  <Card
-                    sx={{
-                      p: 3,
-                      width: 1,
-                    }}
-                    >
-                    {cashRegisterForm}
-                  </Card>
-                </Grid>
-                  <Grid xs={12.4} md={12.6} lg={12.4}>
-                    <AppNewsUpdate
-                      title="Panier du client 🛒"
-                      list={[...Array(5)].map((_, index) => ({
-                        id: faker.string.uuid(),
-                        title: faker.person.jobTitle(),
-                        description: faker.commerce.productDescription(),
-                        image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                      }))}                      
-                      // list={products.map((product, index) => ({
-                      //       id: product.id || `Product${index + 1}`, // Utilisez un ID par défaut si l'ID n'est pas disponible
-                      //       title: product.name || `Product ${index + 1}`, // Utilisez un nom de produit par défaut si le nom n'est pas disponible
-                      //       price: product.price || 0, // Utilisez un prix par défaut si le prix n'est pas disponible
-                      //     }))}
-                      />
-                  </Grid>
-                </Stack>    
-              </Grid>  
-            </Grid>
-          </Grid>
       </Grid>
   </Container>
 

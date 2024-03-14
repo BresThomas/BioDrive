@@ -23,8 +23,8 @@ export const primary = {
   light: '#73BAFB',
   // main: '#1877F2',
   main: '#86B47E',
-  dark: '#0C44AE',
-  darker: '#042174',
+  dark: '#649A5B',
+  darker: '#4B7444',
   contrastText: '#FFFFFF',
 };
 

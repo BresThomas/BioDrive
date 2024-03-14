@@ -33,6 +33,7 @@ import AppWidgetSummary from '../overview/app-widget-summary';
 import AppTrafficBySite from '../overview/app-traffic-by-site';
 import AppCurrentSubject from '../overview/app-current-subject';
 import AppConversionRates from '../overview/app-conversion-rates';
+import AppNumPad from '../overview/app-numpad';
 
 import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
@@ -43,6 +44,13 @@ import { posts } from '../../_mock/blog';
 
 const paymentModes = ['Cartes bancaire', 'Liquide'];
 export default function DashboardView() {
+
+  const [enteredValue, setEnteredValue] = useState('');
+
+  const handleValueChange = (newValue) => {
+    setEnteredValue(newValue);
+  };
+  
     const theme = useTheme();
     const router = useRouter();
 
@@ -221,6 +229,11 @@ export default function DashboardView() {
                         //       price: product.price || 0, // Utilisez un prix par défaut si le prix n'est pas disponible
                         //     }))}
                         />
+                    </Grid>
+                    <Grid xs={12.4} md={12.6} lg={12.4}>
+                   
+                    <AppNumPad onValueChange={handleValueChange} />
+                 
                     </Grid>
                   </Stack>    
                 </Grid>  

@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-
 import config from './Config.js';
 import productRoute from './routes/productRoute.js';
 import transactionRoute from './routes/transactionRoute.js';

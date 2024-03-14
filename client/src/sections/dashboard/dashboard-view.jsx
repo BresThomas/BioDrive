@@ -50,7 +50,7 @@ export default function DashboardView() {
   const handleValueChange = (newValue) => {
     setEnteredValue(newValue);
   };
-  
+
     const theme = useTheme();
     const router = useRouter();
 
@@ -214,7 +214,11 @@ export default function DashboardView() {
                       {cashRegisterForm}
                     </Card>
                   </Grid>
-                    <Grid xs={12.4} md={12.6} lg={12.4}>
+                  <Grid container spacing={3} justifyContent="center">
+                    <Grid >
+                      <AppNumPad onValueChange={handleValueChange} />
+                    </Grid>
+                    <Grid xs={5} md={5} lg={5}>
                       <AppNewsUpdate
                         title="Panier du client 🛒"
                         list={[...Array(5)].map((_, index) => ({
@@ -224,16 +228,13 @@ export default function DashboardView() {
                           image: `/assets/images/covers/cover_${index + 1}.jpg`,
                         }))}                      
                         // list={products.map((product, index) => ({
-                        //       id: product.id || `Product${index + 1}`, // Utilisez un ID par défaut si l'ID n'est pas disponible
-                        //       title: product.name || `Product ${index + 1}`, // Utilisez un nom de produit par défaut si le nom n'est pas disponible
-                        //       price: product.price || 0, // Utilisez un prix par défaut si le prix n'est pas disponible
-                        //     }))}
-                        />
-                    </Grid>
-                    <Grid xs={12.4} md={12.6} lg={12.4}>
-                   
-                    <AppNumPad onValueChange={handleValueChange} />
-                 
+                          //       id: product.id || `Product${index + 1}`, // Utilisez un ID par défaut si l'ID n'est pas disponible
+                          //       title: product.name || `Product ${index + 1}`, // Utilisez un nom de produit par défaut si le nom n'est pas disponible
+                          //       price: product.price || 0, // Utilisez un prix par défaut si le prix n'est pas disponible
+                          //     }))}
+                          />
+                      </Grid>
+                    
                     </Grid>
                   </Stack>    
                 </Grid>  
@@ -263,18 +264,19 @@ export default function DashboardView() {
               </Card>
             </Stack>
           </Grid>
-
-          <Grid xs={12} md={6} lg={4}>
-            <AppNewsUpdate
-              title="Derniers réapprovisionnements"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
-            />
+          <Grid container spacing={3}> 
+            <Grid xs={12} md={6} lg={4}>
+              <AppNewsUpdate
+                title="Derniers réapprovisionnements"
+                list={[...Array(5)].map((_, index) => ({
+                  id: faker.string.uuid(),
+                  title: faker.person.jobTitle(),
+                  description: faker.commerce.productDescription(),
+                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
+                  postedAt: faker.date.recent(),
+                }))}
+              />
+            </Grid>
           </Grid>
         </Grid>
         </Grid>

@@ -7,49 +7,49 @@ import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
 
-
 export default function AppNumPad({ onValueChange }) {
   const [value, setValue] = useState('');
 
   const handleButtonClick = (input) => {
     if (input === 'Del') {
-      // Supprime le dernier caractère de la valeur
       setValue((prevValue) => prevValue.slice(0, -1));
     } else if (input === 'C') {
-      // Efface la valeur
       setValue('');
     } else if (input === '=') {
-      // Si l'utilisateur appuie sur '=', passe la valeur à la fonction de rappel
       onValueChange(value);
     } else if (input === 'carte') {
-      // Si l'utilisateur appuie sur '=', passe la valeur à la fonction de rappel
       onValueChange(value);
     } else {
-      // Ajoute l'entrée à la valeur actuelle
       setValue((prevValue) => prevValue + input);
     }
   };
 
   return (
-    <Card sx={{ width: '260px', height: '325px' }}> 
-      <Grid container spacing={2} alignItems="center" m={0.15}>
+    <Card sx={{ width: '340px', height: '400px' }}>
+      <Grid container spacing={2} alignItems="center" ml={1} mt={2} mr={1}>
         <Grid item mr={-1}>
-            <TextField
+          <TextField
             fullWidth
             label="Montant"
             variant="outlined"
             value={value}
             InputProps={{
-                readOnly: true,
+              readOnly: true,
             }}
-            />
+            sx={{ width: '130%', height: '60px' }}
+          />
         </Grid>
         <Grid item>
           <Stack direction="column" spacing={1}>
             {[['7', '8', '9'], ['4', '5', '6'], ['1', '2', '3'], ['.', '0', 'Del'], ['C', 'carte', '=']].map((row, index) => (
               <Stack key={index} direction="row" spacing={1} justifyContent="center">
                 {row.map((button) => (
-                  <Button key={button} variant="contained" onClick={() => handleButtonClick(button)}>
+                  <Button
+                    key={button}
+                    variant="contained"
+                    onClick={() => handleButtonClick(button)}
+                    sx={{ width: '90px', height: '45px' }} 
+                  >
                     {button}
                   </Button>
                 ))}
@@ -58,7 +58,7 @@ export default function AppNumPad({ onValueChange }) {
           </Stack>
         </Grid>
       </Grid>
-     </Card>
+    </Card>
   );
 }
 

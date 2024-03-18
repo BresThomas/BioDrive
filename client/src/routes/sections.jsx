@@ -4,6 +4,8 @@ import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 import DashboardLayout from '../layouts/dashboard';
 import TransactionsPage from '../pages/transactions';
 import DashboardPage from '../pages/dashboard';
+import ServicesAndLogistiquePage from '../pages/servicesAndLogistique';
+
 
 export const IndexPage = lazy(() => import('../pages/app'));
 export const BlogPage = lazy(() => import('../pages/blog'));
@@ -42,7 +44,11 @@ export default function Router() {
     {
       path: 'transactions',
       element: <TransactionsPage />,
-    },    
+    }, 
+    {
+      path: 'servicesAndLogistique',
+      element: <ServicesAndLogistiquePage />,
+    },   
     {
       path: 'dashboard',
       element: <DashboardPage />,

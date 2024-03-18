@@ -1,0 +1,1 @@
+export { default as ServicesLogistiqueView } from './services-logistique-view';

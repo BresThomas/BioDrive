@@ -21,7 +21,6 @@ export default function PostSearch({ posts }) {
       slotProps={{
         paper: {
           sx: {
-            width: 320,
             [`& .${autocompleteClasses.option}`]: {
               typography: 'body2',
             },

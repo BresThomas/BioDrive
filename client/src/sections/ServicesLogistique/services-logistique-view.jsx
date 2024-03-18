@@ -33,7 +33,6 @@ import AppWidgetSummary from '../overview/app-widget-summary';
 import AppTrafficBySite from '../overview/app-traffic-by-site';
 import AppCurrentSubject from '../overview/app-current-subject';
 import AppConversionRates from '../overview/app-conversion-rates';
-import AppNumPad from '../overview/app-numpad';
 
 import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
@@ -44,13 +43,6 @@ import { posts } from '../../_mock/blog';
 
 const paymentModes = ['Cartes bancaire', 'Liquide'];
 export default function DashboardView() {
-
-  const [enteredValue, setEnteredValue] = useState('');
-
-  const handleValueChange = (newValue) => {
-    setEnteredValue(newValue);
-  };
-
     const theme = useTheme();
     const router = useRouter();
 
@@ -78,16 +70,19 @@ export default function DashboardView() {
 
     const [paymentMode, setPaymentMode] = useState('');
     
-    const renderFormClient = (title) => (
+    const renderForm = (
       <Stack spacing={3} direction="row" alignItems="center">
-        <Typography variant="h6" sx={{ width: '25%' }}>{title}</Typography>
+        <Typography variant="h6">Demande de réappro</Typography>
+    
         <Stack spacing={3} direction="row" alignItems="center">
-          <PostSearch posts={posts}/>
-          <TextField name="email" label="Quantité" sx={{ width: '60%' }}/>
-          <TextField name="email" label="Adresse livraison" sx={{ width: '70%' }}/>
-          <TextField name="email" label="Date livraison" sx={{ width: '70%' }}/>
-          <TextField name="email" label="Prix" sx={{ width: '40%' }}/>
+          
+          <PostSearch posts={posts} />
+          <TextField name="email" label="Quantité" />
+          <TextField name="email" label="Adresse livraison" />
+          <TextField name="email" label="Date livraison" />
+          <TextField name="email" label="Prix" />
         </Stack>
+    
         <LoadingButton
           sx={{ width: '22.5%' }}
           size="large"
@@ -99,28 +94,7 @@ export default function DashboardView() {
           Submit
         </LoadingButton>
       </Stack>
-    );
-
-    const renderFormIncident = (title) => (
-      <Stack spacing={3} direction="row" alignItems="center">
-        <Typography variant="h6" sx={{ width: '20%' }}>{title}</Typography>
-        <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '55%' }}>
-          <TextField name="intitule" label="Intitulé" sx={{ width: '30%' }}/>
-          <TextField name="descriptionIncident" label="Description de l'incident" sx={{ width: '70%' }}/>
-        </Stack>
-        <LoadingButton
-          sx={{ width: '20%' }}
-          size="large"
-          type="submit"
-          variant="contained"
-          color="inherit"
-          onClick={handleClick}
-        >
-          Submit
-        </LoadingButton>
-      </Stack>
-    );
-       
+    );    
     
     const addProductFrom = (
       <Stack spacing={3} alignItems="left">
@@ -232,13 +206,8 @@ export default function DashboardView() {
                       {cashRegisterForm}
                     </Card>
                   </Grid>
-                  <Grid container spacing={3} justifyContent="center">
-                    <Grid >
-                      <AppNumPad onValueChange={handleValueChange} />
-                    </Grid>
-                    <Grid xs={5} md={5} lg={5}>
+                    <Grid xs={12.4} md={12.6} lg={12.4}>
                       <AppNewsUpdate
-                      sx={{height: 400, overflowY: 'auto' }}
                         title="Panier du client 🛒"
                         list={[...Array(5)].map((_, index) => ({
                           id: faker.string.uuid(),
@@ -247,13 +216,11 @@ export default function DashboardView() {
                           image: `/assets/images/covers/cover_${index + 1}.jpg`,
                         }))}                      
                         // list={products.map((product, index) => ({
-                          //       id: product.id || `Product${index + 1}`, // Utilisez un ID par défaut si l'ID n'est pas disponible
-                          //       title: product.name || `Product ${index + 1}`, // Utilisez un nom de produit par défaut si le nom n'est pas disponible
-                          //       price: product.price || 0, // Utilisez un prix par défaut si le prix n'est pas disponible
-                          //     }))}
-                          />
-                      </Grid>
-                    
+                        //       id: product.id || `Product${index + 1}`, // Utilisez un ID par défaut si l'ID n'est pas disponible
+                        //       title: product.name || `Product ${index + 1}`, // Utilisez un nom de produit par défaut si le nom n'est pas disponible
+                        //       price: product.price || 0, // Utilisez un prix par défaut si le prix n'est pas disponible
+                        //     }))}
+                        />
                     </Grid>
                   </Stack>    
                 </Grid>  
@@ -279,14 +246,14 @@ export default function DashboardView() {
                   width: 1,
                 }}
               >
-                {renderFormClient('Ajouter client 👤')}
+                {renderForm}
               </Card>
             </Stack>
           </Grid>
-          <Grid container spacing={3}> 
+
           <Grid xs={12} md={6} lg={4}>
-            <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
-              title="Derniers incidents ⚠️"
+            <AppNewsUpdate
+              title="Derniers réapprovisionnements"
               list={[...Array(5)].map((_, index) => ({
                 id: faker.string.uuid(),
                 title: faker.person.jobTitle(),
@@ -295,61 +262,8 @@ export default function DashboardView() {
                 postedAt: faker.date.recent(),
               }))}
             />
-          </Grid>
-            <Grid xs={12} md={6} lg={4}>
-              <AppNewsUpdate
-                sx={{ width: 520, height: 200, overflowY: 'auto' }}
-                title="Consulter les stocks 📦"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
-                }))}
-              />
-            </Grid>
-          </Grid>
-        <Grid container spacing={3}> 
-          <Grid xs={12} md={6} lg={4}>
-            <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
-              title="Pompes ⛽"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
-            />
-          </Grid>
-            <Grid xs={12} md={6} lg={4}>
-              <AppNewsUpdate
-                sx={{ width: 520, height: 200, overflowY: 'auto' }}
-                title="Rechercher client 👤"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
-                }))}
-              />
-            </Grid>
           </Grid>
         </Grid>
-        <Grid xs={12} sm={6} md={3} pt={3}>
-            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-              <Card
-                sx={{
-                  p: 3,
-                  width: 1,
-                }}
-              >
-                {renderFormIncident('Créer un incident ⚠️')}
-              </Card>
-            </Stack>
-          </Grid>
         </Grid>
       </Grid>
   </Container>

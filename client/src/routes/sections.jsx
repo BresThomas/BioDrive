@@ -1,15 +1,16 @@
 import { lazy, Suspense } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
+import DashboardPage from '../pages/dashboard';
 import DashboardLayout from '../layouts/dashboard';
 import TransactionsPage from '../pages/transactions';
 import PompesPage from '../pages/pompes';
-import DashboardPage from '../pages/dashboard';
 
 export const IndexPage = lazy(() => import('../pages/app'));
 export const BlogPage = lazy(() => import('../pages/blog'));
 export const UserPage = lazy(() => import('../pages/user'));
 export const LoginPage = lazy(() => import('../pages/login'));
+export const ServicesLogistique = lazy(() => import('../pages/services-logistique'));
 export const ProductsPage = lazy(() => import('../pages/products'));
 export const Page404 = lazy(() => import('../pages/page-not-found'));
 
@@ -47,7 +48,11 @@ export default function Router() {
     {
       path: 'transactions',
       element: <TransactionsPage />,
-    },    
+    },
+    {
+      path: 'services-logistique',
+      element: <ServicesLogistique />,
+    },
     {
       path: 'dashboard',
       element: <DashboardPage />,

@@ -28,6 +28,11 @@ const navConfig = [
     icon: icon('ic_user'),
   },  
   {
+    title: 'Services&Logistique',
+    path: '/Services&Logistique',
+    icon: icon('ic_user'),
+  }, 
+  {
     title: 'user',
     path: '/user',
     icon: icon('ic_user'),

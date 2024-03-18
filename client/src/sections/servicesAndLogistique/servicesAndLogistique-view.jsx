@@ -238,7 +238,21 @@ export default function ServicesAndLogistiqueView() {
             ))}
           </Stack>
 
+
         <Grid container spacing={3}>
+
+          <Grid xs={12} sm={6} md={3}>
+            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+              <Card
+                sx={{
+                  p: 3,
+                  width: 1,
+                }}
+              >
+                {renderForm}
+              </Card>
+            </Stack>
+          </Grid>
 
           <Grid xs={12} sm={6} md={3}>
             <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
@@ -281,7 +295,52 @@ export default function ServicesAndLogistiqueView() {
                 }))}
               />
             </Grid>
+
+            <Grid xs={12} sm={6} md={6}>
+            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+              <Card
+                sx={{
+                  p: 3,
+                  width: 1,
+                }}
+              >
+                {renderForm}
+              </Card>
+            </Stack>
           </Grid>
+
+          <Grid xs={12} sm={6} md={3}>
+              <AppNewsUpdate
+                title="Derniers réapprovisionnements"
+                list={[...Array(5)].map((_, index) => ({
+                  id: faker.string.uuid(),
+                  title: faker.person.jobTitle(),
+                  description: faker.commerce.productDescription(),
+                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
+                  postedAt: faker.date.recent(),
+                }))}
+              />
+              </Grid>
+              
+            <Grid xs={12} sm={6} md={3}>
+              <AppNewsUpdate
+                title="Derniers réapprovisionnements"
+                list={[...Array(5)].map((_, index) => ({
+                  id: faker.string.uuid(),
+                  title: faker.person.jobTitle(),
+                  description: faker.commerce.productDescription(),
+                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
+                  postedAt: faker.date.recent(),
+                }))}
+              />
+            </Grid>
+
+
+
+
+          </Grid>
+
+
 
         </Grid>
         </Grid>

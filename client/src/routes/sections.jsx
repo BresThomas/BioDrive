@@ -3,6 +3,7 @@ import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardLayout from '../layouts/dashboard';
 import TransactionsPage from '../pages/transactions';
+import PompesPage from '../pages/pompes';
 import DashboardPage from '../pages/dashboard';
 import ServicesAndLogistiquePage from '../pages/servicesAndLogistique';
 
@@ -41,6 +42,10 @@ export default function Router() {
       path: '404',
       element: <Page404 />,
     },    
+    {
+      path: 'pompes',
+      element: <PompesPage />,
+    },     
     {
       path: 'transactions',
       element: <TransactionsPage />,

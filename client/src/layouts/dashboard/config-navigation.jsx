@@ -21,6 +21,11 @@ const navConfig = [
     title: 'transactions',
     path: '/transactions',
     icon: icon('ic_user'),
+  },    
+  {
+    title: 'pompes',
+    path: '/pompes',
+    icon: icon('ic_user'),
   },  
   {
     title: 'servicesAndLogistique',

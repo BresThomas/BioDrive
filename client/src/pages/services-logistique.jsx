@@ -1,24 +1,27 @@
-// pages/ServicesLogistique.jsx
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../Firebase';
 import { ServicesLogistiqueView } from '../sections/ServicesLogistique';
+import { NotFoundView } from '../sections/error';
+import AuthWrapper from '../components/auth/AuthWrapper';
 
-function ServicesLogistiquePage(){
+// ----------------------------------------------------------------------
+
+export default function ServicesLogistiquePage() {
+
   return (
-    <>
-      <Helmet>
-        <title>Services Logistique</title>
-      </Helmet>
-      <ServicesLogistiqueView />
-    </>
+    <AuthWrapper>
+      <>
+        <Helmet>
+          <title>Services Logistique</title>
+        </Helmet>
+        <ServicesLogistiqueView />
+      </>
+    </AuthWrapper>
   );
-};
-
-export default ServicesLogistiquePage;
-
-
+}
 
 
 

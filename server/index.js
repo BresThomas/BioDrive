@@ -15,18 +15,7 @@ import incidentRoute from './routes/incidentRoute.js';
 import stockRoute from './routes/stockRoute.js';
 import reapproRoute from './routes/reapproRoute.js';
 
-import { auth } from './Firebase.js';
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
-
-const requireAuth = (req, res, next) => {
-  if (req.user) {
-    // Si l'utilisateur est authentifié, continuez
-    next();
-  } else {
-    // Sinon, redirigez l'utilisateur vers la page de connexion
-    res.redirect('http://localhost:3000/login');
-  }
-};
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const app = express();
 

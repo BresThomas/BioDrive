@@ -1,47 +1,61 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Navigate } from 'react-router-dom'; // Importer Redirect
+import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+
+import TextField from '@mui/material/TextField';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { alpha, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
-import LoadingButton from '@mui/lab/LoadingButton';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import { alpha, useTheme } from '@mui/material/styles';
-import InputAdornment from '@mui/material/InputAdornment';
-import axios from 'axios'; // Importez axios pour effectuer des requêtes HTTP
 
-import { useRouter } from '../../routes/hooks';
-import { bgGradient } from '../../theme/css';
-import Logo from '../../components/logo';
+import { auth } from '../../Firebase';
+
 import Iconify from '../../components/iconify';
+import Logo from '../../components/logo';
+import { bgGradient } from '../../theme/css';
 
-export default function LoginView() {
+const LoginView = () => {
   const theme = useTheme();
-  const router = useRouter();
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null); // Renommer la variable user en currentUser
 
-  const handleLogin = async () => {
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user); // Mettre à jour l'état de currentUser
+    });
+
+    return () => unsubscribe(); // Cleanup function pour désinscrire l'écouteur
+  }, []); // Exécuter l'effet une seule fois lorsque le composant est monté
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
     setLoading(true);
+
     try {
-      const response = await axios.post('http://localhost:3001/api/login', {
-        email,
-        password
-      });
-      console.log(response.data); // Gérer la réponse du serveur
-      router.push('/dashboard'); // Redirection vers la page de tableau de bord
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate('/dashboard');
     } catch (error) {
-      console.error('Erreur lors de la connexion :', error);
-      // Gérer les erreurs de connexion (par exemple, afficher un message d'erreur à l'utilisateur)
+      console.error(error.code, error.message);
     } finally {
       setLoading(false);
     }
   };
+
+  if (currentUser) {
+    return <Navigate to="/dashboard" />;
+  }
 
   const renderForm = (
     <>
@@ -127,35 +141,7 @@ export default function LoginView() {
           </Typography>
 
           <Stack direction="row" spacing={2}>
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:google-fill" color="#DF3E30" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:facebook-fill" color="#1877F2" />
-            </Button>
-
-            <Button
-              fullWidth
-              size="large"
-              color="inherit"
-              variant="outlined"
-              sx={{ borderColor: alpha(theme.palette.grey[500], 0.16) }}
-            >
-              <Iconify icon="eva:twitter-fill" color="#1C9CEA" />
-            </Button>
+            {/* Boutons de connexion par les réseaux sociaux */}
           </Stack>
 
           <Divider sx={{ my: 3 }}>
@@ -169,4 +155,6 @@ export default function LoginView() {
       </Stack>
     </Box>
   );
-}
+};
+
+export default LoginView;

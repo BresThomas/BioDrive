@@ -1,5 +1,4 @@
 import { useState } from 'react';
-
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -12,36 +11,54 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import InputAdornment from '@mui/material/InputAdornment';
+import axios from 'axios'; // Importez axios pour effectuer des requêtes HTTP
 
 import { useRouter } from '../../routes/hooks';
-
 import { bgGradient } from '../../theme/css';
-
 import Logo from '../../components/logo';
 import Iconify from '../../components/iconify';
 
-// ----------------------------------------------------------------------
-
 export default function LoginView() {
   const theme = useTheme();
-
   const router = useRouter();
-
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleClick = () => {
-    router.push('/dashboard');
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post('http://localhost:3001/api/login', {
+        email,
+        password
+      });
+      console.log(response.data); // Gérer la réponse du serveur
+      router.push('/dashboard'); // Redirection vers la page de tableau de bord
+    } catch (error) {
+      console.error('Erreur lors de la connexion :', error);
+      // Gérer les erreurs de connexion (par exemple, afficher un message d'erreur à l'utilisateur)
+    } finally {
+      setLoading(false);
+    }
   };
 
   const renderForm = (
     <>
-      <Stack spacing={3} >
-        <TextField name="email" label="Email address" />
+      <Stack spacing={3}>
+        <TextField
+          name="email"
+          label="Email address"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
 
         <TextField
           name="password"
           label="Password"
           type={showPassword ? 'text' : 'password'}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -66,7 +83,8 @@ export default function LoginView() {
         type="submit"
         variant="contained"
         color="inherit"
-        onClick={handleClick}
+        onClick={handleLogin}
+        loading={loading}
       >
         Login
       </LoadingButton>

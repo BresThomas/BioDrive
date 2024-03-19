@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import config from './Config.js';
+import config from './config.js';
 import productRoute from './routes/productRoute.js';
 import transactionRoute from './routes/transactionRoute.js';
 import carburantRoute from './routes/carburantRoute.js';

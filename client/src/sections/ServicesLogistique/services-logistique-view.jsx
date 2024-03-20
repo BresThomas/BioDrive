@@ -230,6 +230,7 @@ export default function DashboardView() {
                     <Grid xs={12.4} md={12.6} lg={12.4}>
                       <AppNewsUpdate
                         title="Panier du client 🛒"
+                        path="/user"
                         list={[...Array(5)].map((_, index) => ({
                           id: faker.string.uuid(),
                           title: faker.person.jobTitle(),

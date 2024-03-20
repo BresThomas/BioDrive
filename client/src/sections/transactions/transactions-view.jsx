@@ -156,6 +156,7 @@ export default function TransactionsView() {
           <Grid xs={12} md={6} lg={8} sx ={{margin: 1}}>
             <AppNewsUpdate
               title="Past transactions"
+              path="/user"
               list={[...Array(5)].map((_, index) => ({
                 id: faker.string.uuid(),
                 title: faker.person.jobTitle(),

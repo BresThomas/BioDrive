@@ -470,8 +470,8 @@ export default function DashboardView() {
                 title="Consulter les stocks 📦"
                 list={stocks.slice(0,5).map(stock => ({
                   id: stock.id_stock,
-                  title: stock.stock_details,
-                  description: `Stock :`, // Utilisez une description appropriée si disponible
+                  title: `Stock :`,
+                  description: ` : ${stock.details.join(", ")}`, // Utilisez une description appropriée si disponible
                   image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
                   postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
                 }))}

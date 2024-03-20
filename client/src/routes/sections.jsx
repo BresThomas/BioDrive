@@ -5,7 +5,6 @@ import DashboardPage from '../pages/dashboard';
 import DashboardLayout from '../layouts/dashboard';
 import TransactionsPage from '../pages/transactions';
 import PompesPage from '../pages/pompes';
-import DashboardPage from '../pages/dashboard';
 import ServicesAndLogistiquePage from '../pages/servicesAndLogistique';
 
 

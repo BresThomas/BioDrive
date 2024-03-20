@@ -38,14 +38,19 @@ const navConfig = [
     icon: icon('ic_user'),
   },
   {
+    title: 'autre',
+    path: '/autre',
+    icon: icon('ic_user'),
+  },
+  {
     title: 'product',
     path: '/products',
     icon: icon('ic_cart'),
   },
   {
-    title: 'blog',
-    path: '/blog',
-    icon: icon('ic_blog'),
+    title: 'gerant',
+    path: '/gerant',
+    icon: icon('ic_user'),
   },
   {
     title: 'login',

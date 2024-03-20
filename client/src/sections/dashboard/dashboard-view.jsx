@@ -49,7 +49,7 @@ export default function DashboardView() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-      fetch('http://localhost:3001/api')
+      fetch('http://localhost:3001/api/reappros')
         .then((response) => response.json())
         .then((data) => {
           // Assurez-vous que les données sont un tableau
@@ -67,6 +67,24 @@ export default function DashboardView() {
     const handleClick = () => {
       router.push('/dashboard');
     };
+
+    const [reappros, setReappro] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/reappros')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setReappro(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
 
     const [paymentMode, setPaymentMode] = useState('');
     
@@ -251,17 +269,19 @@ export default function DashboardView() {
             </Stack>
           </Grid>
 
-          <Grid xs={12} md={6} lg={4}>
-            <AppNewsUpdate
-              title="Derniers réapprovisionnements"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
-            />
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6} lg={4}>
+              <AppNewsUpdate
+                title="Derniers réapprovisionnements"
+                list={reappros.slice(-5).map(reappro => ({
+                  id: reappro.id_reappro,
+                  title: reappro.id_reappro,
+                  description: `Produits : ${reappro.noms.join(', ')}; commandé le ${reappro.date_debut}`, // Utilisez une description appropriée si disponible
+                  image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
+                  postedAt: reappro.date_fin, // Utilisez une date appropriée si disponible
+                }))}
+              />
+            </Grid>
           </Grid>
         </Grid>
         </Grid>

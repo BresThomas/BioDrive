@@ -48,9 +48,9 @@ const navConfig = [
     icon: icon('ic_cart'),
   },
   {
-    title: 'blog',
-    path: '/blog',
-    icon: icon('ic_blog'),
+    title: 'gerant',
+    path: '/gerant',
+    icon: icon('ic_user'),
   },
   {
     title: 'login',

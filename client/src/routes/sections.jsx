@@ -9,7 +9,7 @@ import ServicesAndLogistiquePage from '../pages/servicesAndLogistique';
 
 
 export const IndexPage = lazy(() => import('../pages/app'));
-export const BlogPage = lazy(() => import('../pages/blog'));
+export const GerantPage = lazy(() => import('../pages/gerant'));
 export const UserPage = lazy(() => import('../pages/user'));
 export const LoginPage = lazy(() => import('../pages/login'));
 export const ServicesLogistique = lazy(() => import('../pages/services-logistique'));
@@ -33,7 +33,6 @@ export default function Router() {
         { element: <IndexPage />, index: true },
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
       ],
     },
     {
@@ -59,6 +58,10 @@ export default function Router() {
     {
       path: 'autre',
       element: <AutrePage />,
+    },
+    {
+      path: 'gerant',
+      element: <GerantPage />,
     },
     {
       path: 'dashboard',

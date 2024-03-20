@@ -5,13 +5,13 @@ import { Helmet } from 'react-helmet-async';
 
 import { AutreView } from '../sections/autre';
 
-function ServicesLogistiquePage(){
+function AutrePage(){
     return (
         <>
         <Helmet>
-            <title>Services Logistique</title>
+            <title>Gerant | autre</title>
         </Helmet>
         <AutreView />
         </>
     );};
-export default ServicesLogistiquePage;
+export default AutrePage;

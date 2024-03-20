@@ -40,7 +40,7 @@ import navConfig from '../../layouts/dashboard/config-navigation';
 
 const filtreRecherche = ['Tous', 'Nom du produit', 'Identifiant', 'Catégorie'];
 
-export default function DashboardView() {
+export default function GerantView() {
 
   const [enteredValue, setEnteredValue] = useState('');
 

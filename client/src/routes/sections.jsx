@@ -70,6 +70,8 @@ export default function Router() {
     {
       path: 'servicesAndLogistique',
       element: <ServicesLogistique />,
+    },
+    {
       path: 'gerant',
       element: <GerantPage />,
     },

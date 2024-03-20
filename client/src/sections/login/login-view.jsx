@@ -43,23 +43,6 @@ export default function LoginView() {
     }
   };
 
-  const checkCredentials = async () => {
-
-    firebase.ref('')
-    const userId = document.getElementsByName('userId')[0].value;
-    const password = document.getElementsByName('password')[0].value;
-
-    const data = await queryApi();
-
-    if(data.id === userId && data.password === password) {
-      router.push('/dashboard');
-    } else {
-      alert('Identifiant ou mot de passe incorrect');
-    } 
-
-
-  }
-
   const renderForm = (
     <>
       <Stack spacing={3}>

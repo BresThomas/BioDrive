@@ -24,6 +24,13 @@ export default function AppNumPad({ onValueChange }) {
     }
   };
 
+  const handleChange = (e) => {
+    const regex = /^[0-9\b]+$/;
+    if (e.target.value === "" || regex.test(e.target.value)) {
+      setValue(e.target.value);
+    }
+  };
+
   return (
     <Card sx={{ width: '340px', height: '400px' }}>
       <Grid container spacing={2} alignItems="center" ml={1} mt={2} mr={1}>
@@ -33,9 +40,7 @@ export default function AppNumPad({ onValueChange }) {
             label="Montant"
             variant="outlined"
             value={value}
-            InputProps={{
-              readOnly: true,
-            }}
+            onChange={(e)=>handleChange(e)}
             sx={{ width: '130%', height: '60px' }}
           />
         </Grid>

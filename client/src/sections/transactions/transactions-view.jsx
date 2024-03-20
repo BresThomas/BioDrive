@@ -55,11 +55,14 @@ export default function TransactionsView() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [hello, setHello] = useState('');
 
+
+  
   useEffect(() => {
     fetch('http://localhost:3001/hello')
       .then((response) => response.json())
       .then((data) => setHello(data.message));
   }, []);
+
 
   const router = useRouter();
 

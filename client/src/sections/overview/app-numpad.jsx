@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -24,6 +24,13 @@ export default function AppNumPad({ onValueChange }) {
     }
   };
 
+  const handleChange = (e) => {
+    const regex = /^[0-9\b]+$/;
+    if (e.target.value === "" || regex.test(e.target.value)) {
+      setValue(e.target.value);
+    }
+  };
+
   return (
     <Card sx={{ width: '340px', height: '400px' }}>
       <Grid container spacing={2} alignItems="center" ml={1} mt={2} mr={1}>
@@ -33,10 +40,8 @@ export default function AppNumPad({ onValueChange }) {
             label="Montant"
             variant="outlined"
             value={value}
-            InputProps={{
-              readOnly: true,
-            }}
-            sx={{ width: '130%', height: '60px' }}
+            onChange={(e)=>handleChange(e)}
+            sx={{ width: '285px', height: '60px' }}
           />
         </Grid>
         <Grid item>

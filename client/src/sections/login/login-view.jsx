@@ -51,7 +51,7 @@ const LoginView = () => {
 
         <TextField
           name="password"
-          label="Password"
+          label="Mot de passe"
           type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -69,7 +69,7 @@ const LoginView = () => {
 
       <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
         <Link variant="subtitle2" underline="hover">
-          Forgot password?
+          Mot de passe oublié?
         </Link>
       </Stack>
 
@@ -81,7 +81,7 @@ const LoginView = () => {
         color="inherit"
         onClick={handleLogin}
       >
-        Login
+        Se connecter
       </LoadingButton>
     </>
   );

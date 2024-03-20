@@ -56,6 +56,7 @@ export default function DashboardView() {
   const [enteredValue, setEnteredValue] = useState('');
   
   const handleValueChange = (newValue) => {
+    console.log("New value:", newValue);
     setEnteredValue(newValue);
   };
   
@@ -83,6 +84,103 @@ export default function DashboardView() {
     const handleClick = () => {
       router.push('/dashboard');
     };
+    
+
+    const handlePayment = async () => {
+      if(enteredValue === '') {
+        alert('Veuillez valider le montant à régler');
+      } else {
+        alert('Paiement effectué avec succès');
+        await sendTransaction();
+      }
+    };
+
+    const sendTransaction = async (event) => {
+
+      const response = await fetch('http://localhost:3001/api/newTransaction', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          paymentMode,
+          value: enteredValue,
+          date: new Date().toLocaleString()
+        })
+      });
+    };
+
+    const [incidents, setIncident] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/incidents')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setIncident(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
+    const [stocks, setStock] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/stocks')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setStock(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
+    const [pompes, setPompe] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/pompes')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setPompe(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
+    const [clients, setClient] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/clients')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setClient(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
 
     const [paymentMode, setPaymentMode] = useState('');
     
@@ -109,26 +207,93 @@ export default function DashboardView() {
       </Stack>
     );
 
+    // =====================INCIDENT======================//
+
+    const initialFormData = {
+      intitule: '',
+      descriptionIncident: '',
+      gravite: ''
+    };
+  
+    const [formData, setFormData] = useState(initialFormData);
+  
+    const handleChangeIncident = (event) => {
+      const { name, value } = event.target;
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        [name]: value
+      }));
+    };
+
+    const getDate = () => {
+      const today = new Date();
+      const month = today.getMonth() + 1;
+      const year = today.getFullYear();
+      const date = today.getDate();
+      return `${date}/${month}/${year}`;
+    };    
+
+    const clickFormIncident = async () => {
+      console.log(formData);
+  
+      const response = await fetch('http://localhost:3001/api/newIncident', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id_incident: "Sid5N6leQMFIhEHupQhy",
+          gravite: formData.gravite,
+          intitule: formData.intitule,
+          date: getDate(),
+          description: formData.descriptionIncident,
+        })
+      });
+  
+      if (response.ok) {
+        // Réinitialiser les champs du formulaire à leur valeur initiale vide
+        setFormData(initialFormData);
+        console.log("Formulaire soumis avec succès!");
+      } else {
+        console.error("Erreur lors de la soumission du formulaire");
+      }
+    };
+
     const renderFormIncident = (title) => (
       <Stack spacing={3} direction="row" alignItems="center">
         <Typography variant="h6" sx={{ width: '20%' }}>{title}</Typography>
         <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '55%' }}>
-          <TextField name="intitule" label="Intitulé" sx={{ width: '30%' }}/>
-          <TextField name="descriptionIncident" label="Description de l'incident" sx={{ width: '70%' }}/>
+        <TextField name="intitule" value={formData.intitule} label="Intitulé" sx={{ width: '30%' }} onChange={handleChangeIncident} />
+        <TextField name="descriptionIncident" value={formData.descriptionIncident} label="Description de l'incident" sx={{ width: '70%' }} onChange={handleChangeIncident} />
         </Stack>
+
+        <TextField
+          select
+          name="gravite"
+          label="Gravité"
+          sx={{ width: '30%' }}
+          value={formData.gravite}
+          onChange={handleChangeIncident}
+        >
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+        </TextField>
+
         <LoadingButton
           sx={{ width: '20%' }}
           size="large"
           type="submit"
           variant="contained"
           color="inherit"
-          onClick={handleClick}
+          onClick={clickFormIncident}// Click -> envoie formulaire
         >
           Submit
         </LoadingButton>
       </Stack>
     );
        
+    // ======================================================= //
     
     const addProductFrom = (
       <Stack spacing={3} alignItems="left">
@@ -200,9 +365,9 @@ export default function DashboardView() {
           type="submit"
           variant="contained"
           color="inherit"
-          onClick={handleClick}
+          onClick={handlePayment}
           >
-          Proceder au paiement
+          Procéder au paiement
         </LoadingButton>
           </Stack>
       </Stack>
@@ -300,11 +465,12 @@ export default function DashboardView() {
               </Card>
             </Stack>
           </Grid>
+
+          <Grid container spacing={3}>
           <Grid container spacing={3}> 
           <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
               title="Derniers incidents ⚠️"
-              path="/user"
               list={[...Array(5)].map((_, index) => ({
                 id: faker.string.uuid(),
                 title: faker.person.jobTitle(),
@@ -314,16 +480,17 @@ export default function DashboardView() {
               }))}
             />
           </Grid>
+          
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate
                 sx={{ width: 520, height: 200, overflowY: 'auto' }}
                 title="Consulter les stocks 📦"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
+                list={stocks.slice(0,5).map(stock => ({
+                  id: stock.id_stock,
+                  title: `Stock :`,
+                  description: ` : ${stock.details.join(", ")}`, // Utilisez une description appropriée si disponible
+                  image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
+                  postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
                 }))}
               />
             </Grid>
@@ -332,7 +499,6 @@ export default function DashboardView() {
           <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
               title="Pompes ⛽"
-              path="/pompes"
               list={[...Array(5)].map((_, index) => ({
                 id: faker.string.uuid(),
                 title: faker.person.jobTitle(),
@@ -346,7 +512,6 @@ export default function DashboardView() {
               <AppNewsUpdate
                 sx={{ width: 520, height: 200, overflowY: 'auto' }}
                 title="Rechercher client 👤"
-                path="/user"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
                   title: faker.person.jobTitle(),
@@ -372,6 +537,7 @@ export default function DashboardView() {
           </Grid>
         </Grid>
       </Grid>
+    </Grid>
   </Container>
 
   );

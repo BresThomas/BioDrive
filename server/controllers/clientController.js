@@ -36,6 +36,7 @@ export const getClients = async (req, res, next) => {
       clients.forEach((doc) => {
         const client = new Client(
           doc.id,
+          doc.data().email,
           doc.data().nom,
           doc.data().prenom,
           doc.data().adresse,

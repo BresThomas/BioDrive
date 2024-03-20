@@ -58,7 +58,7 @@ export default function Router() {
       element: <TransactionsPage />,
     },
     {
-      path: 'services-logistique',
+      path: 'servicesAndLogistique',
       element: <ServicesLogistique />,
     },
     {

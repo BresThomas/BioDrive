@@ -24,7 +24,7 @@ const navConfig = [
   },  
   {
     title: 'Services&Logistique',
-    path: '/services-logistique',
+    path: '/servicesAndLogistique',
     icon: icon('ic_user'),
   }, 
   {

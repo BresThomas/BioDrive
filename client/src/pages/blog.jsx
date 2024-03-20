@@ -2,21 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../Firebase';
-import { ProductsView } from '../sections/products/view';
-import { NotFoundView } from '../sections/error';
+import { BlogView } from '../sections/blog/view';
 
 // ----------------------------------------------------------------------
 
-export default function ProductsPage() {
+export default function BlogPage() {
 
   return (
       <>
         <Helmet>
-          <title>Products</title>
+          <title>Blog </title>
         </Helmet>
 
-        <ProductsView />
+        <BlogView />
       </>
   );
 }

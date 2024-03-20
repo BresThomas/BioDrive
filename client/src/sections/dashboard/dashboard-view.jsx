@@ -17,11 +17,18 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
+import { useNavigate } from 'react-router-dom';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from '../../Firebase';
+
 import PostSearch from '../blog/post-search';
 import Iconify from '../../components/iconify';
 import { RouterLink } from '../../routes/components';
 import { usePathname, useRouter } from '../../routes/hooks';
 import Popup from '../../components/popup/popup';
+import AccountPopover from '../../layouts/dashboard/common/account-popover';
+import NotificationsPopover from '../../layouts/dashboard/common/notifications-popover';
+
 
 
 import AppTasks from '../overview/app-tasks';
@@ -39,39 +46,40 @@ import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
 import { posts } from '../../_mock/blog';
 
+
 // ----------------------------------------------------------------------
 
 
 const paymentModes = ['Cartes bancaire', 'Liquide'];
 export default function DashboardView() {
-
+  
   const [enteredValue, setEnteredValue] = useState('');
-
+  
   const handleValueChange = (newValue) => {
     console.log("New value:", newValue);
     setEnteredValue(newValue);
   };
+  
+  const theme = useTheme();
+  const router = useRouter();
+  
+  const [products, setProducts] = useState([]);
 
-    const theme = useTheme();
-    const router = useRouter();
-
-    const [products, setProducts] = useState([]);
-
-    useEffect(() => {
-      fetch('http://localhost:3001/api')
-        .then((response) => response.json())
-        .then((data) => {
-          // Assurez-vous que les données sont un tableau
-          if (Array.isArray(data)) {
-            setProducts(data);
+  const navigate = useNavigate();
+    useEffect(()=>{
+      onAuthStateChanged(auth, (user) => {
+          if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/firebase.User
+            const uid = user.uid;
+            navigate('/dashboard'); 
           } else {
-            console.error("Les données reçues ne sont pas un tableau.");
+            // User is signed out
+            navigate('/login'); 
           }
-        })
-        .catch((error) => {
-          console.error("Erreur lors de la récupération des données:", error);
         });
-    }, []);
+       
+  }, [navigate])
 
     const handleClick = () => {
       router.push('/dashboard');
@@ -101,6 +109,78 @@ export default function DashboardView() {
         })
       });
     };
+
+    const [incidents, setIncident] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/incidents')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setIncident(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
+    const [stocks, setStock] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/stocks')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setStock(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
+    const [pompes, setPompe] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/pompes')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setPompe(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
+    const [clients, setClient] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/clients')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setClient(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
 
     const [paymentMode, setPaymentMode] = useState('');
 
@@ -352,9 +432,11 @@ export default function DashboardView() {
 
       <Grid container spacing={3}>
           <Grid item xs={12} sm={12} md={5} xl={5}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} sx={{ p: 2 }}>
                 <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
                 Caisse 💶
                 </Typography>
+            </Stack>
             <Grid container spacing={3}>
               <Grid item >
                 <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
@@ -386,6 +468,7 @@ export default function DashboardView() {
                       <AppNewsUpdate
                       sx={{height: 400, overflowY: 'auto' }}
                         title="Panier du client 🛒"
+                        path="/user"
                         list={[...Array(5)].map((_, index) => ({
                           id: faker.string.uuid(),
                           title: faker.person.jobTitle(),
@@ -406,15 +489,21 @@ export default function DashboardView() {
               </Grid>
             </Grid>
         <Grid item xs={36} sm={12} md={7} xl={7}>
-          <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-            ERP 👋
-          </Typography>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} sx={{ p: 2 }}>
+            <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
+              ERP 👋
+            </Typography>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <NotificationsPopover />
+              <AccountPopover />
+            </Stack>
+          </Stack>
           <Stack direction="row" spacing={2} sx={{ p: 2 }}>
             {navConfig.map((item) => (
               <NavItem key={item.title} item={item} />
             ))}
           </Stack>
-
+          
         <Grid container spacing={3}>
 
           <Grid xs={12} sm={6} md={3}>
@@ -429,6 +518,8 @@ export default function DashboardView() {
               </Card>
             </Stack>
           </Grid>
+
+          <Grid container spacing={3}>
           <Grid container spacing={3}> 
           <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
@@ -442,16 +533,17 @@ export default function DashboardView() {
               }))}
             />
           </Grid>
+          
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate
                 sx={{ width: 520, height: 200, overflowY: 'auto' }}
                 title="Consulter les stocks 📦"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
+                list={stocks.slice(0,5).map(stock => ({
+                  id: stock.id_stock,
+                  title: `Stock :`,
+                  description: ` : ${stock.details.join(", ")}`, // Utilisez une description appropriée si disponible
+                  image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
+                  postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
                 }))}
               />
             </Grid>
@@ -498,6 +590,7 @@ export default function DashboardView() {
           </Grid>
         </Grid>
       </Grid>
+    </Grid>
   </Container>
 
   );

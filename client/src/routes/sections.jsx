@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardPage from '../pages/dashboard';
+import SignUpPage from '../pages/signup';
 import DashboardLayout from '../layouts/dashboard';
 import TransactionsPage from '../pages/transactions';
 import PompesPage from '../pages/pompes';
@@ -31,13 +32,20 @@ export default function Router() {
       ),
       children: [
         { element: <IndexPage />, index: true },
-        { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
       ],
     },
     {
+      path: 'user',
+      element: <UserPage /> 
+    },
+    {
       path: 'login',
       element: <LoginPage />,
+    },    
+    {
+      path: 'signup',
+      element: <SignUpPage />,
     },
     {
       path: '404',
@@ -58,6 +66,10 @@ export default function Router() {
     {
       path: 'autre',
       element: <AutrePage />,
+    },
+    {
+      path: 'servicesAndLogistique',
+      element: <ServicesLogistique />,
     },
     {
       path: 'gerant',

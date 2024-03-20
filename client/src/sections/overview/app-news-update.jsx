@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
@@ -16,28 +17,34 @@ import Scrollbar from '../../components/scrollbar';
 
 // ----------------------------------------------------------------------
 
-export default function AppNewsUpdate({ title, subheader, list, ...other }) {
+export default function AppNewsUpdate({ title, subheader, list, path, ...other }) {
+  const navigate = useNavigate();
+
+  const handleViewAllClick = () => {
+    navigate(path);
+  };
+
   return (
     <Card {...other}>
-      <CardHeader title={title} subheader={subheader} />
+      <Stack spacing={3} direction="row" alignItems="center" justifyContent="space-between">
+        <CardHeader title={title} subheader={subheader} />
+        <Box sx={{ textAlign: 'right', pt: 2.5, pr: 1 }}>
+          <Button
+            size="small"
+            color="inherit"
+            endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
+            onClick={handleViewAllClick}
+          >
+            View all
+          </Button>
+        </Box>
+      </Stack>
 
         <Stack spacing={3} sx={{ p: 3, pr: 0 }}>
           {list.map((news) => (
             <NewsItem key={news.id} news={news} />
           ))}
         </Stack>
-
-      <Divider sx={{ borderStyle: 'dashed' }} />
-
-      <Box sx={{ p: 2, textAlign: 'right' }}>
-        <Button
-          size="small"
-          color="inherit"
-          endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
-        >
-          View all
-        </Button>
-      </Box>
     </Card>
   );
 }
@@ -46,6 +53,7 @@ AppNewsUpdate.propTypes = {
   title: PropTypes.string,
   subheader: PropTypes.string,
   list: PropTypes.array.isRequired,
+  path: PropTypes.string.isRequired,
 };
 
 // ----------------------------------------------------------------------

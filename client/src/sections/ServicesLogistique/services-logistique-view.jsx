@@ -1,7 +1,9 @@
 import { faker } from '@faker-js/faker';
-import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
+import { useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+
+import { onAuthStateChanged } from 'firebase/auth';
 
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -38,18 +40,37 @@ import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
 import { posts } from '../../_mock/blog';
 
+import { auth } from '../../Firebase';
+
 // ----------------------------------------------------------------------
 
 
 const paymentModes = ['Cartes bancaire', 'Liquide'];
 export default function DashboardView() {
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          const uid = user.uid;
+          navigate('/servicesAndLogistique'); 
+        } else {
+          // User is signed out
+          navigate('/login'); 
+        }
+      });
+      
+  }, [navigate])
+
     const theme = useTheme();
     const router = useRouter();
 
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-      fetch('http://localhost:3001/api')
+      fetch('http://localhost:3001/api/products')
         .then((response) => response.json())
         .then((data) => {
           // Assurez-vous que les données sont un tableau
@@ -209,6 +230,7 @@ export default function DashboardView() {
                     <Grid xs={12.4} md={12.6} lg={12.4}>
                       <AppNewsUpdate
                         title="Panier du client 🛒"
+                        path="/user"
                         list={[...Array(5)].map((_, index) => ({
                           id: faker.string.uuid(),
                           title: faker.person.jobTitle(),

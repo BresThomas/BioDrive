@@ -1,5 +1,9 @@
 import { useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
 import { faker } from '@faker-js/faker';
+
+import { onAuthStateChanged } from 'firebase/auth';
+
 import Grid from '@mui/material/Unstable_Grid2';
 
 import TextField from '@mui/material/TextField';
@@ -14,10 +18,9 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Iconify from '../../components/iconify';
 import { useRouter } from '../../routes/hooks';
-
-
-
 import { RouterLink } from '../../routes/components';
+
+import { auth } from '../../Firebase';
 
 import Logo from '../../components/logo';
 
@@ -27,6 +30,23 @@ import AppWebsiteVisits from '../overview/app-website-visits';
 // ----------------------------------------------------------------------
 
 export default function PompesView() {
+
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          const uid = user.uid;
+          navigate('/pompes'); 
+        } else {
+          // User is signed out
+          navigate('/login'); 
+        }
+      });
+      
+  }, [navigate])
 
   const [hello, setHello] = useState("");
    
@@ -158,7 +178,7 @@ export default function PompesView() {
             </Stack>
           </Grid>
 
-          <Button href="/" size="large" variant="contained" component={RouterLink}>
+          <Button href="/dashboard" size="large" variant="contained" component={RouterLink}>
             Go to Home
           </Button>
         </Box>

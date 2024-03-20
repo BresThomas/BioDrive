@@ -3,12 +3,11 @@ import { Navigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../Firebase';
-import { LoginView } from '../sections/login';
-import { DashboardView } from '../sections/dashboard';
+import { SignUpView } from '../sections/signup';
 
 // ----------------------------------------------------------------------
 
-export default function LoginPage() {
+export default function SignUpPage() {
   const [user, setUser] = useState(null); // Utiliser un état pour suivre l'état de l'utilisateur
 
   useEffect(() => {
@@ -27,10 +26,10 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title>Login </title>
+        <title>SignUp </title>
       </Helmet>
 
-      <LoginView />
+      <SignUpView />
     </>
   );
 }

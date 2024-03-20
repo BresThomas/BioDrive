@@ -30,9 +30,7 @@ const LoginView = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log('User signed in:', user);
         navigate("/dashboard");
-        console.log(user);
       })
       .catch((error) => {
         const errorCode = error.code;

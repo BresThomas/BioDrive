@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { faker } from '@faker-js/faker';
 import Stack from '@mui/material/Stack';
+import { useNavigate } from 'react-router-dom';
+import { onAuthStateChanged } from 'firebase/auth';
+
 import Grid from '@mui/material/Unstable_Grid2';
 import TablePagination from '@mui/material/TablePagination';
 import TextField from '@mui/material/TextField';
@@ -13,6 +16,8 @@ import { Card, CardContent } from '@mui/material';
 import { useRouter } from '../../routes/hooks';
 import AppNewsUpdate from '../overview/app-news-update';
 
+import { auth } from '../../Firebase';
+
 import { RouterLink } from '../../routes/components';
 
 import Logo from '../../components/logo';
@@ -24,6 +29,24 @@ import { posts } from '../../_mock/blog';
 // ----------------------------------------------------------------------
 
 export default function TransactionsView() {
+  
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          const uid = user.uid;
+          navigate('/transactions'); 
+        } else {
+          // User is signed out
+          navigate('/login'); 
+        }
+      });
+      
+  }, [navigate])
+
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -143,7 +166,7 @@ export default function TransactionsView() {
             />
           </Grid>
 
-          <Button sx={{margin: 1}} href="/" size="large" variant="contained" component={RouterLink}>
+          <Button sx={{margin: 1}} href="/dashboard" size="large" variant="contained" component={RouterLink}>
             Go to Home
           </Button>
         </Box>

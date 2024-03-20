@@ -5,21 +5,18 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../Firebase';
 import { ServicesLogistiqueView } from '../sections/ServicesLogistique';
 import { NotFoundView } from '../sections/error';
-import AuthWrapper from '../components/auth/AuthWrapper';
 
 // ----------------------------------------------------------------------
 
 export default function ServicesLogistiquePage() {
 
   return (
-    <AuthWrapper>
       <>
         <Helmet>
           <title>Services Logistique</title>
         </Helmet>
         <ServicesLogistiqueView />
       </>
-    </AuthWrapper>
   );
 }
 

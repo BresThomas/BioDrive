@@ -4,14 +4,12 @@ import { Helmet } from 'react-helmet-async';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../Firebase';
 import { DashboardView } from '../sections/dashboard';
-import AuthWrapper from '../components/auth/AuthWrapper';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardPage() {
 
   return (
-    <AuthWrapper>
       <>
         <Helmet>
           <title>Dashboard</title>
@@ -19,7 +17,6 @@ export default function DashboardPage() {
 
         <DashboardView />
       </>
-    </AuthWrapper>
   );
 }
 

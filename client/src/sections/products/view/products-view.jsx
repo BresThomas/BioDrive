@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { onAuthStateChanged } from 'firebase/auth';
 
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
@@ -12,9 +15,29 @@ import ProductSort from '../product-sort';
 import ProductFilters from '../product-filters';
 import ProductCartWidget from '../product-cart-widget';
 
+import { auth } from '../../../Firebase';
+
 // ----------------------------------------------------------------------
 
 export default function ProductsView() {
+  
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          const uid = user.uid;
+          navigate('/products'); 
+        } else {
+          // User is signed out
+          navigate('/login'); 
+        }
+      });
+      
+  }, [navigate])
+
   const [openFilter, setOpenFilter] = useState(false);
 
   const handleOpenFilter = () => {

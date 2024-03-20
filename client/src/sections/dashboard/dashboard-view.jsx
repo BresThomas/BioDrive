@@ -17,11 +17,17 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
+import { useNavigate } from 'react-router-dom';
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from '../../Firebase';
+
 import PostSearch from '../blog/post-search';
 import Iconify from '../../components/iconify';
 import { RouterLink } from '../../routes/components';
 import { usePathname, useRouter } from '../../routes/hooks';
 import Popup from '../../components/popup/popup';
+import AccountPopover from '../../layouts/dashboard/common/account-popover';
+
 
 
 import AppTasks from '../overview/app-tasks';
@@ -39,38 +45,39 @@ import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
 import { posts } from '../../_mock/blog';
 
+
 // ----------------------------------------------------------------------
 
 
 const paymentModes = ['Cartes bancaire', 'Liquide'];
 export default function DashboardView() {
-
+  
   const [enteredValue, setEnteredValue] = useState('');
-
+  
   const handleValueChange = (newValue) => {
     setEnteredValue(newValue);
   };
+  
+  const theme = useTheme();
+  const router = useRouter();
+  
+  const [products, setProducts] = useState([]);
 
-    const theme = useTheme();
-    const router = useRouter();
-
-    const [products, setProducts] = useState([]);
-
-    useEffect(() => {
-      fetch('http://localhost:3001/api')
-        .then((response) => response.json())
-        .then((data) => {
-          // Assurez-vous que les données sont un tableau
-          if (Array.isArray(data)) {
-            setProducts(data);
+  const navigate = useNavigate();
+    useEffect(()=>{
+      onAuthStateChanged(auth, (user) => {
+          if (user) {
+            // User is signed in, see docs for a list of available properties
+            // https://firebase.google.com/docs/reference/js/firebase.User
+            const uid = user.uid;
+            navigate('/dashboard'); 
           } else {
-            console.error("Les données reçues ne sont pas un tableau.");
+            // User is signed out
+            navigate('/login'); 
           }
-        })
-        .catch((error) => {
-          console.error("Erreur lors de la récupération des données:", error);
         });
-    }, []);
+       
+  }, [navigate])
 
     const handleClick = () => {
       router.push('/dashboard');
@@ -206,9 +213,11 @@ export default function DashboardView() {
 
       <Grid container spacing={3}>
           <Grid item xs={12} sm={12} md={5} xl={5}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} sx={{ p: 2 }}>
                 <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
                 Caisse 💶
                 </Typography>
+            </Stack>
             <Grid container spacing={3}>
               <Grid item >
                 <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
@@ -260,15 +269,18 @@ export default function DashboardView() {
               </Grid>
             </Grid>
         <Grid item xs={36} sm={12} md={7} xl={7}>
-          <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-            ERP 👋
-          </Typography>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} sx={{ p: 2 }}>
+            <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
+              ERP 👋
+            </Typography>
+            <AccountPopover />
+          </Stack>
           <Stack direction="row" spacing={2} sx={{ p: 2 }}>
             {navConfig.map((item) => (
               <NavItem key={item.title} item={item} />
             ))}
           </Stack>
-
+          
         <Grid container spacing={3}>
 
           <Grid xs={12} sm={6} md={3}>

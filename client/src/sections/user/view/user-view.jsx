@@ -1,4 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect} from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { onAuthStateChanged } from 'firebase/auth';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -10,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
+import { auth } from '../../../Firebase';
 import { users } from '../../../_mock/user';
 
 import Iconify from '../../../components/iconify';
@@ -25,6 +29,24 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 // ----------------------------------------------------------------------
 
 export default function UserPage() {
+  
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          const uid = user.uid;
+          navigate('/user'); 
+        } else {
+          // User is signed out
+          navigate('/login'); 
+        }
+      });
+      
+  }, [navigate])
+
   const [page, setPage] = useState(0);
 
   const [order, setOrder] = useState('asc');

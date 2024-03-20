@@ -5,14 +5,12 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../Firebase';
 import { PompesView } from '../sections/pompes';
 import { NotFoundView } from '../sections/error';
-import AuthWrapper from '../components/auth/AuthWrapper';
 
 // ----------------------------------------------------------------------
 
 export default function PompesPage() {
 
   return (
-    <AuthWrapper>
       <>
         <Helmet>
           <title>Pompes</title>
@@ -20,6 +18,5 @@ export default function PompesPage() {
 
         <PompesView />
       </>
-    </AuthWrapper>
   );
 }

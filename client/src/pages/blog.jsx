@@ -4,14 +4,12 @@ import { Helmet } from 'react-helmet-async';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../Firebase';
 import { BlogView } from '../sections/blog/view';
-import AuthWrapper from '../components/auth/AuthWrapper';
 
 // ----------------------------------------------------------------------
 
 export default function BlogPage() {
 
   return (
-    <AuthWrapper>
       <>
         <Helmet>
           <title>Blog </title>
@@ -19,6 +17,5 @@ export default function BlogPage() {
 
         <BlogView />
       </>
-    </AuthWrapper>
   );
 }

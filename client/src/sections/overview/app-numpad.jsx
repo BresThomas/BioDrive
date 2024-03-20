@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -41,7 +41,7 @@ export default function AppNumPad({ onValueChange }) {
             variant="outlined"
             value={value}
             onChange={(e)=>handleChange(e)}
-            sx={{ width: '130%', height: '60px' }}
+            sx={{ width: '285px', height: '60px' }}
           />
         </Grid>
         <Grid item>

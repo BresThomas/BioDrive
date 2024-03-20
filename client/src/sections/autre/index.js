@@ -1,0 +1,1 @@
+export { default as AutreView } from './autre-view';

@@ -1,0 +1,1 @@
+export { default as GerantView } from './gerant-view';

@@ -1,22 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom'; // Importer Redirect
-import { signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
+import IconButton from '@mui/material/IconButton'; // Import from correct path
 import InputAdornment from '@mui/material/InputAdornment';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-
 import { auth } from '../../Firebase';
-
 import Iconify from '../../components/iconify';
 import Logo from '../../components/logo';
 import { bgGradient } from '../../theme/css';
@@ -24,38 +20,26 @@ import { bgGradient } from '../../theme/css';
 const LoginView = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-
-  const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null); // Renommer la variable user en currentUser
+  const [showPassword, setShowPassword] = useState(false); // Add state for password visibility
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user); // Mettre à jour l'état de currentUser
-    });
-
-    return () => unsubscribe(); // Cleanup function pour désinscrire l'écouteur
-  }, []); // Exécuter l'effet une seule fois lorsque le composant est monté
-
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    setLoading(true);
-
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/dashboard');
-    } catch (error) {
-      console.error(error.code, error.message);
-    } finally {
-      setLoading(false);
-    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log('User signed in:', user);
+        navigate("/dashboard");
+        console.log(user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorCode, errorMessage);
+      });
   };
-
-  if (currentUser) {
-    return <Navigate to="/dashboard" />;
-  }
 
   const renderForm = (
     <>
@@ -98,7 +82,6 @@ const LoginView = () => {
         variant="contained"
         color="inherit"
         onClick={handleLogin}
-        loading={loading}
       >
         Login
       </LoadingButton>
@@ -131,7 +114,7 @@ const LoginView = () => {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Sign in to Minimal</Typography>
+          <Typography variant="h4">Sign in to ERP</Typography>
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
             Don’t have an account?

@@ -14,7 +14,7 @@ export default function AppPage() {
     <AuthWrapper>
       <>
         <Helmet>
-          <title>Dashboard | Minimal UI</title>
+          <title>Dashboard </title>
         </Helmet>
 
         <AppView />

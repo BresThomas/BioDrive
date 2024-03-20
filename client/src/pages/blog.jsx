@@ -14,7 +14,7 @@ export default function BlogPage() {
     <AuthWrapper>
       <>
         <Helmet>
-          <title>Blog | Minimal UI</title>
+          <title>Blog </title>
         </Helmet>
 
         <BlogView />

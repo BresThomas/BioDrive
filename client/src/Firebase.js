@@ -1,15 +1,14 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 
-// Votre configuration Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyAoj6DJPlXfQINVRtRHit98caypDf7CVcA",
-  authDomain: "biodrive-d778e.firebaseapp.com",
-  projectId: "biodrive-d778e",
-  storageBucket: "biodrive-d778e.appspot.com",
-  messagingSenderId: "278943019900",
-  appId: "1:278943019900:web:29a52d33f7033025602af9",
-  measurementId: "G-N7C8J34ZE4"
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
 // Initialiser Firebase

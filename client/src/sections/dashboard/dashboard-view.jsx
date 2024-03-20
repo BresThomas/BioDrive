@@ -48,6 +48,7 @@ export default function DashboardView() {
   const [enteredValue, setEnteredValue] = useState('');
 
   const handleValueChange = (newValue) => {
+    console.log("New value:", newValue);
     setEnteredValue(newValue);
   };
 
@@ -74,6 +75,30 @@ export default function DashboardView() {
 
     const handleClick = () => {
       router.push('/dashboard');
+    };
+
+    const handlePayment = async () => {
+      if(enteredValue === '') {
+        alert('Veuillez valider le montant à régler');
+      } else {
+        alert('Paiement effectué avec succès');
+        await sendTransaction();
+      }
+    };
+
+    const sendTransaction = async (event) => {
+
+      const response = await fetch('http://localhost:3001/api/newTransaction', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          paymentMode,
+          value: enteredValue,
+          date: new Date().toLocaleString()
+        })
+      });
     };
 
     const [paymentMode, setPaymentMode] = useState('');
@@ -192,9 +217,9 @@ export default function DashboardView() {
           type="submit"
           variant="contained"
           color="inherit"
-          onClick={handleClick}
+          onClick={handlePayment}
           >
-          Proceder au paiement
+          Procéder au paiement
         </LoadingButton>
           </Stack>
       </Stack>

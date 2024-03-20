@@ -207,6 +207,7 @@ export default function GerantView() {
                     <Grid xs={6} md={6} lg={4}>
                       <AppNewsUpdate sx={{ width: 350, height: 450, overflowY: 'auto' }}
                         title="Planning 📅"
+                        path="/users"
                         list={[...Array(5)].map((_, index) => ({
                           id: faker.string.uuid(),
                           title: faker.person.jobTitle(),
@@ -282,6 +283,7 @@ export default function GerantView() {
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate sx={{ width: 520, height: 150, overflowY: 'auto' }}
                 title="Parkings disponibles 🚗"
+                path="/users"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
                   title: faker.person.jobTitle(),
@@ -309,6 +311,7 @@ export default function GerantView() {
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate sx={{ width: 520, height: 150, overflowY: 'auto' }}
                 title="Servces"
+                path="/users"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
                   title: faker.person.jobTitle(),
@@ -320,6 +323,7 @@ export default function GerantView() {
             </Grid>
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate 
+              path="/users"
                 sx={{ width: 520, height: 150, overflowX: 'auto', overflowY: 'none',
                   display: 'flex', flexDirection: 'row' }}
                 list={[...Array(5)].map((_, index) => ({

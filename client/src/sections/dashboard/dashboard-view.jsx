@@ -471,6 +471,7 @@ export default function DashboardView() {
           <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
               title="Derniers incidents ⚠️"
+              path="/users"
               list={[...Array(5)].map((_, index) => ({
                 id: faker.string.uuid(),
                 title: faker.person.jobTitle(),
@@ -499,6 +500,7 @@ export default function DashboardView() {
           <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
               title="Pompes ⛽"
+              path="/pompes"
               list={[...Array(5)].map((_, index) => ({
                 id: faker.string.uuid(),
                 title: faker.person.jobTitle(),

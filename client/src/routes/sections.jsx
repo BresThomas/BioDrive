@@ -13,6 +13,7 @@ export const BlogPage = lazy(() => import('../pages/blog'));
 export const UserPage = lazy(() => import('../pages/user'));
 export const LoginPage = lazy(() => import('../pages/login'));
 export const ServicesLogistique = lazy(() => import('../pages/services-logistique'));
+export const AutrePage = lazy(() => import('../pages/autre'));
 export const ProductsPage = lazy(() => import('../pages/products'));
 export const Page404 = lazy(() => import('../pages/page-not-found'));
 
@@ -55,6 +56,10 @@ export default function Router() {
       path: 'servicesAndLogistique',
       element: <ServicesAndLogistiquePage />,
     },   
+    {
+      path: 'autre',
+      element: <AutrePage />,
+    },
     {
       path: 'dashboard',
       element: <DashboardPage />,

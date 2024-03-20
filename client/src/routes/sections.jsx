@@ -5,6 +5,8 @@ import DashboardPage from '../pages/dashboard';
 import DashboardLayout from '../layouts/dashboard';
 import TransactionsPage from '../pages/transactions';
 import PompesPage from '../pages/pompes';
+import ServicesAndLogistiquePage from '../pages/servicesAndLogistique';
+
 
 export const IndexPage = lazy(() => import('../pages/app'));
 export const BlogPage = lazy(() => import('../pages/blog'));
@@ -48,11 +50,11 @@ export default function Router() {
     {
       path: 'transactions',
       element: <TransactionsPage />,
-    },
+    }, 
     {
-      path: 'services-logistique',
-      element: <ServicesLogistique />,
-    },
+      path: 'servicesAndLogistique',
+      element: <ServicesAndLogistiquePage />,
+    },   
     {
       path: 'dashboard',
       element: <DashboardPage />,

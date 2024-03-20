@@ -103,16 +103,69 @@ export default function DashboardView() {
     };
 
     const [paymentMode, setPaymentMode] = useState('');
+
+    // =============================CLIENT====================================== //
+    
+    const initialFormDataClient = {
+      email: '',
+      nom: '',
+      prenom: '',
+      date_naissance: '',
+      tel: '',
+      adresse_post: '',
+    };
+  
+    const [formDataClient, setFormDataClient] = useState(initialFormDataClient);
+  
+    const handleChangeClient = (event) => {
+      const { name, value } = event.target;
+      setFormDataClient(prevFormData => ({
+        ...prevFormData,
+        [name]: value
+      }));
+    };
+
+    const clickFormClient = async () => {
+      console.log(formDataClient);
+  
+      const response = await fetch('http://localhost:3001/api/newClient', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: formDataClient.email,
+          nom: formDataClient.nom,
+          prenom: formDataClient.prenom,
+          date_naissance: formDataClient.date_naissance,
+          numero_portable: formDataClient.tel,
+          adresse: formDataClient.adresse_post,
+        })
+      });
+  
+      console.log(response);
+      console.log(response.ok);
+
+      if (response.ok) {
+        // Réinitialiser les champs du formulaire à leur valeur initiale vide
+        setFormDataClient(initialFormDataClient);
+        console.log("Formulaire soumis avec succès!");
+      } else {
+        console.error("Erreur lors de la soumission du formulaire");
+      }
+    };
+    
     
     const renderFormClient = (title) => (
       <Stack spacing={3} direction="row" alignItems="center">
         <Typography variant="h6" sx={{ width: '25%' }}>{title}</Typography>
         <Stack spacing={3} direction="row" alignItems="center">
-          <PostSearch posts={posts}/>
-          <TextField name="email" label="Quantité" sx={{ width: '60%' }}/>
-          <TextField name="email" label="Adresse livraison" sx={{ width: '70%' }}/>
-          <TextField name="email" label="Date livraison" sx={{ width: '70%' }}/>
-          <TextField name="email" label="Prix" sx={{ width: '40%' }}/>
+          <TextField name="email" label="Email" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="nom" label="Nom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="prenom" label="Prénom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="tel" label="Tel." sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="adresse_post" label="Adresse Post." sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="date_naissance" label="Date de Naissance" sx={{ width: '40%' }} onChange={handleChangeClient}/>
         </Stack>
         <LoadingButton
           sx={{ width: '22.5%' }}
@@ -120,7 +173,7 @@ export default function DashboardView() {
           type="submit"
           variant="contained"
           color="inherit"
-          onClick={handleClick}
+          onClick={clickFormClient}
         >
           Submit
         </LoadingButton>
@@ -129,17 +182,17 @@ export default function DashboardView() {
 
     // =====================INCIDENT======================//
 
-    const initialFormData = {
+    const initialFormDataIncident = {
       intitule: '',
       descriptionIncident: '',
       gravite: ''
     };
   
-    const [formData, setFormData] = useState(initialFormData);
+    const [formDataIncident, setFormDataIncident] = useState(initialFormDataIncident);
   
     const handleChangeIncident = (event) => {
       const { name, value } = event.target;
-      setFormData(prevFormData => ({
+      setFormDataIncident(prevFormData => ({
         ...prevFormData,
         [name]: value
       }));
@@ -154,7 +207,7 @@ export default function DashboardView() {
     };    
 
     const clickFormIncident = async () => {
-      console.log(formData);
+      console.log(formDataIncident);
   
       const response = await fetch('http://localhost:3001/api/newIncident', {
         method: 'POST',
@@ -163,16 +216,16 @@ export default function DashboardView() {
         },
         body: JSON.stringify({
           id_incident: "Sid5N6leQMFIhEHupQhy",
-          gravite: formData.gravite,
-          intitule: formData.intitule,
+          gravite: formDataIncident.gravite,
+          intitule: formDataIncident.intitule,
           date: getDate(),
-          description: formData.descriptionIncident,
+          description: formDataIncident.descriptionIncident,
         })
       });
   
       if (response.ok) {
         // Réinitialiser les champs du formulaire à leur valeur initiale vide
-        setFormData(initialFormData);
+        setFormDataIncident(initialFormDataIncident);
         console.log("Formulaire soumis avec succès!");
       } else {
         console.error("Erreur lors de la soumission du formulaire");
@@ -183,8 +236,8 @@ export default function DashboardView() {
       <Stack spacing={3} direction="row" alignItems="center">
         <Typography variant="h6" sx={{ width: '20%' }}>{title}</Typography>
         <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '55%' }}>
-        <TextField name="intitule" value={formData.intitule} label="Intitulé" sx={{ width: '30%' }} onChange={handleChangeIncident} />
-        <TextField name="descriptionIncident" value={formData.descriptionIncident} label="Description de l'incident" sx={{ width: '70%' }} onChange={handleChangeIncident} />
+        <TextField name="intitule" value={formDataIncident.intitule} label="Intitulé" sx={{ width: '30%' }} onChange={handleChangeIncident} />
+        <TextField name="descriptionIncident" value={formDataIncident.descriptionIncident} label="Description de l'incident" sx={{ width: '70%' }} onChange={handleChangeIncident} />
         </Stack>
 
         <TextField
@@ -192,7 +245,7 @@ export default function DashboardView() {
           name="gravite"
           label="Gravité"
           sx={{ width: '30%' }}
-          value={formData.gravite}
+          value={formDataIncident.gravite}
           onChange={handleChangeIncident}
         >
           <MenuItem value={1}>1</MenuItem>

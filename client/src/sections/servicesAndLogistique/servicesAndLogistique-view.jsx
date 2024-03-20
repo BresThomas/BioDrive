@@ -70,6 +70,7 @@ export default function ServicesAndLogistiqueView() {
 
     const [paymentMode, setPaymentMode] = useState('');
     
+    
     const renderForm = (
       <Stack spacing={3} direction="row" alignItems="center">
         <Typography variant="h6">Demande de réappro</Typography>
@@ -95,6 +96,25 @@ export default function ServicesAndLogistiqueView() {
         </LoadingButton>
       </Stack>
     );    
+
+    const renderForm2 = (
+      <Stack spacing={30} direction="row" alignItems="center">
+    <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Tickets de transport en commun</Typography>
+    <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Nombre restant :  XX</Typography> 
+        
+
+        <LoadingButton
+          sx={{ width: '22.5%' }}
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          onClick={handleClick}
+        >
+          Submit
+        </LoadingButton>
+      </Stack>
+    );  
     
     const addProductFrom = (
       <Stack spacing={3} alignItems="left">
@@ -249,7 +269,7 @@ export default function ServicesAndLogistiqueView() {
                   width: 1,
                 }}
               >
-                {renderForm}
+                {renderForm2}
               </Card>
             </Stack>
           </Grid>
@@ -272,7 +292,7 @@ export default function ServicesAndLogistiqueView() {
             <Grid container spacing={3} columns={6}>
               <Grid xs={12} sm={6} md={3}>
               <AppNewsUpdate
-                title="Derniers réapprovisionnements"
+                title="Parkings disponibles"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
                   title: faker.person.jobTitle(),
@@ -285,7 +305,7 @@ export default function ServicesAndLogistiqueView() {
               
             <Grid xs={12} sm={6} md={3}>
               <AppNewsUpdate
-                title="Derniers réapprovisionnements"
+                title="Services de livraison spéciaux"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
                   title: faker.person.jobTitle(),
@@ -311,7 +331,7 @@ export default function ServicesAndLogistiqueView() {
 
           <Grid xs={12} sm={6} md={3}>
               <AppNewsUpdate
-                title="Derniers réapprovisionnements"
+                title="Consulter les plannings"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
                   title: faker.person.jobTitle(),
@@ -324,7 +344,7 @@ export default function ServicesAndLogistiqueView() {
               
             <Grid xs={12} sm={6} md={3}>
               <AppNewsUpdate
-                title="Derniers réapprovisionnements"
+                title="Consulter les tables de transaction"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
                   title: faker.person.jobTitle(),

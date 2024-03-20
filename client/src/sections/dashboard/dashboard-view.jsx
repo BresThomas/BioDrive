@@ -75,6 +75,7 @@ export default function DashboardView() {
     const handleClick = () => {
       router.push('/dashboard');
     };
+    
 
     const [paymentMode, setPaymentMode] = useState('');
     
@@ -101,26 +102,93 @@ export default function DashboardView() {
       </Stack>
     );
 
+    // =====================INCIDENT======================//
+
+    const initialFormData = {
+      intitule: '',
+      descriptionIncident: '',
+      gravite: ''
+    };
+  
+    const [formData, setFormData] = useState(initialFormData);
+  
+    const handleChangeIncident = (event) => {
+      const { name, value } = event.target;
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        [name]: value
+      }));
+    };
+
+    const getDate = () => {
+      const today = new Date();
+      const month = today.getMonth() + 1;
+      const year = today.getFullYear();
+      const date = today.getDate();
+      return `${date}/${month}/${year}`;
+    };    
+
+    const clickFormIncident = async () => {
+      console.log(formData);
+  
+      const response = await fetch('http://localhost:3001/api/newIncident', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id_incident: "Sid5N6leQMFIhEHupQhy",
+          gravite: formData.gravite,
+          intitule: formData.intitule,
+          date: getDate(),
+          description: formData.descriptionIncident,
+        })
+      });
+  
+      if (response.ok) {
+        // Réinitialiser les champs du formulaire à leur valeur initiale vide
+        setFormData(initialFormData);
+        console.log("Formulaire soumis avec succès!");
+      } else {
+        console.error("Erreur lors de la soumission du formulaire");
+      }
+    };
+
     const renderFormIncident = (title) => (
       <Stack spacing={3} direction="row" alignItems="center">
         <Typography variant="h6" sx={{ width: '20%' }}>{title}</Typography>
         <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '55%' }}>
-          <TextField name="intitule" label="Intitulé" sx={{ width: '30%' }}/>
-          <TextField name="descriptionIncident" label="Description de l'incident" sx={{ width: '70%' }}/>
+        <TextField name="intitule" value={formData.intitule} label="Intitulé" sx={{ width: '30%' }} onChange={handleChangeIncident} />
+        <TextField name="descriptionIncident" value={formData.descriptionIncident} label="Description de l'incident" sx={{ width: '70%' }} onChange={handleChangeIncident} />
         </Stack>
+
+        <TextField
+          select
+          name="gravite"
+          label="Gravité"
+          sx={{ width: '30%' }}
+          value={formData.gravite}
+          onChange={handleChangeIncident}
+        >
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+        </TextField>
+
         <LoadingButton
           sx={{ width: '20%' }}
           size="large"
           type="submit"
           variant="contained"
           color="inherit"
-          onClick={handleClick}
+          onClick={clickFormIncident}// Click -> envoie formulaire
         >
           Submit
         </LoadingButton>
       </Stack>
     );
        
+    // ======================================================= //
     
     const addProductFrom = (
       <Stack spacing={3} alignItems="left">

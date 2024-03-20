@@ -104,7 +104,7 @@ export default function UserPage() {
         </Button>
       </Stack>
 
-      <Card>
+      <Card>  
         <UserTableToolbar
           numSelected={selected.length}
           filterName={filterName}

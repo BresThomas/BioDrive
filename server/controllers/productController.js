@@ -1,5 +1,6 @@
 import firebase from '../Firebase.js';
 import Product from '../models/productModel.js';
+
 import {
   getFirestore,
   collection,
@@ -10,7 +11,9 @@ import {
   updateDoc,
   deleteDoc,
 } from 'firebase/firestore';
+
 const db = getFirestore(firebase);
+
 export const createProduct = async (req, res, next) => {
     try {
       const data = req.body;
@@ -45,6 +48,7 @@ export const createProduct = async (req, res, next) => {
       res.status(400).send(error.message);
     }
   };
+  
   export const getProduct = async (req, res, next) => {
     try {
       const id = req.params.id;

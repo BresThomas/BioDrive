@@ -1,98 +1,92 @@
-import { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { faker } from '@faker-js/faker';
+import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
-
+import TablePagination from '@mui/material/TablePagination';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
 import LoadingButton from '@mui/lab/LoadingButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import Iconify from '../../components/iconify';
+import { Card, CardContent } from '@mui/material';
 import { useRouter } from '../../routes/hooks';
-
-
+import AppNewsUpdate from '../overview/app-news-update';
 
 import { RouterLink } from '../../routes/components';
 
 import Logo from '../../components/logo';
-
-import AppOrderTimeline from '../overview/app-order-timeline';
+import { users } from '../../_mock/user';
+import { applyFilter, getComparator } from '../user/utils';
+import PostSearch from '../blog/post-search';
+import { posts } from '../../_mock/blog';
 
 // ----------------------------------------------------------------------
 
 export default function TransactionsView() {
+  const [page, setPage] = useState(0);
+  const [order, setOrder] = useState('asc');
+  const [selected, setSelected] = useState([]);
+  const [orderBy, setOrderBy] = useState('name');
+  const [filterName, setFilterName] = useState('');
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [hello, setHello] = useState('');
 
-  const [hello, setHello] = useState("");
-   
-    useEffect(() => {
-      fetch('http://localhost:3001/hello')
-        .then((response) => response.json())
-        .then((data) => setHello(data.message));
-    }, []);
+  useEffect(() => {
+    fetch('http://localhost:3001/hello')
+      .then((response) => response.json())
+      .then((data) => setHello(data.message));
+  }, []);
 
   const router = useRouter();
 
-  const [showPassword, setShowPassword] = useState(false);
+  const handleFilterByName = (event) => {
+    setPage(0);
+    setFilterName(event.target.value);
+  };
+
+  const dataFiltered = applyFilter({
+    inputData: users,
+    comparator: getComparator(order, orderBy),
+    filterName,
+  });
+
+  const notFound = !dataFiltered.length && !!filterName;
 
   const handleClick = () => {
     router.push('/dashboard');
   };
 
-  const renderHeader = (
-    <Box
-      component="header"
-      sx={{
-        top: 0,
-        left: 0,
-        width: 1,
-        lineHeight: 0,
-        position: 'fixed',
-        p: (theme) => ({ xs: theme.spacing(3, 3, 0), sm: theme.spacing(5, 5, 0) }),
-      }}
-    >
-      <Logo />
-    </Box>
-  );
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-  
-
-  const renderForm = (
-    <Grid container spacing={2} alignItems="center">
-      <Grid item xs={15} md={10}>
-        <TextField fullWidth name="email" label="Email address" />
-        <TextField fullWidth name="email" label="Email address" />
-        <TextField fullWidth name="email" label="Email address" />
-        <TextField fullWidth name="email" label="Email address" />
-        <Button href="/" size="large" variant="contained" component={RouterLink}>
-            Clear
-        </Button>
-        <LoadingButton
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
-          color="inherit"
-          onClick={handleClick}
-        >
-          Submit
-        </LoadingButton>
-      </Grid>
-    </Grid>
-  );
+  const handleChangeRowsPerPage = (event) => {
+    setPage(0);
+    setRowsPerPage(parseInt(event.target.value, 10));
+  };
 
   return (
     <>
-      {renderHeader}
-
+      <Box
+        component="header"
+        sx={{
+          top: 0,
+          left: 0,
+          width: 1,
+          lineHeight: 0,
+          position: 'fixed',
+          p: (theme) => ({ xs: theme.spacing(3, 3, 0), sm: theme.spacing(5, 5, 0) }),
+        }}
+      >
+        <Logo />
+      </Box>
+      <Grid container spacing={2}>
       <Container>
         <Box
           sx={{
             py: 12,
-            maxWidth: 480,
+            maxWidth: 1050,
             mx: 'auto',
             display: 'flex',
             minHeight: '100vh',
@@ -102,41 +96,69 @@ export default function TransactionsView() {
             justifyContent: 'center',
           }}
         >
-          <Typography variant="h3" sx={{ mb: 3 }}>
+          <Typography variant="h3" sx={{ mb: 3, margin: 2 }}>
             Dashboard transactions
           </Typography>
 
-          <Typography sx={{ color: 'text.secondary' }}>
-          {hello}
-          </Typography>
+          <Typography sx={{ color: 'text.secondary' }}>{hello}</Typography>
+          <Box width="100%" sx={{margin: 1}}>
+              <Card>
+                <CardContent>
+                  <Stack spacing={3} direction="row" alignItems="center">
+                    <Typography variant="h6">Enregistrer une transaction</Typography>
 
-          <Grid xs={12} md={6} lg={8}>
-          <AppOrderTimeline
-            title="Transactions passées"
-            list={[...Array(5)].map((_, index) => ({
-              id: faker.string.uuid(),
-              title: [
-                '1983, orders, $4220',
-                '12 Invoices have been paid',
-                'Order #37745 from September',
-                'New order placed #XF-2356',
-                'New order placed #XF-2346',
-              ][index],
-              type: `order${index + 1}`,
-              time: faker.date.past(),
-            }))}
-          />
-        </Grid>
+                    <Stack spacing={3} direction="row" alignItems="center" sx={{ flexGrow: 1 }}>
+                      <PostSearch posts={posts} />
+                      <TextField name="quantity" label="Quantité" />
+                      <TextField name="deliveryAddress" label="Adresse livraison" />
+                      <TextField name="deliveryDate" label="Date livraison" />
+                      <TextField name="price" label="Prix" />
+                    </Stack>
 
-          <Button href="/" size="large" variant="contained" component={RouterLink}>
+                    <LoadingButton
+                      sx={{ width: '22.5%' }}
+                      size="large"
+                      type="submit"
+                      variant="contained"
+                      color="inherit"
+                      onClick={handleClick}
+                    >
+                      Submit
+                    </LoadingButton>
+                  </Stack>
+                </CardContent>
+              </Card>
+            </Box>
+
+          <Grid xs={12} md={6} lg={8} sx ={{margin: 1}}>
+            <AppNewsUpdate
+              title="Past transactions"
+              list={[...Array(5)].map((_, index) => ({
+                id: faker.string.uuid(),
+                title: faker.person.jobTitle(),
+                description: faker.commerce.productDescription(),
+                image: `/assets/images/covers/cover_${index + 1}.jpg`,
+                postedAt: faker.date.recent(),
+              }))}
+            />
+          </Grid>
+
+          <Button sx={{margin: 1}} href="/" size="large" variant="contained" component={RouterLink}>
             Go to Home
           </Button>
         </Box>
+        <TablePagination
+          page={page}
+          component="div"
+          count={users.length}
+          rowsPerPage={rowsPerPage}
+          onPageChange={handleChangePage}
+          rowsPerPageOptions={[5, 10, 25]}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </Container>
-
-      {renderForm}
-
-  
+      
+      </Grid>
     </>
   );
 }

@@ -11,6 +11,8 @@ import IconButton from '@mui/material/IconButton';
 
 import { account } from '../../../_mock/account';
 
+import { auth } from '../../../Firebase';
+
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -39,8 +41,19 @@ export default function AccountPopover() {
 
   const handleClose = () => {
     setOpen(null);
+  };  
+  
+  const handleLogout = () => {
+    auth.signOut()
+      .then(() => {
+        console.log('Déconnexion réussie');
+        // Mettre en œuvre toute autre logique nécessaire après la déconnexion, comme rediriger l'utilisateur vers une autre page, etc.
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la déconnexion :', error.message);
+        // Gérer les erreurs de déconnexion ici, si nécessaire
+      });
   };
-
   return (
     <>
       <IconButton
@@ -105,7 +118,7 @@ export default function AccountPopover() {
         <MenuItem
           disableRipple
           disableTouchRipple
-          onClick={handleClose}
+          onClick={handleLogout}
           sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
         >
           Logout

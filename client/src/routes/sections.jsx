@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Outlet, Navigate, useRoutes } from 'react-router-dom';
 
 import DashboardPage from '../pages/dashboard';
+import SignUpPage from '../pages/signup';
 import DashboardLayout from '../layouts/dashboard';
 import TransactionsPage from '../pages/transactions';
 import PompesPage from '../pages/pompes';
@@ -36,6 +37,10 @@ export default function Router() {
     {
       path: 'login',
       element: <LoginPage />,
+    },    
+    {
+      path: 'signup',
+      element: <SignUpPage />,
     },
     {
       path: '404',

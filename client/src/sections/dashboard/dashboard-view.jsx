@@ -27,6 +27,7 @@ import { RouterLink } from '../../routes/components';
 import { usePathname, useRouter } from '../../routes/hooks';
 import Popup from '../../components/popup/popup';
 import AccountPopover from '../../layouts/dashboard/common/account-popover';
+import NotificationsPopover from '../../layouts/dashboard/common/notifications-popover';
 
 
 
@@ -273,7 +274,10 @@ export default function DashboardView() {
             <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
               ERP 👋
             </Typography>
-            <AccountPopover />
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <NotificationsPopover />
+              <AccountPopover />
+            </Stack>
           </Stack>
           <Stack direction="row" spacing={2} sx={{ p: 2 }}>
             {navConfig.map((item) => (

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton'; // Import from correct path
+import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
@@ -17,22 +17,23 @@ import Iconify from '../../components/iconify';
 import Logo from '../../components/logo';
 import { bgGradient } from '../../theme/css';
 
-const LoginView = () => {
+const SignupView = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // Add state for password visibility
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleSignup = (e) => {
     e.preventDefault();
-    signInWithEmailAndPassword(auth, email, password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
+        // Account created successfully
         const user = userCredential.user;
         navigate("/dashboard");
       })
       .catch((error) => {
+        // Handle signup errors
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
@@ -67,21 +68,16 @@ const LoginView = () => {
         />
       </Stack>
 
-      <Stack direction="row" alignItems="center" justifyContent="flex-end" sx={{ my: 3 }}>
-        <Link variant="subtitle2" underline="hover">
-          Forgot password?
-        </Link>
-      </Stack>
-
       <LoadingButton
         fullWidth
         size="large"
         type="submit"
         variant="contained"
         color="inherit"
-        onClick={handleLogin}
+        onClick={handleSignup}
+        sx={{ mt: 4 }}
       >
-        Login
+        Sign Up
       </LoadingButton>
     </>
   );
@@ -112,12 +108,12 @@ const LoginView = () => {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Sign in to ERP 👋</Typography>
+          <Typography variant="h4">Create an Account</Typography>
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Don’t have an account?
-            <Link href="/signup" variant="subtitle2" sx={{ ml: 0.5 }}>
-              Get started
+            Already have an account?
+            <Link href="/login" variant="subtitle2" sx={{ ml: 0.5 }}>
+              Sign In
             </Link>
           </Typography>
 
@@ -128,4 +124,4 @@ const LoginView = () => {
   );
 };
 
-export default LoginView;
+export default SignupView;

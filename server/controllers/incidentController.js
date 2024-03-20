@@ -37,7 +37,8 @@ export const getIncidents = async (req, res, next) => {
         const incident = new Incident(
           doc.id,
           doc.data().gravite,
-          doc.data().date
+          doc.data().date,
+          doc.data().intitule,
         );
         incidentArray.push(incident);
       });

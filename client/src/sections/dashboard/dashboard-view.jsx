@@ -57,7 +57,7 @@ export default function DashboardView() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-      fetch('http://localhost:3001/api/reappros')
+      fetch('http://localhost:3001/api/products')
         .then((response) => response.json())
         .then((data) => {
           // Assurez-vous que les données sont un tableau
@@ -76,10 +76,10 @@ export default function DashboardView() {
       router.push('/dashboard');
     };
 
-    const [reappros, setReappro] = useState([]);
+    const [incidents, setIncident] = useState([]);
 
     useEffect(() => {
-      fetch('http://localhost:3001/api/reappros')
+      fetch('http://localhost:3001/api/incidents')
         .then(response => {
           if (!response.ok) {
             throw new Error('Erreur lors de la récupération des données');
@@ -87,7 +87,61 @@ export default function DashboardView() {
           return response.json();
         })
         .then(data => {
-          setReappro(data);
+          setIncident(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
+    const [stocks, setStock] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/stocks')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setStock(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
+    const [pompes, setPompe] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/pompes')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setPompe(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
+    const [clients, setClient] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/clients')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setClient(data);
         })
         .catch(error => {
           console.error("Erreur lors de la récupération des données:", error);
@@ -303,41 +357,30 @@ export default function DashboardView() {
           </Grid>
 
           <Grid container spacing={3}>
-            <Grid item xs={12} md={6} lg={4}>
-              <AppNewsUpdate
-                title="Derniers réapprovisionnements"
-                list={reappros.slice(-5).map(reappro => ({
-                  id: reappro.id_reappro,
-                  title: reappro.id_reappro,
-                  description: `Produits : ${reappro.noms.join(', ')}; commandé le ${reappro.date_debut}`, // Utilisez une description appropriée si disponible
-                  image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
-                  postedAt: reappro.date_fin, // Utilisez une date appropriée si disponible
-                }))}
-              />
-            </Grid>
           <Grid container spacing={3}> 
           <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
               title="Derniers incidents ⚠️"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
+              list={incidents.slice(0,5).map(incident => ({
+                id: incident.id_incident,
+                title: `Gravité : ${incident.gravite}`,
+                description: incident.intitule, // Utilisez une description appropriée si disponible
+                image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
+                postedAt: "03/20/2024", // Utilisez une date appropriée si disponible
               }))}
             />
           </Grid>
+          
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate
                 sx={{ width: 520, height: 200, overflowY: 'auto' }}
                 title="Consulter les stocks 📦"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
+                list={stocks.slice(0,5).map(stock => ({
+                  id: stock.id_stock,
+                  title: stock.stock_details,
+                  description: `Stock :`, // Utilisez une description appropriée si disponible
+                  image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
+                  postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
                 }))}
               />
             </Grid>
@@ -346,12 +389,12 @@ export default function DashboardView() {
           <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
               title="Pompes ⛽"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
+              list={pompes.slice(0,5).map(pompe => ({
+                id: pompe.id_pompe,
+                title: pompe.id_pompe,
+                description: `Carburants : ${pompe.carburants.join(", ")}`, // Utilisez une description appropriée si disponible
+                image: `https://cdn-icons-png.flaticon.com/512/115/115101.png`, // Utilisez une logique appropriée pour l'image
+                postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
               }))}
             />
           </Grid>
@@ -359,12 +402,12 @@ export default function DashboardView() {
               <AppNewsUpdate
                 sx={{ width: 520, height: 200, overflowY: 'auto' }}
                 title="Rechercher client 👤"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
+                list={clients.slice(0,5).map(client => ({
+                  id: client.id_client,
+                  title: client.nom + client.prenom,
+                  description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible
+                  image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
+                  postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
                 }))}
               />
             </Grid>

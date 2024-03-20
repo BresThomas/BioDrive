@@ -32,21 +32,14 @@ export default function TransactionsView() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [hello, setHello] = useState('');
 
-<<<<<<< HEAD
-  const [hello, setHello] = useState("");
+
   
-    useEffect(() => {
-      fetch('http://localhost:3001/hello')
-        .then((response) => response.json())
-        .then((data) => setHello(data.message));
-    }, []);
-=======
   useEffect(() => {
     fetch('http://localhost:3001/hello')
       .then((response) => response.json())
       .then((data) => setHello(data.message));
   }, []);
->>>>>>> ee98d4ac5a8b06a211659d7aab2daedde27620ba
+
 
   const router = useRouter();
 

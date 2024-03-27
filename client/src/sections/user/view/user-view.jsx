@@ -14,7 +14,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
 
 import { auth } from '../../../Firebase';
-import { users } from '../../../_mock/user';
+import { useUsers } from '../../../_mock/useUsers';
 
 import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
@@ -31,16 +31,14 @@ import { emptyRows, applyFilter, getComparator } from '../utils';
 export default function UserPage() {
   
   const navigate = useNavigate();
+  const users = useUsers();
 
-  useEffect(()=>{
+  useEffect(() => {
     onAuthStateChanged(auth, (user) => {
         if (user) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
           const uid = user.uid;
           navigate('/user'); 
         } else {
-          // User is signed out
           navigate('/login'); 
         }
       });
@@ -48,15 +46,10 @@ export default function UserPage() {
   }, [navigate])
 
   const [page, setPage] = useState(0);
-
   const [order, setOrder] = useState('asc');
-
   const [selected, setSelected] = useState([]);
-
   const [orderBy, setOrderBy] = useState('name');
-
   const [filterName, setFilterName] = useState('');
-
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleSort = (event, id) => {
@@ -117,10 +110,9 @@ export default function UserPage() {
                 onRequestSort={handleSort}
                 headLabel={[
                   { id: 'name', label: 'Name' },
-                  { id: 'company', label: 'Company' },
-                  { id: 'role', label: 'Role' },
-                  { id: 'isVerified', label: 'Verified', align: 'center' },
-                  { id: 'status', label: 'Status' },
+                  { id: 'phone', label: 'Numero de téléphone' },
+                  { id: 'adresse', label: 'Adresse' },
+                  { id: 'date_naissance', label: 'Date de naissance', align: 'center' },
                   { id: '' },
                 ]}
               />
@@ -131,11 +123,10 @@ export default function UserPage() {
                     <UserTableRow
                       key={row.id}
                       name={row.name}
-                      role={row.role}
-                      status={row.status}
-                      company={row.company}
+                      phone={row.phone}
+                      adresse={row.adresse}
                       avatarUrl={row.avatarUrl}
-                      isVerified={row.isVerified}
+                      date_naissance={row.date_naissance}
                       selected={selected.indexOf(row.name) !== -1}
                     />
                   ))}

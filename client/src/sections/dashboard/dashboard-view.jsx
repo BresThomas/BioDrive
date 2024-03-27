@@ -105,7 +105,6 @@ export default function DashboardView() {
         body: JSON.stringify({
           paymentMode,
           value: enteredValue,
-          date: new Date().toLocaleString()
         })
       });
     };
@@ -286,7 +285,7 @@ export default function DashboardView() {
       const hour = today.getHours().toString().padStart(2, '0');
       const minutes = today.getMinutes().toString().padStart(2, '0');
       const seconds = today.getSeconds().toString().padStart(2, '0');
-      return `${month}/${date}/${year} ${hour}:${minutes}:${seconds}`;
+      return `${year}-${month}-${date}-${hour}:${minutes}:${seconds}`;
     };    
 
     const clickFormIncident = async () => {
@@ -298,7 +297,6 @@ export default function DashboardView() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          id_incident: "Sid5N6leQMFIhEHupQhy",
           gravite: formDataIncident.gravite,
           intitule: formDataIncident.intitule,
           date: getDate(),
@@ -575,7 +573,7 @@ export default function DashboardView() {
                   id: client.id_client,
                   title: `${client.nom} ${client.prenom}`,
                   description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible
-                  image: `/assets/images/avatars/avatar_2.jpg`, // Utilisez une logique appropriée pour l'image
+                  image: `/assets/images/avatars/avatar_${index + 1}.jpg`,
                 })).reverse()}
               />
             </Grid>

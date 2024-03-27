@@ -20,10 +20,9 @@ export default function UserTableRow({
   selected,
   name,
   avatarUrl,
-  company,
-  role,
-  isVerified,
-  status,
+  phone,
+  adresse,
+  date_naissance,
   handleClick,
 }) {
   const [open, setOpen] = useState(null);
@@ -49,15 +48,11 @@ export default function UserTableRow({
           </Stack>
         </TableCell>
 
-        <TableCell>{company}</TableCell>
+        <TableCell>{phone}</TableCell>
 
-        <TableCell>{role}</TableCell>
-
-        <TableCell align="center">{isVerified ? 'Yes' : 'No'}</TableCell>
-
-        <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>{status}</Label>
-        </TableCell>
+        <TableCell>{adresse}</TableCell>
+        
+        <TableCell align="center">{date_naissance}</TableCell>
 
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
@@ -92,11 +87,10 @@ export default function UserTableRow({
 
 UserTableRow.propTypes = {
   avatarUrl: PropTypes.any,
-  company: PropTypes.any,
+  phone: PropTypes.any,
+  adresse: PropTypes.any,
   handleClick: PropTypes.func,
-  isVerified: PropTypes.any,
+  date_naissance: PropTypes.any,
   name: PropTypes.any,
-  role: PropTypes.any,
   selected: PropTypes.any,
-  status: PropTypes.string,
 };

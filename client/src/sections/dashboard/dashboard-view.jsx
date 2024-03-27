@@ -560,7 +560,7 @@ export default function DashboardView() {
           </Grid>
         </Grid>
         <Grid>
-            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }} pt={3}>
               <Card
                 sx={{
                   p: 3,

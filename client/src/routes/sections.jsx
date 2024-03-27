@@ -13,7 +13,6 @@ export const IndexPage = lazy(() => import('../pages/app'));
 export const GerantPage = lazy(() => import('../pages/gerant'));
 export const UserPage = lazy(() => import('../pages/user'));
 export const LoginPage = lazy(() => import('../pages/login'));
-export const ServicesLogistique = lazy(() => import('../pages/services-logistique'));
 export const AutrePage = lazy(() => import('../pages/autre'));
 export const ProductsPage = lazy(() => import('../pages/products'));
 export const Page404 = lazy(() => import('../pages/page-not-found'));
@@ -66,10 +65,6 @@ export default function Router() {
     {
       path: 'autre',
       element: <AutrePage />,
-    },
-    {
-      path: 'servicesAndLogistique',
-      element: <ServicesLogistique />,
     },
     {
       path: 'gerant',

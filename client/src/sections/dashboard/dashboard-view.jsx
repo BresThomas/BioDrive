@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';
@@ -15,6 +16,8 @@ import Card from '@mui/material/Card';
 import InputAdornment from '@mui/material/InputAdornment';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+
+import { onAuthStateChanged } from 'firebase/auth';
 
 import PostSearch from '../blog/post-search';
 import Iconify from '../../components/iconify';
@@ -41,11 +44,30 @@ import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
 import { posts } from '../../_mock/blog';
 
+import { auth } from '../../Firebase';
+
 // ----------------------------------------------------------------------
 
 
 const paymentModes = ['Cartes bancaire', 'Liquide'];
 export default function DashboardView() {
+
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          const uid = user.uid;
+          navigate('/dashboard'); 
+        } else {
+          // User is signed out
+          navigate('/login'); 
+        }
+      });
+      
+  }, [navigate])
 
   const [enteredValue, setEnteredValue] = useState('');
 
@@ -60,7 +82,7 @@ export default function DashboardView() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-      fetch('http://localhost:3001/api')
+      fetch('http://localhost:3001/api/products')
         .then((response) => response.json())
         .then((data) => {
           // Assurez-vous que les données sont un tableau

@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';

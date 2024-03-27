@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 import { onAuthStateChanged } from 'firebase/auth';
 
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { alpha, useTheme } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
+import ListItemButton from '@mui/material/ListItemButton';
 import TablePagination from '@mui/material/TablePagination';
 
 import { auth } from '../../../Firebase';
@@ -27,6 +31,10 @@ import UserTableHead from '../user-table-head';
 import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
+import { usePathname, useRouter } from '../../../routes/hooks';
+import { RouterLink } from '../../../routes/components';
+
+import navConfig from '../../../layouts/dashboard/config-navigation';
 
 export default function UserPage() {
 
@@ -162,18 +170,22 @@ export default function UserPage() {
 
   return (
     <Container>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5} mt={5}>
-        <Typography variant="h4">Users</Typography>
-        {/* <Button variant="contained" color="inherit" onClick={() => setIsNewClientFormVisible(true)} startIcon={<Iconify icon="eva:plus-fill" />}>
-          New User
-        </Button> */}
-      </Stack>
-
+      <Grid item xs={36} sm={12} md={7} xl={7}>
+          <Stack direction="row" spacing={2} sx={{ p: 2, pt: 5 }}>
+            {navConfig.map((item) => (
+              <NavItem key={item.title} item={item} />
+            ))}
+          </Stack>
+      </Grid>
+      <Box pb={3} pt={3} >
+          { renderFormClient("Ajouter un client") } 
+        </Box>
       <Card>
         <UserTableToolbar
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
+          title="Users 👤"
         />
 
         <Scrollbar>
@@ -230,10 +242,49 @@ export default function UserPage() {
           />
         </Card>
 
-        <Box pt={5}>
-          { renderFormClient("Ajouter un client 👤") } 
-        </Box>
+        
       </Container>
     );
   }
+
+  // ----------------------------------------------------------------------
+  
+  function NavItem({ item }) {
+    const pathname = usePathname();
+  
+    const active = item.path === pathname;
+  
+    return (
+      <ListItemButton
+        component={RouterLink}
+        href={item.path}
+        sx={{
+          minHeight: 44,
+          borderRadius: 0.75,
+          typography: 'body2',
+          color: 'text.secondary',
+          textTransform: 'capitalize',
+          fontWeight: 'fontWeightMedium',
+          ...(active && {
+            color: 'primary.main',
+            fontWeight: 'fontWeightSemiBold',
+            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
+            '&:hover': {
+              bgcolor: (theme) => alpha(theme.palette.primary.main, 0.16),
+            },
+          }),
+        }}
+      >
+        <Box component="span" sx={{ width: 24, height: 24, mr: 2 }}>
+          {item.icon}
+        </Box>
+  
+        <Box component="span">{item.title} </Box>
+      </ListItemButton>
+    );
+  }
+  
+  NavItem.propTypes = {
+    item: PropTypes.object,
+  };
   

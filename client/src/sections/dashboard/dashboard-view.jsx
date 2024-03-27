@@ -524,53 +524,59 @@ export default function DashboardView() {
           <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
               title="Derniers incidents ⚠️"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
+              path="/incidents"
+              list={incidents.slice(0,5).map(incident => ({
+                id: incident.id_incident,
+                title: `Gravité : ${incident.gravite}`,
+                description: incident.intitule, // Utilisez une description appropriée si disponible
+                image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
+                postedAt: "03/20/2024", // Utilisez une date appropriée si disponible
               }))}
+
             />
           </Grid>
           
             <Grid xs={12} md={6} lg={4}>
-              <AppNewsUpdate
-                sx={{ width: 520, height: 200, overflowY: 'auto' }}
-                title="Consulter les stocks 📦"
-                list={stocks.slice(0,5).map(stock => ({
-                  id: stock.id_stock,
-                  title: `Stock :`,
-                  description: ` : ${stock.details.join(", ")}`, // Utilisez une description appropriée si disponible
-                  image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
-                  postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
-                }))}
-              />
+            <AppNewsUpdate
+              sx={{ width: 520, height: 200, overflowY: 'auto' }}
+              title="Consulter les stocks 📦"
+              path="/stocks"
+              list={stocks.slice(0,5).map(stock => ({
+                id: stock.id_stock,
+                title: stock.stock_details,
+                description: ` : ${stock.details ? stock.details.join(", ") : ''}`, // Vérifiez si stock.details est défini avant d'utiliser join
+                image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
+                postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
+              }))}
+            />
             </Grid>
           </Grid>
         <Grid container spacing={3}> 
           <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
               title="Pompes ⛽"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
+              path="/pompes"
+              list={pompes.slice(0,5).map(pompe => ({
+                id: pompe.id_pompe,
+                title: pompe.id_pompe,
+                description: `Carburants : ${pompe.carburants.join(", ")}`, // Utilisez une description appropriée si disponible
+                image: `https://cdn-icons-png.flaticon.com/512/115/115101.png`, // Utilisez une logique appropriée pour l'image
+                postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
               }))}
+
             />
           </Grid>
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate
                 sx={{ width: 520, height: 200, overflowY: 'auto' }}
                 title="Rechercher client 👤"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
+                path="/clients"
+                list={clients.slice(0,5).map(client => ({
+                  id: client.id_client,
+                  title: client.nom + client.prenom,
+                  description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible
+                  image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
+                  postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
                 }))}
               />
             </Grid>

@@ -1,6 +1,5 @@
 import { faker } from '@faker-js/faker';
 import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
 import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';
@@ -183,6 +182,78 @@ export default function DashboardView() {
 
     const [paymentMode, setPaymentMode] = useState('');
 
+    const [incidents, setIncident] = useState([]);
+ 
+    useEffect(() => {
+      fetch('http://localhost:3001/api/incidents')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setIncident(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+ 
+    const [stocks, setStock] = useState([]);
+ 
+    useEffect(() => {
+      fetch('http://localhost:3001/api/stocks')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setStock(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+ 
+    const [pompes, setPompe] = useState([]);
+ 
+    useEffect(() => {
+      fetch('http://localhost:3001/api/pompes')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setPompe(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+ 
+    const [clients, setClient] = useState([]);
+ 
+    useEffect(() => {
+      fetch('http://localhost:3001/api/clients')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setClient(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
     // =============================CLIENT====================================== //
     
     const initialFormDataClient = {
@@ -226,7 +297,7 @@ export default function DashboardView() {
         // Réinitialiser les champs du formulaire à leur valeur initiale vide
         setFormDataClient(initialFormDataClient);
         console.log("Formulaire soumis avec succès!");
-        window.location.reload(false);
+        window.location.reload(true);
       } else {
         console.error("Erreur lors de la soumission du formulaire");
       }
@@ -234,27 +305,34 @@ export default function DashboardView() {
     
     
     const renderFormClient = (title) => (
-      <Stack spacing={3} direction="row" alignItems="center">
-        <Typography variant="h6" sx={{ width: '25%' }}>{title}</Typography>
+      <Card
+      sx={{
+        p: 3,
+        width: 1,
+      }}
+      >
         <Stack spacing={3} direction="row" alignItems="center">
-          <TextField name="email" value={formDataClient.email} label="Email" sx={{ width: '40%' }} onChange={handleChangeClient}/>
-          <TextField name="nom" value={formDataClient.nom} label="Nom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
-          <TextField name="prenom" value={formDataClient.prenom} label="Prénom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
-          <TextField name="tel" value={formDataClient.tel} label="Tel." sx={{ width: '40%' }} onChange={handleChangeClient}/>
-          <TextField name="adresse_post" value={formDataClient.adresse_post} label="Adresse Post." sx={{ width: '40%' }} onChange={handleChangeClient}/>
-          <TextField name="date_naissance" value={formDataClient.date_naissance} label="Date de Naissance" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <Typography variant="h6" sx={{ width: '25%' }}>{title}</Typography>
+          <Stack spacing={3} direction="row" alignItems="center">
+            <TextField name="email" value={formDataClient.email} label="Email" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+            <TextField name="nom" value={formDataClient.nom} label="Nom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+            <TextField name="prenom" value={formDataClient.prenom} label="Prénom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+            <TextField name="tel" value={formDataClient.tel} label="Tel." sx={{ width: '40%' }} onChange={handleChangeClient}/>
+            <TextField name="adresse_post" value={formDataClient.adresse_post} label="Adresse Post." sx={{ width: '40%' }} onChange={handleChangeClient}/>
+            <TextField name="date_naissance" value={formDataClient.date_naissance} label="Date de Naissance" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          </Stack>
+          <LoadingButton
+            sx={{ width: '22.5%' }}
+            size="large"
+            type="submit"
+            variant="contained"
+            color="inherit"
+            onClick={clickFormClient}
+          >
+            Submit
+          </LoadingButton>
         </Stack>
-        <LoadingButton
-          sx={{ width: '22.5%' }}
-          size="large"
-          type="submit"
-          variant="contained"
-          color="inherit"
-          onClick={clickFormClient}
-        >
-          Submit
-        </LoadingButton>
-      </Stack>
+      </Card>
     );
 
     // =====================INCIDENT======================//
@@ -283,10 +361,7 @@ export default function DashboardView() {
       const hour = today.getHours().toString().padStart(2, '0');
       const minutes = today.getMinutes().toString().padStart(2, '0');
       const seconds = today.getSeconds().toString().padStart(2, '0');
-
-      console.log(month, date, year, hour, minutes, seconds);
-
-      return `${month}/${date}/${year} ${hour}:${minutes}:${seconds}`;
+      return `${year}-${month}-${date}-${hour}:${minutes}:${seconds}`;
     };    
 
     const clickFormIncident = async () => {
@@ -298,7 +373,6 @@ export default function DashboardView() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          id_incident: "Sid5N6leQMFIhEHupQhy",
           gravite: formDataIncident.gravite,
           intitule: formDataIncident.intitule,
           date: getDate(),
@@ -310,7 +384,7 @@ export default function DashboardView() {
         // Réinitialiser les champs du formulaire à leur valeur initiale vide
         setFormDataIncident(initialFormDataIncident);
         console.log("Formulaire soumis avec succès!");
-        window.location.reload(false);
+        window.location.reload(true);
       } else {
         console.error("Erreur lors de la soumission du formulaire");
       }
@@ -512,14 +586,7 @@ export default function DashboardView() {
 
           <Grid xs={12} sm={6} md={3}>
             <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-              <Card
-                sx={{
-                  p: 3,
-                  width: 1,
-                }}
-              >
                 {renderFormClient('Ajouter client 👤')}
-              </Card>
             </Stack>
           </Grid>
 
@@ -535,7 +602,7 @@ export default function DashboardView() {
                 description: `${incident.description}, Gravité : ${incident.gravite}`, // Utilisez une description appropriée si disponible
                 image: '/assets/icons/incident.png',
                 postedAt: `${incident.date}`,
-              })).reverse()}             
+              }))}             
             />
           </Grid>
           
@@ -549,7 +616,7 @@ export default function DashboardView() {
                 title: `id : ${stock.id_stock}`,
                 description: `Contenu : ${stock.details ? stock.details.join(", ") : ', '}`,
                 image: `/assets/icons/stock.png`,
-              })).reverse()}
+              }))}
             />
             </Grid>
           </Grid>
@@ -561,9 +628,10 @@ export default function DashboardView() {
               list={pompes.slice(0,5).map(pompe => ({
                 id: pompe.id_pompe,
                 title: pompe.id_pompe,
-                description: `Carburants : ${pompe.carburants.join(", ")}`, // Utilisez une description appropriée si disponible
+                description: `Carburants : ${pompe.carburants.join(", ")}`,
                 image: `/assets/icons/borne.png`,
-              })).reverse()}
+                postedAt: "02/03/2023",
+              }))}
 
             />
           </Grid>
@@ -572,18 +640,18 @@ export default function DashboardView() {
                 sx={{ width: 520, height: 200, overflowY: 'auto' }}
                 title="Rechercher client 👤"
                 path="/user"
-                list={clients.slice(0,5).map((client, index) => ({
+                list={clients.slice(0,5).map((client) => ({
                   id: client.id_client,
                   title: `${client.nom} ${client.prenom}`,
                   description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible
-                  image: `/assets/images/avatars/avatar_2.jpg`, // Utilisez une logique appropriée pour l'image
-                })).reverse()}
+                  image: `/assets/images/avatars/avatar_2.jpg`,
+                }))}
               />
             </Grid>
           </Grid>
         </Grid>
         <Grid>
-            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }} pt={3}>
               <Card
                 sx={{
                   p: 3,

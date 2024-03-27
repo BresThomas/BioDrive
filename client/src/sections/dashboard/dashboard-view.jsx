@@ -557,7 +557,7 @@ export default function DashboardView() {
               path="/stocks"
               list={stocks.slice(0,5).map(stock => ({
                 id: stock.id_stock,
-                title: `id : ${stock.id_stock}`,
+                title: `ID stock : ${stock.id_stock}`,
                 description: `Contenu : ${stock.details ? stock.details.join(", ") : ', '}`,
                 image: `/assets/icons/stock.png`,
               }))}
@@ -571,7 +571,7 @@ export default function DashboardView() {
               path="/pompes"
               list={pompes.slice(0,5).map(pompe => ({
                 id: pompe.id_pompe,
-                title: pompe.id_pompe,
+                title: `ID pompe : ${pompe.id_pompe}`,
                 description: `Carburants : ${pompe.carburants.join(", ")}`,
                 image: `/assets/icons/borne.png`,
                 postedAt: "02/03/2023",

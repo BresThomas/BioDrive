@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
+import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Card from '@mui/material/Card';
+import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import { auth } from '../../Firebase';
@@ -20,8 +22,11 @@ import { bgGradient } from '../../theme/css';
 const SignupView = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [role, setRole] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
 
@@ -31,6 +36,14 @@ const SignupView = () => {
       .then((userCredential) => {
         // Account created successfully
         const user = userCredential.user;
+        const displayName = `${firstName} ${lastName}`;
+
+        return updateProfile(auth.currentUser, {
+          displayName,
+          role
+        });
+      })
+      .then(() => {
         navigate("/dashboard");
       })
       .catch((errorMessage) => {
@@ -59,15 +72,29 @@ const SignupView = () => {
     <>
       <Stack spacing={3}>
         <TextField
+          name="firstName"
+          label="Prénom"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+
+        <TextField
+          name="lastName"
+          label="Nom"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+        />
+
+        <TextField
           name="email"
-          label="Email address"
+          label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <TextField
           name="password"
-          label="Password"
+          label="Mot de passe"
           type={showPassword ? 'text' : 'password'}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -81,6 +108,16 @@ const SignupView = () => {
             ),
           }}
         />
+
+        <Select
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          fullWidth
+          label="Rôle"
+        >
+          <MenuItem value="gerant">Gérant</MenuItem>
+          <MenuItem value="employe">Employé</MenuItem>
+        </Select>
       </Stack>
 
       <LoadingButton
@@ -92,7 +129,7 @@ const SignupView = () => {
         onClick={handleSignup}
         sx={{ mt: 4 }}
       >
-        Sign Up
+        S&apos;enregistrer
       </LoadingButton>
 
       {error && (
@@ -129,12 +166,12 @@ const SignupView = () => {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Create an Account</Typography>
+          <Typography variant="h4">Créer un compte</Typography>
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Already have an account?
+            Vous avez déjà un compte ?
             <Link href="/login" variant="subtitle2" sx={{ ml: 0.5 }}>
-              Sign In
+              Se connecter
             </Link>
           </Typography>
 

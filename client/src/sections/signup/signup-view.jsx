@@ -38,7 +38,7 @@ const SignupView = () => {
         const user = userCredential.user;
         const displayName = `${firstName} ${lastName}`;
 
-        return updateProfile(auth.currentUser, {
+        return updateProfile(user, {
           displayName,
           role
         });
@@ -72,6 +72,7 @@ const SignupView = () => {
     <>
       <Stack spacing={3}>
         <TextField
+          required
           name="firstName"
           label="Prénom"
           value={firstName}
@@ -79,6 +80,7 @@ const SignupView = () => {
         />
 
         <TextField
+          required
           name="lastName"
           label="Nom"
           value={lastName}
@@ -86,6 +88,7 @@ const SignupView = () => {
         />
 
         <TextField
+          required
           name="email"
           label="Email"
           value={email}
@@ -93,6 +96,7 @@ const SignupView = () => {
         />
 
         <TextField
+          required
           name="password"
           label="Mot de passe"
           type={showPassword ? 'text' : 'password'}
@@ -110,6 +114,7 @@ const SignupView = () => {
         />
 
         <Select
+          required
           value={role}
           onChange={(e) => setRole(e.target.value)}
           fullWidth

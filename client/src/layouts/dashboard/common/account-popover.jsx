@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
@@ -52,7 +54,7 @@ export default function AccountPopover() {
   const handleClose = () => {
     setOpen(null);
   };
-
+  const navigate = useNavigate();
   const handleLogout = () => {
     auth.signOut()
       .then(() => {

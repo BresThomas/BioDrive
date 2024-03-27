@@ -49,22 +49,41 @@ import { auth } from '../../Firebase';
 const paymentModes = ['Cartes bancaire', 'Liquide'];
 export default function DashboardView() {
 
-  const navigate = useNavigate();
-
-  useEffect(()=>{
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
-          const uid = user.uid;
-          navigate('/dashboard'); 
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, (userLogged) => {
+        if (userLogged) {
+          setUser(userLogged);
+          setLoading(false);
         } else {
-          // User is signed out
-          navigate('/login'); 
+          navigate('/login');
         }
       });
-      
-  }, [navigate])
+
+      return () => unsubscribe();
+    }, [navigate]);
+
+    useEffect(() => {
+      // Vérifier le rôle de l'utilisateur lorsque les informations de l'utilisateur sont disponibles
+      if (user && !loading) {
+        // Récupérer le rôle de l'utilisateur depuis les informations de l'utilisateur
+        const role = user.role;
+        console.log("Role:", role)
+        if (role === 'gerant') {
+          // Si l'utilisateur est un gérant, affichez le tableau de bord du gérant
+          navigate('/dashboard');
+        } else if (role === 'employe') {
+          // Si l'utilisateur est un employé, affichez le tableau de bord de l'employé
+          navigate('/dashboard');
+        } else {
+          // Si le rôle n'est pas défini ou est invalide, déconnectez l'utilisateur
+          navigate('/dashboard');
+        }
+      }
+    }, [user, loading, navigate]);
 
   const [enteredValue, setEnteredValue] = useState('');
   

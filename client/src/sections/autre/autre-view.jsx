@@ -5,7 +5,6 @@ import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
@@ -15,25 +14,12 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
-import InputAdornment from '@mui/material/InputAdornment';
 
 import { posts } from '../../_mock/blog';
 import PostSearch from '../blog/post-search';
-import AppTasks from '../overview/app-tasks';
-import Iconify from '../../components/iconify';
-import AppNumPad from '../overview/app-numpad';
-import Popup from '../../components/popup/popup';
 import { RouterLink } from '../../routes/components';
 import AppNewsUpdate from '../overview/app-news-update';
 import { usePathname, useRouter } from '../../routes/hooks';
-import { NAV } from '../../layouts/dashboard/config-layout';
-import AppOrderTimeline from '../overview/app-order-timeline';
-import AppCurrentVisits from '../overview/app-current-visits';
-import AppWebsiteVisits from '../overview/app-website-visits';
-import AppWidgetSummary from '../overview/app-widget-summary';
-import AppTrafficBySite from '../overview/app-traffic-by-site';
-import AppCurrentSubject from '../overview/app-current-subject';
-import AppConversionRates from '../overview/app-conversion-rates';
 import navConfig from '../../layouts/dashboard/config-navigation';
 
 // ----------------------------------------------------------------------
@@ -74,36 +60,42 @@ export default function DashboardView() {
     };
 
     const [paymentMode, setPaymentMode] = useState('');
-    
-    const renderFormClient = (title) => (
+
+    const ajouterService = (title) => (
       <Stack spacing={3} direction="row" alignItems="center">
-        <Typography variant="h6" sx={{ width: '25%' }}>{title}</Typography>
-        <Stack spacing={3} direction="row" alignItems="center">
-          <PostSearch posts={posts}/>
-          <TextField name="email" label="Quantité" sx={{ width: '60%' }}/>
-          <TextField name="email" label="Adresse livraison" sx={{ width: '70%' }}/>
-          <TextField name="email" label="Date livraison" sx={{ width: '70%' }}/>
-          <TextField name="email" label="Prix" sx={{ width: '40%' }}/>
+        <Typography variant="h6" sx={{ width: '10%' }}>{title}</Typography>
+        <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '80%' }}>
+          <TextField name="nom" label="nom" sx={{ width: '16%' }}/>
+          <TextField name="type" label="type" sx={{ width: '16%' }}/>
+          <TextField name="mail" label="email" sx={{ width: '17%' }}/>
+          <TextField name="tel" label="téléphone" sx={{ width: '16%' }}/>
+          <TextField name="adresse" label="adresse" sx={{ width: '16%' }}/>
+          <TextField name="iban" label="iban" sx={{ width: '17%' }}/>
+
         </Stack>
         <LoadingButton
-          sx={{ width: '22.5%' }}
+          sx={{ width: '10%' }}
           size="large"
           type="submit"
           variant="contained"
           color="inherit"
           onClick={handleClick}
         >
-          Submit
+          valider
         </LoadingButton>
       </Stack>
     );
 
-    const renderFormIncident = (title) => (
+    const ajouterCredit = (title) => (
       <Stack spacing={3} direction="row" alignItems="center">
         <Typography variant="h6" sx={{ width: '20%' }}>{title}</Typography>
         <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '55%' }}>
-          <TextField name="intitule" label="Intitulé" sx={{ width: '30%' }}/>
-          <TextField name="descriptionIncident" label="Description de l'incident" sx={{ width: '70%' }}/>
+          <Typography variant="body1">Montant Bonnus</Typography>
+          <TextField name="montant" label="0%" sx={{ width: '20%' }}/>
+          <Typography variant="body1">Tranches Bonnus</Typography>
+          <TextField name="tranches" label="0%" sx={{ width: '20%' }}/>
+          <Typography variant="body1">Montant Minimum</Typography>
+          <TextField name="maximum" label="0%" sx={{ width: '20%' }}/>
         </Stack>
         <LoadingButton
           sx={{ width: '20%' }}
@@ -113,11 +105,11 @@ export default function DashboardView() {
           color="inherit"
           onClick={handleClick}
         >
-          Submit
+          valider
         </LoadingButton>
       </Stack>
     );
-    
+
     const searchProductFrom = (
       <Stack spacing={3} direction="row" alignItems="center">
         <PostSearch posts={posts} />
@@ -139,10 +131,10 @@ export default function DashboardView() {
 
     const listStock = (
       <Stack alignItems="left">
-        <Typography variant="h3">Stocks</Typography>
         <Stack direction="row" alignItems="center">
         <AppNewsUpdate
                 sx={{ width: 920, height: 200, overflowY: 'auto' }}
+                title="Stocks"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
                   title: faker.person.jobTitle(),
@@ -157,10 +149,10 @@ export default function DashboardView() {
 
     const listClient = (
       <Stack alignItems="left">
-        <Typography variant="h6">Liste Clients</Typography>
         <Stack direction="row" alignItems="center">
         <AppNewsUpdate
-                sx={{ width: 1020, height: 180, overflowY: 'auto' }}
+                sx={{ width: 1020, height: 150, overflowY: 'auto' }}
+                title="Liste Clients"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
                   title: faker.person.jobTitle(),
@@ -183,29 +175,20 @@ export default function DashboardView() {
             <Grid container spacing={3}>
               <Grid item >
                 <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-                <Grid xs={12.4} md={12.6} lg={12.4}>
-                    <Card
-                      sx={{
-                        p: 3,
-                        width: 1,
-                      }}
-                      >
+                  <Grid xs={12.4} md={12.6} lg={12.4}>
+                    <Card sx={{ p: 3, width: 1,}}>
                       {searchProductFrom}
                     </Card>
                   </Grid>
                 <Grid xs={12.4} md={12.6} lg={12.4}>
-                    <Card
-                      sx={{
-                        p: 3,
-                        width: 1,
-                      }}
-                      >
+                  <Card sx={{ p: 3, width: 1,}}>
                       {listStock}
                     </Card>
                   </Grid>
-                  <Grid container spacing={40}> 
+                  <Grid container spacing={10}> 
                     <Grid xs={6} md={6} lg={4}>
-                      <AppNewsUpdate sx={{ width: 350, height: 450, overflowY: 'auto' }}
+                      <AppNewsUpdate
+                        sx={{ width: 350, height: 400, overflowY: 'auto'}}
                         title="Planning 📅"
                         list={[...Array(5)].map((_, index) => ({
                           id: faker.string.uuid(),
@@ -218,7 +201,7 @@ export default function DashboardView() {
                     </Grid>
                     <Grid xs={6} md={6} lg={4}>
                         <AppNewsUpdate
-                          sx={{ width: 450, height: 450, overflowY: 'auto' }}
+                          sx={{ width: 400, height: 400, overflowY: 'auto', marginLeft: 10 }}
                           title="Rechercher Client 👤"
                           list={[...Array(5)].map((_, index) => ({
                             id: faker.string.uuid(),
@@ -244,43 +227,28 @@ export default function DashboardView() {
             ))}
           </Stack>
           <Grid xs={12.4} md={12.6} lg={12.4}>
-            <Card
-              sx={{
-                p: 3,
-                width: 1,
-              }}
-              >
+            <Card sx={{p: 2, width: 1,}}>
               {listClient}
             </Card>
           </Grid>
           <Grid xs={12} sm={6} md={3} pt={3}>
             <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-              <Card
-                sx={{
-                  p: 3,
-                  width: 1,
-                }}
-              >
-                {renderFormIncident('Carte Crédit Énergie ⚡️')}
+              <Card sx={{p: 2, width: 1,}}>
+                {ajouterCredit('Carte Crédit Énergie ⚡️')}
               </Card>
             </Stack>
           </Grid>
-          <Grid xs={12} sm={6} md={3} pt={3} spacing={3}>
+          <Grid xs={12} sm={6} md={3} pt={3} spacing={2} sx={{ marginBottom: 3 }}>
             <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-              <Card
-                sx={{
-                  p: 3,
-                  width: 1,
-                }}
-              >
-                {renderFormIncident('Ajouter Service 🛠️')}
+              <Card sx={{p: 2, width: 1,}}>
+                {ajouterService('Ajouter Service 🛠️')}
               </Card>
             </Stack>
           </Grid>
 
-          <Grid container spacing={3}>
+          <Grid container spacing={2}>
             <Grid xs={12} md={6} lg={4}>
-              <AppNewsUpdate sx={{ width: 520, height: 150, overflowY: 'auto' }}
+              <AppNewsUpdate sx={{ width: 520, height: 140, overflowY: 'auto' }}
                 title="Parkings disponibles 🚗"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
@@ -293,7 +261,7 @@ export default function DashboardView() {
             </Grid>
               <Grid xs={12} md={6} lg={4}>
                 <AppNewsUpdate
-                  sx={{ width: 520, height: 150, overflowY: 'auto' }}
+                  sx={{ width: 520, height: 140, overflowY: 'auto' }}
                   title="Services spéciaux de livraison 🚚"
                   list={[...Array(5)].map((_, index) => ({
                     id: faker.string.uuid(),
@@ -307,7 +275,7 @@ export default function DashboardView() {
           </Grid>
           <Grid container spacing={3}>
             <Grid xs={12} md={6} lg={4}>
-              <AppNewsUpdate sx={{ width: 520, height: 150, overflowY: 'auto' }}
+              <AppNewsUpdate sx={{ width: 520, height: 140, overflowY: 'auto' }}
                 title="Servces"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
@@ -320,7 +288,7 @@ export default function DashboardView() {
             </Grid>
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate 
-                sx={{ width: 520, height: 150, overflowX: 'auto', overflowY: 'none',
+                sx={{ width: 520, height: 140, overflowX: 'auto', overflowY: 'none',
                   display: 'flex', flexDirection: 'row' }}
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),

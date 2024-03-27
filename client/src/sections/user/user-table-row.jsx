@@ -18,6 +18,7 @@ import Iconify from '../../components/iconify';
 
 export default function UserTableRow({
   selected,
+  id,
   name,
   avatarUrl,
   phone,
@@ -34,6 +35,25 @@ export default function UserTableRow({
   const handleCloseMenu = () => {
     setOpen(null);
   };
+  
+  const handleDeleteClient = async (id_client) => {
+    setOpen(null);
+  
+    const response = await fetch(`http://localhost:3001/api/deleteClient/${id_client}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+  
+    if (response.ok) {
+      console.log("Suppression réussie !");
+      window.location.reload(true);
+    } else {
+      console.error("Erreur lors de la suppression du client");
+    }
+  };
+  
 
   return (
     <>
@@ -76,16 +96,18 @@ export default function UserTableRow({
           Edit
         </MenuItem>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={() => handleDeleteClient(id)} sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
           Delete
         </MenuItem>
+
       </Popover>
     </>
   );
 }
 
 UserTableRow.propTypes = {
+  id: PropTypes.any,
   avatarUrl: PropTypes.any,
   phone: PropTypes.any,
   adresse: PropTypes.any,

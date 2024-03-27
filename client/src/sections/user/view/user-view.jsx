@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { onAuthStateChanged } from 'firebase/auth';
@@ -6,9 +6,11 @@ import { onAuthStateChanged } from 'firebase/auth';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
+import TextField from '@mui/material/TextField';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 import TablePagination from '@mui/material/TablePagination';
@@ -26,23 +28,21 @@ import TableEmptyRows from '../table-empty-rows';
 import UserTableToolbar from '../user-table-toolbar';
 import { emptyRows, applyFilter, getComparator } from '../utils';
 
-// ----------------------------------------------------------------------
-
 export default function UserPage() {
-  
+
   const navigate = useNavigate();
   const users = useUsers();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-        if (user) {
-          const uid = user.uid;
-          navigate('/user'); 
-        } else {
-          navigate('/login'); 
-        }
-      });
-      
+      if (user) {
+        const uid = user.uid;
+        navigate('/user');
+      } else {
+        navigate('/login');
+      }
+    });
+
   }, [navigate])
 
   const [page, setPage] = useState(0);
@@ -80,19 +80,96 @@ export default function UserPage() {
     filterName,
   });
 
+  const initialFormDataClient = {
+    email: '',
+    nom: '',
+    prenom: '',
+    date_naissance: '',
+    tel: '',
+    adresse_post: '',
+  };
+
+  const [formDataClient, setFormDataClient] = useState(initialFormDataClient);
+
+  const handleChangeClient = (event) => {
+    const { name, value } = event.target;
+    setFormDataClient(prevFormDataClient => ({
+      ...prevFormDataClient,
+      [name]: value
+    }));
+  };
+
+  const clickFormClient = async () => {
+    console.log(formDataClient);
+
+    const response = await fetch('http://localhost:3001/api/newClient', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: formDataClient.email,
+        nom: formDataClient.nom,
+        prenom: formDataClient.prenom,
+        date_naissance: formDataClient.date_naissance,
+        numero_portable: formDataClient.tel,
+        adresse: formDataClient.adresse_post,
+      })
+    });
+
+    if (response.ok) {
+      // Réinitialiser les champs du formulaire à leur valeur initiale vide
+      setFormDataClient(initialFormDataClient);
+      console.log("Formulaire soumis avec succès!");
+      window.location.reload(true);
+    } else {
+      console.error("Erreur lors de la soumission du formulaire");
+    }
+  };
+
+  const renderFormClient = (title) => (
+    <Card
+    sx={{
+      p: 3,
+      width: 1,
+    }}
+    >
+      <Stack spacing={3} direction="row" alignItems="center">
+        <Typography variant="h6" sx={{ width: '25%' }}>{title}</Typography>
+        <Stack spacing={3} direction="row" alignItems="center">
+          <TextField name="email" value={formDataClient.email} label="Email" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="nom" value={formDataClient.nom} label="Nom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="prenom" value={formDataClient.prenom} label="Prénom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="tel" value={formDataClient.tel} label="Tel." sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="adresse_post" value={formDataClient.adresse_post} label="Adresse Post." sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="date_naissance" value={formDataClient.date_naissance} label="Date de Naissance" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+        </Stack>
+        <LoadingButton
+          sx={{ width: '22.5%' }}
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          onClick={clickFormClient}
+        >
+          Submit
+        </LoadingButton>
+      </Stack>
+    </Card>
+  );
+
   const notFound = !dataFiltered.length && !!filterName;
 
   return (
     <Container>
       <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5} mt={5}>
         <Typography variant="h4">Users</Typography>
-
-        <Button variant="contained" color="inherit" startIcon={<Iconify icon="eva:plus-fill" />}>
+        {/* <Button variant="contained" color="inherit" onClick={() => setIsNewClientFormVisible(true)} startIcon={<Iconify icon="eva:plus-fill" />}>
           New User
-        </Button>
+        </Button> */}
       </Stack>
 
-      <Card>  
+      <Card>
         <UserTableToolbar
           numSelected={selected.length}
           filterName={filterName}
@@ -121,37 +198,42 @@ export default function UserPage() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <UserTableRow
-                      key={row.id}
-                      name={row.name}
-                      phone={row.phone}
-                      adresse={row.adresse}
-                      avatarUrl={row.avatarUrl}
-                      date_naissance={row.date_naissance}
-                      selected={selected.indexOf(row.name) !== -1}
+                    name={row.name}
+                    phone={row.phone}
+                    adresse={row.adresse}
+                    avatarUrl={row.avatarUrl}
+                    date_naissance={row.date_naissance}
+                    selected={selected.indexOf(row.name) !== -1}
+                    id={row.id}
                     />
-                  ))}
+                    ))}
+  
+                  <TableEmptyRows
+                    height={77}
+                    emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                  />
+  
+                  {notFound && <TableNoData query={filterName} />}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Scrollbar>
+  
+          <TablePagination
+            page={page}
+            component="div"
+            count={users.length}
+            rowsPerPage={rowsPerPage}
+            onPageChange={handleChangePage}
+            rowsPerPageOptions={[5, 10, 25]}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Card>
 
-                <TableEmptyRows
-                  height={77}
-                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
-                />
-
-                {notFound && <TableNoData query={filterName} />}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Scrollbar>
-
-        <TablePagination
-          page={page}
-          component="div"
-          count={users.length}
-          rowsPerPage={rowsPerPage}
-          onPageChange={handleChangePage}
-          rowsPerPageOptions={[5, 10, 25]}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Card>
-    </Container>
-  );
-}
+        <Box pt={5}>
+          { renderFormClient("Ajouter un client 👤") } 
+        </Box>
+      </Container>
+    );
+  }
+  

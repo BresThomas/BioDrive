@@ -185,7 +185,7 @@ export default function UserPage() {
           numSelected={selected.length}
           filterName={filterName}
           onFilterName={handleFilterByName}
-          title="Users 👤"
+          title="Clients 👤"
         />
 
         <Scrollbar>
@@ -198,7 +198,7 @@ export default function UserPage() {
                 numSelected={selected.length}
                 onRequestSort={handleSort}
                 headLabel={[
-                  { id: 'name', label: 'Name' },
+                  { id: 'name', label: 'Nom et prénom' },
                   { id: 'phone', label: 'Numero de téléphone' },
                   { id: 'adresse', label: 'Adresse' },
                   { id: 'date_naissance', label: 'Date de naissance', align: 'center' },

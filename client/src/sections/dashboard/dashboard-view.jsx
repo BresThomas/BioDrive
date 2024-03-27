@@ -536,9 +536,9 @@ export default function DashboardView() {
               list={pompes.slice(0,5).map(pompe => ({
                 id: pompe.id_pompe,
                 title: pompe.id_pompe,
-                description: `Carburants : ${pompe.carburants.join(", ")}`, // Utilisez une description appropriée si disponible
-                image: `https://cdn-icons-png.flaticon.com/512/115/115101.png`, // Utilisez une logique appropriée pour l'image
-                postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
+                description: `Carburants : ${pompe.carburants.join(", ")}`,
+                image: `/assets/icons/borne.png`,
+                postedAt: "02/03/2023",
               }))}
 
             />

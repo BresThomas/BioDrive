@@ -182,77 +182,7 @@ export default function DashboardView() {
 
     const [paymentMode, setPaymentMode] = useState('');
 
-    const [incidents, setIncident] = useState([]);
- 
-    useEffect(() => {
-      fetch('http://localhost:3001/api/incidents')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des données');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setIncident(data);
-        })
-        .catch(error => {
-          console.error("Erreur lors de la récupération des données:", error);
-        });
-    }, []);
- 
-    const [stocks, setStock] = useState([]);
- 
-    useEffect(() => {
-      fetch('http://localhost:3001/api/stocks')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des données');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setStock(data);
-        })
-        .catch(error => {
-          console.error("Erreur lors de la récupération des données:", error);
-        });
-    }, []);
- 
-    const [pompes, setPompe] = useState([]);
- 
-    useEffect(() => {
-      fetch('http://localhost:3001/api/pompes')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des données');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setPompe(data);
-        })
-        .catch(error => {
-          console.error("Erreur lors de la récupération des données:", error);
-        });
-    }, []);
- 
-    const [clients, setClient] = useState([]);
- 
-    useEffect(() => {
-      fetch('http://localhost:3001/api/clients')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des données');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setClient(data);
-        })
-        .catch(error => {
-          console.error("Erreur lors de la récupération des données:", error);
-        });
-    }, []);
+    
 
     // =============================CLIENT====================================== //
     

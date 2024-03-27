@@ -16,7 +16,6 @@ import Card from '@mui/material/Card';
 import InputAdornment from '@mui/material/InputAdornment';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-
 import { onAuthStateChanged } from 'firebase/auth';
 
 import PostSearch from '../blog/post-search';
@@ -24,7 +23,8 @@ import Iconify from '../../components/iconify';
 import { RouterLink } from '../../routes/components';
 import { usePathname, useRouter } from '../../routes/hooks';
 import Popup from '../../components/popup/popup';
-
+import AccountPopover from '../../layouts/dashboard/common/account-popover';
+import NotificationsPopover from '../../layouts/dashboard/common/notifications-popover';
 
 import AppTasks from '../overview/app-tasks';
 import AppNewsUpdate from '../overview/app-news-update';
@@ -36,9 +36,6 @@ import AppTrafficBySite from '../overview/app-traffic-by-site';
 import AppCurrentSubject from '../overview/app-current-subject';
 import AppConversionRates from '../overview/app-conversion-rates';
 import AppNumPad from '../overview/app-numpad';
-
-import AccountPopover from '../../layouts/dashboard/common/account-popover';
-import NotificationsPopover from '../../layouts/dashboard/common/notifications-popover';
 
 import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
@@ -70,16 +67,16 @@ export default function DashboardView() {
   }, [navigate])
 
   const [enteredValue, setEnteredValue] = useState('');
-
+  
   const handleValueChange = (newValue) => {
     console.log("New value:", newValue);
     setEnteredValue(newValue);
   };
-
-    const theme = useTheme();
-    const router = useRouter();
-
-    const [products, setProducts] = useState([]);
+  
+  const theme = useTheme();
+  const router = useRouter();
+  
+  const [products, setProducts] = useState([]);
 
     useEffect(() => {
       fetch('http://localhost:3001/api/products')
@@ -89,13 +86,12 @@ export default function DashboardView() {
           if (Array.isArray(data)) {
             setProducts(data);
           } else {
-            console.error("Les données reçues ne sont pas un tableau.");
+            // User is signed out
+            navigate('/login'); 
           }
-        })
-        .catch((error) => {
-          console.error("Erreur lors de la récupération des données:", error);
         });
-    }, []);
+       
+  }, [navigate])
 
     const handleClick = () => {
       router.push('/dashboard');
@@ -125,10 +121,8 @@ export default function DashboardView() {
       });
     };
 
-    const [paymentMode, setPaymentMode] = useState('');
-
     const [incidents, setIncident] = useState([]);
- 
+
     useEffect(() => {
       fetch('http://localhost:3001/api/incidents')
         .then(response => {
@@ -144,9 +138,9 @@ export default function DashboardView() {
           console.error("Erreur lors de la récupération des données:", error);
         });
     }, []);
- 
+
     const [stocks, setStock] = useState([]);
- 
+
     useEffect(() => {
       fetch('http://localhost:3001/api/stocks')
         .then(response => {
@@ -162,9 +156,9 @@ export default function DashboardView() {
           console.error("Erreur lors de la récupération des données:", error);
         });
     }, []);
- 
+
     const [pompes, setPompe] = useState([]);
- 
+
     useEffect(() => {
       fetch('http://localhost:3001/api/pompes')
         .then(response => {
@@ -180,9 +174,9 @@ export default function DashboardView() {
           console.error("Erreur lors de la récupération des données:", error);
         });
     }, []);
- 
+
     const [clients, setClient] = useState([]);
- 
+
     useEffect(() => {
       fetch('http://localhost:3001/api/clients')
         .then(response => {
@@ -198,6 +192,10 @@ export default function DashboardView() {
           console.error("Erreur lors de la récupération des données:", error);
         });
     }, []);
+
+    const [paymentMode, setPaymentMode] = useState('');
+
+    
 
     // =============================CLIENT====================================== //
     
@@ -455,9 +453,11 @@ export default function DashboardView() {
 
       <Grid container spacing={3}>
           <Grid item xs={12} sm={12} md={5} xl={5}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} sx={{ p: 2 }}>
                 <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
                 Caisse 💶
                 </Typography>
+            </Stack>
             <Grid container spacing={3}>
               <Grid item >
                 <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
@@ -489,6 +489,7 @@ export default function DashboardView() {
                       <AppNewsUpdate
                       sx={{height: 400, overflowY: 'auto' }}
                         title="Panier du client 🛒"
+                        path="/user"
                         list={[...Array(5)].map((_, index) => ({
                           id: faker.string.uuid(),
                           title: faker.person.jobTitle(),
@@ -524,7 +525,7 @@ export default function DashboardView() {
               <NavItem key={item.title} item={item} />
             ))}
           </Stack>
-
+          
         <Grid container spacing={3}>
 
           <Grid xs={12} sm={6} md={3}>
@@ -532,6 +533,8 @@ export default function DashboardView() {
                 {renderFormClient('Ajouter client 👤')}
             </Stack>
           </Grid>
+
+          <Grid container spacing={3}>
           <Grid container spacing={3}> 
           <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
@@ -546,6 +549,7 @@ export default function DashboardView() {
               }))}             
             />
           </Grid>
+          
             <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate
               sx={{ width: 520, height: 200, overflowY: 'auto' }}
@@ -582,7 +586,7 @@ export default function DashboardView() {
                 path="/user"
                 list={clients.slice(0,5).map((client) => ({
                   id: client.id_client,
-                  title: client.nom + client.prenom,
+                  title: `${client.nom} ${client.prenom}`,
                   description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible
                   image: `/assets/images/avatars/avatar_2.jpg`,
                 }))}
@@ -604,6 +608,7 @@ export default function DashboardView() {
           </Grid>
         </Grid>
       </Grid>
+    </Grid>
   </Container>
 
   );

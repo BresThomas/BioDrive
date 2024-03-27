@@ -103,6 +103,78 @@ export default function DashboardView() {
 
     const [paymentMode, setPaymentMode] = useState('');
 
+    const [incidents, setIncident] = useState([]);
+ 
+    useEffect(() => {
+      fetch('http://localhost:3001/api/incidents')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setIncident(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+ 
+    const [stocks, setStock] = useState([]);
+ 
+    useEffect(() => {
+      fetch('http://localhost:3001/api/stocks')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setStock(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+ 
+    const [pompes, setPompe] = useState([]);
+ 
+    useEffect(() => {
+      fetch('http://localhost:3001/api/pompes')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setPompe(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+ 
+    const [clients, setClient] = useState([]);
+ 
+    useEffect(() => {
+      fetch('http://localhost:3001/api/clients')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setClient(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
     // =============================CLIENT====================================== //
     
     const initialFormDataClient = {
@@ -477,7 +549,7 @@ export default function DashboardView() {
                 sx={{ width: 520, height: 200, overflowY: 'auto' }}
                 title="Rechercher client 👤"
                 path="/clients"
-                list={clients.slice(0,5).map(client => ({
+                list={clients.slice(0,5).map((index, client) => ({
                   id: client.id_client,
                   title: client.nom + client.prenom,
                   description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible

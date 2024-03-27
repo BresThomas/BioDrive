@@ -23,6 +23,7 @@ const SignupView = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSignup = (e) => {
     e.preventDefault();
@@ -32,11 +33,25 @@ const SignupView = () => {
         const user = userCredential.user;
         navigate("/dashboard");
       })
-      .catch((error) => {
+      .catch((errorMessage) => {
         // Handle signup errors
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+        switch (errorMessage.code) {
+          case "auth/email-already-in-use":
+            errorMessage = "Cette adresse e-mail est déjà utilisée. Veuillez utiliser une autre adresse e-mail.";
+            break;
+          case "auth/weak-password":
+            errorMessage = "Le mot de passe est trop faible. Veuillez utiliser un mot de passe plus fort (minimum 6 caractères).";
+            break;
+          case "auth/invalid-email":
+            errorMessage = "L'adresse e-mail saisie est invalide. Veuillez saisir une adresse e-mail valide.";
+            break;
+          // Ajoutez d'autres cas pour d'autres erreurs Firebase courantes ici
+          default:
+            break;
+        }
+  
+        // Mettre à jour le state avec le message d'erreur convivial
+        setError(errorMessage);
       });
   };
 
@@ -79,6 +94,12 @@ const SignupView = () => {
       >
         Sign Up
       </LoadingButton>
+
+      {error && (
+        <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+          {error.toString()}
+        </Typography>
+      )}
     </>
   );
 

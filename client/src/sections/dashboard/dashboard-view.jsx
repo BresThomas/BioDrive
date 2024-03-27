@@ -527,9 +527,9 @@ export default function DashboardView() {
               path="/incidents"
               list={incidents.slice(0,5).map(incident => ({
                 id: incident.id_incident,
-                title: `Gravité : ${incident.gravite}`,
-                description: incident.intitule, // Utilisez une description appropriée si disponible
-                image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
+                title: incident.intitule,
+                description: `Gravité : ${incident.gravite}`, // Utilisez une description appropriée si disponible
+                image: '/assets/icons/incident.png',
                 postedAt: "03/20/2024", // Utilisez une date appropriée si disponible
               }))}
 
@@ -543,10 +543,10 @@ export default function DashboardView() {
               path="/stocks"
               list={stocks.slice(0,5).map(stock => ({
                 id: stock.id_stock,
-                title: stock.stock_details,
-                description: ` : ${stock.details ? stock.details.join(", ") : ''}`, // Vérifiez si stock.details est défini avant d'utiliser join
-                image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
-                postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
+                title: `id : ${stock.id_stock}`,
+                description: `Contenu : ${stock.details ? stock.details.join(", ") : ', '}`,
+                image: `/assets/icons/stock.png`,
+                postedAt: "02/03/2020",
               }))}
             />
             </Grid>
@@ -560,7 +560,7 @@ export default function DashboardView() {
                 id: pompe.id_pompe,
                 title: pompe.id_pompe,
                 description: `Carburants : ${pompe.carburants.join(", ")}`, // Utilisez une description appropriée si disponible
-                image: `https://cdn-icons-png.flaticon.com/512/115/115101.png`, // Utilisez une logique appropriée pour l'image
+                image: `/assets/icons/borne.png`, // Utilisez une logique appropriée pour l'image
                 postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
               }))}
 
@@ -570,12 +570,12 @@ export default function DashboardView() {
               <AppNewsUpdate
                 sx={{ width: 520, height: 200, overflowY: 'auto' }}
                 title="Rechercher client 👤"
-                path="/clients"
-                list={clients.slice(0,5).map(client => ({
+                path="/user"
+                list={clients.slice(0,5).map((client, index) => ({
                   id: client.id_client,
                   title: client.nom + client.prenom,
                   description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible
-                  image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
+                  image: `/assets/images/avatars/avatar_2.jpg`, // Utilisez une logique appropriée pour l'image
                   postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
                 }))}
               />

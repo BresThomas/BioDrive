@@ -201,7 +201,10 @@ export default function DashboardView() {
       const month = today.getMonth() + 1;
       const year = today.getFullYear();
       const date = today.getDate();
-      return `${date}/${month}/${year}`;
+      const hour = today.getHours().toString().padStart(2, '0');
+      const minutes = today.getMinutes().toString().padStart(2, '0');
+      const seconds = today.getSeconds().toString().padStart(2, '0');
+      return `${month}/${date}/${year} ${hour}:${minutes}:${seconds}`;
     };    
 
     const clickFormIncident = async () => {
@@ -258,7 +261,7 @@ export default function DashboardView() {
           type="submit"
           variant="contained"
           color="inherit"
-          onClick={clickFormIncident}// Click -> envoie formulaire
+          onClick={clickFormIncident}
         >
           Submit
         </LoadingButton>
@@ -432,58 +435,62 @@ export default function DashboardView() {
           <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
               title="Derniers incidents ⚠️"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
+              path="/incidents"
+              list={incidents.slice(0,5).map((incident, index) => ({
+                id: incident.id_incident,
+                title: incident.intitule,
+                description: `${incident.description}, Gravité : ${incident.gravite}`, // Utilisez une description appropriée si disponible
+                image: '/assets/icons/incident.png',
+                postedAt: `${incident.date}`,
+              })).reverse()}             
             />
           </Grid>
             <Grid xs={12} md={6} lg={4}>
-              <AppNewsUpdate
-                sx={{ width: 520, height: 200, overflowY: 'auto' }}
-                title="Consulter les stocks 📦"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
-                }))}
-              />
+            <AppNewsUpdate
+              sx={{ width: 520, height: 200, overflowY: 'auto' }}
+              title="Consulter les stocks 📦"
+              path="/stocks"
+              list={stocks.slice(0,5).map(stock => ({
+                id: stock.id_stock,
+                title: `id : ${stock.id_stock}`,
+                description: `Contenu : ${stock.details ? stock.details.join(", ") : ', '}`,
+                image: `/assets/icons/stock.png`,
+              })).reverse()}
+            />
             </Grid>
           </Grid>
         <Grid container spacing={3}> 
           <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
               title="Pompes ⛽"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
+              path="/pompes"
+              list={pompes.slice(0,5).map(pompe => ({
+                id: pompe.id_pompe,
+                title: pompe.id_pompe,
+                description: `Carburants : ${pompe.carburants.join(", ")}`, // Utilisez une description appropriée si disponible
+                image: `https://cdn-icons-png.flaticon.com/512/115/115101.png`, // Utilisez une logique appropriée pour l'image
+                postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
               }))}
+
             />
           </Grid>
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate
                 sx={{ width: 520, height: 200, overflowY: 'auto' }}
                 title="Rechercher client 👤"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
+                path="/clients"
+                list={clients.slice(0,5).map(client => ({
+                  id: client.id_client,
+                  title: client.nom + client.prenom,
+                  description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible
+                  image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
+                  postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
                 }))}
               />
             </Grid>
           </Grid>
         </Grid>
-        <Grid xs={12} sm={6} md={3} pt={3}>
+        <Grid>
             <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
               <Card
                 sx={{

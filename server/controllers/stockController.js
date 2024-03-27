@@ -36,7 +36,6 @@ export const getStocks = async (req, res, next) => {
       stocks.forEach((doc) => {
         const stock = new Stock(
           doc.id,
-          doc.data().stock_details,
           doc.data().details
         );
         stockArray.push(stock);

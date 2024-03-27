@@ -41,6 +41,9 @@ import AppCurrentSubject from '../overview/app-current-subject';
 import AppConversionRates from '../overview/app-conversion-rates';
 import AppNumPad from '../overview/app-numpad';
 
+import AccountPopover from '../../layouts/dashboard/common/account-popover';
+import NotificationsPopover from '../../layouts/dashboard/common/notifications-popover';
+
 import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
 import { posts } from '../../_mock/blog';
@@ -506,6 +509,7 @@ export default function DashboardView() {
               <AccountPopover />
             </Stack>
           </Stack>
+
           <Stack direction="row" spacing={2} sx={{ p: 2 }}>
             {navConfig.map((item) => (
               <NavItem key={item.title} item={item} />

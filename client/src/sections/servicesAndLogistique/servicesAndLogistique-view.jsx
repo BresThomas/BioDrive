@@ -98,7 +98,7 @@ export default function ServicesAndLogistiqueView() {
     );    
 
     const renderForm2 = (
-      <Stack spacing={30} direction="row" alignItems="center">
+      <Stack spacing={30} direction="row" alignItems="center" sx={{ width: '1000px'}}>
     <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Tickets de transport en commun</Typography>
     <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Nombre restant :  XX</Typography> 
         
@@ -115,6 +115,47 @@ export default function ServicesAndLogistiqueView() {
         </LoadingButton>
       </Stack>
     );  
+
+    const renderForm3 = (
+      <Stack spacing={30} direction="row" alignItems="center" sx={{ width: '1000px'}}>
+      <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Abonnement  aux transport en commun</Typography>
+        
+
+        <LoadingButton
+          sx={{ width: '22.5%' }}
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          onClick={handleClick}
+        >
+          Submit
+        </LoadingButton>
+      </Stack>
+    );  
+
+    const renderForm4 = (
+      <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '1000px'}}>
+        <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Réserver un service entre perticulier</Typography>
+    
+        <Stack spacing={3} direction="row" alignItems="center">
+          
+          <PostSearch posts={posts} />
+          <TextField name="email" label="EMail du client" />
+        </Stack>
+    
+        <LoadingButton
+          sx={{ width: '22.5%' }}
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          onClick={handleClick}
+        >
+          Submit
+        </LoadingButton>
+      </Stack>
+    );
     
     const addProductFrom = (
       <Stack spacing={3} alignItems="left">
@@ -282,16 +323,16 @@ export default function ServicesAndLogistiqueView() {
                   width: 1,
                 }}
               >
-                {renderForm}
+                {renderForm3}
               </Card>
             </Stack>
           </Grid>
 
           <Grid xs={12} md={6} lg={4}>
             
-            <Grid container spacing={3} columns={6}>
+            <Grid container spacing={3} >
               <Grid xs={12} sm={6} md={3}>
-              <AppNewsUpdate
+              <AppNewsUpdate sx={{ width: 520, height: 180, overflowY: 'auto' }}
                 title="Parkings disponibles"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
@@ -304,7 +345,7 @@ export default function ServicesAndLogistiqueView() {
               </Grid>
               
             <Grid xs={12} sm={6} md={3}>
-              <AppNewsUpdate
+              <AppNewsUpdate sx={{ width: 520, height: 180, overflowY: 'auto' }}
                 title="Services de livraison spéciaux"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
@@ -317,20 +358,20 @@ export default function ServicesAndLogistiqueView() {
             </Grid>
 
             <Grid xs={12} sm={6} md={6}>
-            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+            <Stack alignItems="center" justifyContent="center" sx={{ height: 1}}>
               <Card
                 sx={{
                   p: 3,
                   width: 1,
                 }}
               >
-                {renderForm}
+                {renderForm4}
               </Card>
             </Stack>
           </Grid>
 
-          <Grid xs={12} sm={6} md={3}>
-              <AppNewsUpdate
+          <Grid xs={15} sm={6} md={3}>
+              <AppNewsUpdate sx={{ width: 520, height: 280, overflowY: 'auto' }}
                 title="Consulter les plannings"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
@@ -342,8 +383,8 @@ export default function ServicesAndLogistiqueView() {
               />
               </Grid>
               
-            <Grid xs={12} sm={6} md={3}>
-              <AppNewsUpdate
+            <Grid xs={15} sm={6} md={3}>
+              <AppNewsUpdate sx={{ width: 520, height: 280, overflowY: 'auto' }}
                 title="Consulter les tables de transaction"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),

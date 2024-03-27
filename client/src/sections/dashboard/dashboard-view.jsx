@@ -511,7 +511,7 @@ export default function DashboardView() {
                 description: `${incident.description}, Gravité : ${incident.gravite}`, // Utilisez une description appropriée si disponible
                 image: '/assets/icons/incident.png',
                 postedAt: `${incident.date}`,
-              })).reverse()}             
+              }))}             
             />
           </Grid>
             <Grid xs={12} md={6} lg={4}>
@@ -524,7 +524,7 @@ export default function DashboardView() {
                 title: `id : ${stock.id_stock}`,
                 description: `Contenu : ${stock.details ? stock.details.join(", ") : ', '}`,
                 image: `/assets/icons/stock.png`,
-              })).reverse()}
+              }))}
             />
             </Grid>
           </Grid>
@@ -539,7 +539,7 @@ export default function DashboardView() {
                 description: `Carburants : ${pompe.carburants.join(", ")}`,
                 image: `/assets/icons/borne.png`,
                 postedAt: "02/03/2023",
-              })).reverse()}
+              }))}
 
             />
           </Grid>
@@ -553,7 +553,7 @@ export default function DashboardView() {
                   title: client.nom + client.prenom,
                   description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible
                   image: `/assets/images/avatars/avatar_2.jpg`,
-                })).reverse()}
+                }))}
               />
             </Grid>
           </Grid>

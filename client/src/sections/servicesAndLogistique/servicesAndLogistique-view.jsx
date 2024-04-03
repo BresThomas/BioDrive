@@ -69,19 +69,77 @@ export default function ServicesAndLogistiqueView() {
     };
 
     const [paymentMode, setPaymentMode] = useState('');
+
+    // ==================DEMANDE DE REAPPRO================ //
+
+    const initialFormDataReappro = {
+      id_produit: '',
+      quantite: '',
+      adresse_livraison: '',
+      date_livraison: '',
+      prix: '',
+    };
+  
+    const [formDataReappro, setFormDataReappro] = useState(initialFormDataReappro);
+  
+    const handleChangeReappro = (event) => {
+      const { name, value } = event.target;
+      setFormDataReappro(prevFormDataReappro => ({
+        ...prevFormDataReappro,
+        [name]: value
+      }));
+    };
+
+    const handleChangeSearchReappro = (event, value) => { // Recupere specifiquement l'id dans la list posts
+      // const { name, value } = event.target;
+      setFormDataReappro(prevFormDataReappro => ({
+        ...prevFormDataReappro,
+        id_produit: value.id
+      }));
+    };
+
+    const clickFormReappro = async () => {
+      console.log("vababab");
+      console.log(formDataReappro);
+  
+      const response = await fetch('http://localhost:3001/api/newReappro', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+
+          id_produit: formDataReappro.id_produit,
+          quantite: formDataReappro.quantite,
+          adresse_livraison: formDataReappro.adresse_livraison,
+          date_livraison: formDataReappro.date_livraison,
+          prix: formDataReappro.prix,
+        })
+      });
+
+      if (response.ok) {
+        // Réinitialiser les champs du formulaire à leur valeur initiale vide
+        setFormDataReappro(initialFormDataReappro);
+        console.log("Formulaire soumis avec succès!");
+        // window.location.reload(true);
+      } else {
+        console.error("Erreur lors de la soumission du formulaire");
+      }
+    };
     
     
+
     const renderForm = (
       <Stack spacing={3} direction="row" alignItems="center">
         <Typography variant="h6">Demande de réappro</Typography>
     
         <Stack spacing={3} direction="row" alignItems="center">
           
-          <PostSearch posts={posts} />
-          <TextField name="email" label="Quantité" />
-          <TextField name="email" label="Adresse livraison" />
-          <TextField name="email" label="Date livraison" />
-          <TextField name="email" label="Prix" />
+          <PostSearch posts={posts} onChange={handleChangeSearchReappro}/>
+          <TextField name="quantite" label="Quantité" onChange={handleChangeReappro} />
+          <TextField name="adresse_livraison" label="Adresse livraison" onChange={handleChangeReappro} />
+          <TextField name="date_livraison" label="Date livraison" onChange={handleChangeReappro} />
+          <TextField name="prix" label="Prix" onChange={handleChangeReappro} />
         </Stack>
     
         <LoadingButton
@@ -90,7 +148,7 @@ export default function ServicesAndLogistiqueView() {
           type="submit"
           variant="contained"
           color="inherit"
-          onClick={handleClick}
+          onClick={clickFormReappro}
         >
           Submit
         </LoadingButton>

@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';
@@ -15,10 +16,7 @@ import Card from '@mui/material/Card';
 import InputAdornment from '@mui/material/InputAdornment';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-
-import { useNavigate } from 'react-router-dom';
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from '../../Firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 import PostSearch from '../blog/post-search';
 import Iconify from '../../components/iconify';
@@ -27,8 +25,6 @@ import { usePathname, useRouter } from '../../routes/hooks';
 import Popup from '../../components/popup/popup';
 import AccountPopover from '../../layouts/dashboard/common/account-popover';
 import NotificationsPopover from '../../layouts/dashboard/common/notifications-popover';
-
-
 
 import AppTasks from '../overview/app-tasks';
 import AppNewsUpdate from '../overview/app-news-update';
@@ -45,13 +41,50 @@ import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
 import { posts } from '../../_mock/blog';
 
+import { auth } from '../../Firebase';
 
 // ----------------------------------------------------------------------
 
 
 const paymentModes = ['Cartes bancaire', 'Liquide'];
 export default function DashboardView() {
-  
+
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, (userLogged) => {
+        if (userLogged) {
+          setUser(userLogged);
+          setLoading(false);
+        } else {
+          navigate('/login');
+        }
+      });
+
+      return () => unsubscribe();
+    }, [navigate]);
+
+    useEffect(() => {
+      // Vérifier le rôle de l'utilisateur lorsque les informations de l'utilisateur sont disponibles
+      if (user && !loading) {
+        // Récupérer le rôle de l'utilisateur depuis les informations de l'utilisateur
+        const role = user.role;
+        console.log("Role:", role)
+        if (role === 'gerant') {
+          // Si l'utilisateur est un gérant, affichez le tableau de bord du gérant
+          navigate('/dashboard');
+        } else if (role === 'employe') {
+          // Si l'utilisateur est un employé, affichez le tableau de bord de l'employé
+          navigate('/dashboard');
+        } else {
+          // Si le rôle n'est pas défini ou est invalide, déconnectez l'utilisateur
+          navigate('/dashboard');
+        }
+      }
+    }, [user, loading, navigate]);
+
   const [enteredValue, setEnteredValue] = useState('');
   
   const handleValueChange = (newValue) => {
@@ -64,14 +97,13 @@ export default function DashboardView() {
   
   const [products, setProducts] = useState([]);
 
-  const navigate = useNavigate();
-    useEffect(()=>{
-      onAuthStateChanged(auth, (user) => {
-          if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/firebase.User
-            const uid = user.uid;
-            navigate('/dashboard'); 
+    useEffect(() => {
+      fetch('http://localhost:3001/api/products')
+        .then((response) => response.json())
+        .then((data) => {
+          // Assurez-vous que les données sont un tableau
+          if (Array.isArray(data)) {
+            setProducts(data);
           } else {
             // User is signed out
             navigate('/login'); 
@@ -544,7 +576,7 @@ export default function DashboardView() {
               path="/stocks"
               list={stocks.slice(0,5).map(stock => ({
                 id: stock.id_stock,
-                title: `id : ${stock.id_stock}`,
+                title: `ID stock : ${stock.id_stock}`,
                 description: `Contenu : ${stock.details ? stock.details.join(", ") : ', '}`,
                 image: `/assets/icons/stock.png`,
               }))}
@@ -558,7 +590,7 @@ export default function DashboardView() {
               path="/pompes"
               list={pompes.slice(0,5).map(pompe => ({
                 id: pompe.id_pompe,
-                title: pompe.id_pompe,
+                title: `ID pompe : ${pompe.id_pompe}`,
                 description: `Carburants : ${pompe.carburants.join(", ")}`,
                 image: `/assets/icons/borne.png`,
                 postedAt: "02/03/2023",

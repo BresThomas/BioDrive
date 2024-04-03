@@ -8,4 +8,4 @@ class Incident{
     }
 }
 
-export default Incident;
+module.exports = Incident;

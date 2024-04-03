@@ -1,12 +1,11 @@
-import express from 'express';
-
-import {
+const express = require('express');
+const {
   createAvantage,
   getAvantage,
   getAvantages,
   updateAvantage,
   deleteAvantage,
-} from '../controllers/avantageController.js';
+} = require('../controllers/avantageController.js');
 
 const router = express.Router();
 
@@ -16,4 +15,4 @@ router.get('/avantage/:id', getAvantage);
 router.put('/updateAvantage/:id', updateAvantage);
 router.delete('/deleteAvantage/:id', deleteAvantage);
 
-export default router;
+module.exports = router;

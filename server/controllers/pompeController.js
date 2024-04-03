@@ -1,20 +1,11 @@
-import firebase from '../Firebase.js';
-import Pompe from '../models/pompeModel.js';
-import {
-  getFirestore,
-  collection,
-  doc,
-  addDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+const firebase = require('../Firebase.js');
+const Pompe = require('../models/pompeModel.js');
+const { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc } = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
 // Créer une pompe
-export const createPompe = async (req, res, next) => {
+exports.createPompe = async (req, res, next) => {
   try {
     const data = req.body;
     await addDoc(collection(db, 'pompes'), data);
@@ -25,7 +16,7 @@ export const createPompe = async (req, res, next) => {
 };
 
 // Récupérer toutes les pompes
-export const getPompes = async (req, res, next) => {
+exports.getPompes = async (req, res, next) => {
   try {
     const pompes = await getDocs(collection(db, 'pompes'));
     const pompeArray = [];
@@ -49,7 +40,7 @@ export const getPompes = async (req, res, next) => {
 };
 
 // Récupérer une pompe par son ID
-export const getPompe = async (req, res, next) => {
+exports.getPompe = async (req, res, next) => {
   try {
     const id = req.params.id;
     const pompe = doc(db, 'pompes', id);
@@ -65,7 +56,7 @@ export const getPompe = async (req, res, next) => {
 };
 
 // Mettre à jour une pompe
-export const updatePompe = async (req, res, next) => {
+exports.updatePompe = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -78,7 +69,7 @@ export const updatePompe = async (req, res, next) => {
 };
 
 // Supprimer une pompe
-export const deletePompe = async (req, res, next) => {
+exports.deletePompe = async (req, res, next) => {
   try {
     const id = req.params.id;
     await deleteDoc(doc(db, 'pompes', id));

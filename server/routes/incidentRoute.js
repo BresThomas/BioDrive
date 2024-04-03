@@ -1,12 +1,11 @@
-import express from 'express';
-
-import {
+const express = require('express');
+const {
   createIncident,
   getIncident,
   getIncidents,
   updateIncident,
   deleteIncident,
-} from '../controllers/incidentController.js';
+} = require('../controllers/incidentController.js');
 
 const router = express.Router();
 
@@ -16,4 +15,4 @@ router.get('/incident/:id', getIncident);
 router.put('/updateIncident/:id', updateIncident);
 router.delete('/deleteIncident/:id', deleteIncident);
 
-export default router;
+module.exports = router;

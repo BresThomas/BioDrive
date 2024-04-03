@@ -1,20 +1,11 @@
-import firebase from '../Firebase.js';
-import Reappro from '../models/reapproModel.js';
-import {
-  getFirestore,
-  collection,
-  doc,
-  addDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+const firebase = require('../Firebase.js');
+const Reappro = require('../models/reapproModel.js');
+const { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc } = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
 // Créer un réapprovisionnement
-export const createReappro = async (req, res, next) => {
+exports.createReappro = async (req, res, next) => {
   try {
     const data = req.body;
     await addDoc(collection(db, 'reappros'), data);
@@ -25,7 +16,7 @@ export const createReappro = async (req, res, next) => {
 };
 
 // Récupérer tous les réapprovisionnements
-export const getReappros = async (req, res, next) => {
+exports.getReappros = async (req, res, next) => {
   try {
     const reappros = await getDocs(collection(db, 'reappros'));
     const reapproArray = [];
@@ -51,7 +42,7 @@ export const getReappros = async (req, res, next) => {
 };
 
 // Récupérer un réapprovisionnement par son ID
-export const getReappro = async (req, res, next) => {
+exports.getReappro = async (req, res, next) => {
   try {
     const id = req.params.id;
     const reappro = doc(db, 'reappros', id);
@@ -67,7 +58,7 @@ export const getReappro = async (req, res, next) => {
 };
 
 // Mettre à jour un réapprovisionnement
-export const updateReappro = async (req, res, next) => {
+exports.updateReappro = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -80,7 +71,7 @@ export const updateReappro = async (req, res, next) => {
 };
 
 // Supprimer un réapprovisionnement
-export const deleteReappro = async (req, res, next) => {
+exports.deleteReappro = async (req, res, next) => {
   try {
     const id = req.params.id;
     await deleteDoc(doc(db, 'reappros', id));

@@ -5,4 +5,4 @@ class Pompe {
     }
 }
 
-export default Pompe;
+module.exports = Pompe;

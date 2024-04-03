@@ -7,4 +7,4 @@ class Avantage {
     }
 }
 
-export default Avantage;
+module.exports = Avantage;

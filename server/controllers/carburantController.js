@@ -1,6 +1,6 @@
-import firebase from '../Firebase.js';
-import Carburant from '../models/carburantModel.js';
-import {
+const firebase = require('../Firebase.js');
+const Carburant = require('../models/carburantModel.js');
+const {
   getFirestore,
   collection,
   doc,
@@ -9,12 +9,12 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
-} from 'firebase/firestore';
+} = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
 // Créer un carburant
-export const createCarburant = async (req, res, next) => {
+exports.createCarburant = async (req, res, next) => {
   try {
     const data = req.body;
     await addDoc(collection(db, 'carburants'), data);
@@ -25,7 +25,7 @@ export const createCarburant = async (req, res, next) => {
 };
 
 // Récupérer tous les carburants
-export const getCarburants = async (req, res, next) => {
+exports.getCarburants = async (req, res, next) => {
   try {
     const carburants = await getDocs(collection(db, 'carburants'));
     const carburantArray = [];
@@ -51,7 +51,7 @@ export const getCarburants = async (req, res, next) => {
 };
 
 // Récupérer un carburant par son ID
-export const getCarburant = async (req, res, next) => {
+exports.getCarburant = async (req, res, next) => {
   try {
     const id = req.params.id;
     const carburant = doc(db, 'carburants', id);
@@ -67,7 +67,7 @@ export const getCarburant = async (req, res, next) => {
 };
 
 // Mettre à jour un carburant
-export const updateCarburant = async (req, res, next) => {
+exports.updateCarburant = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -80,7 +80,7 @@ export const updateCarburant = async (req, res, next) => {
 };
 
 // Supprimer un carburant
-export const deleteCarburant = async (req, res, next) => {
+exports.deleteCarburant = async (req, res, next) => {
   try {
     const id = req.params.id;
     await deleteDoc(doc(db, 'carburants', id));

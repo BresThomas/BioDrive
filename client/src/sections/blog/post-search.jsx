@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react'; // Import useState hook
 
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -9,12 +10,20 @@ import Iconify from '../../components/iconify';
 // ----------------------------------------------------------------------
 
 PostSearch.propTypes = {
-  posts: PropTypes.array.isRequired,
+  items: PropTypes.array.isRequired,
+  onValueChange: PropTypes.func.isRequired, // Prop to pass selected value to parent component
 };
 
-export default function PostSearch({ posts }) {
+export default function PostSearch({ items, onValueChange }) {
+  const [selectedProduct, setSelectedProduct] = useState(null); // State to hold selected product
+
+  const handlePostChange = (event, newValue) => {
+    onValueChange(newValue); // Pass selected value to parent component
+  };
+
   return (
     <Autocomplete
+      onChange={handlePostChange} // Call handleProductChange on value change
       fullWidth
       autoHighlight
       popupIcon={null}
@@ -27,18 +36,8 @@ export default function PostSearch({ posts }) {
           },
         },
       }}
-      options={posts}
-      // getOptionLabel={(post) => (
-      //   post.title &&
-      //   post.cover && (
-      //     <img
-      //       src={post.cover}
-      //       alt={`Cover ${post.title}`}
-      //       style={{ width: 20, height: 20, marginRight: 5 }}
-      //     />
-      //   )
-      // )}
-      getOptionLabel={(post) => post.title}
+      options={items}
+      getOptionLabel={(product) => product.nom}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       renderInput={(params) => (
         <TextField

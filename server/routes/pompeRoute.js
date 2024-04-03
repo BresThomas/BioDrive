@@ -1,12 +1,11 @@
-import express from 'express';
-
-import {
+const express = require('express');
+const {
   createPompe,
   getPompe,
   getPompes,
   updatePompe,
   deletePompe,
-} from '../controllers/pompeController.js';
+} = require('../controllers/pompeController.js');
 
 const router = express.Router();
 
@@ -16,4 +15,4 @@ router.get('/pompe/:id', getPompe);
 router.put('/updatePompe/:id', updatePompe);
 router.delete('/deletePompe/:id', deletePompe);
 
-export default router;
+module.exports = router;

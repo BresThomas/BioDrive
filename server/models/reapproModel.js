@@ -7,4 +7,4 @@ class Reappro {
     }
 }
 
-export default Reappro;
+module.exports = Reappro;

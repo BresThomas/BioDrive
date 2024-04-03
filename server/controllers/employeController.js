@@ -1,20 +1,11 @@
-import firebase from '../Firebase.js';
-import Employe from '../models/employeModel.js';
-import {
-  getFirestore,
-  collection,
-  doc,
-  addDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+const firebase = require('../Firebase.js');
+const Employe = require('../models/employeModel.js');
+const { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc } = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
 // Créer un employé
-export const createEmploye = async (req, res, next) => {
+const createEmploye = async (req, res, next) => {
   try {
     const data = req.body;
     await addDoc(collection(db, 'employes'), data);
@@ -25,7 +16,7 @@ export const createEmploye = async (req, res, next) => {
 };
 
 // Récupérer tous les employés
-export const getEmployes = async (req, res, next) => {
+const getEmployes = async (req, res, next) => {
   try {
     const employes = await getDocs(collection(db, 'employes'));
     const employeArray = [];
@@ -51,7 +42,7 @@ export const getEmployes = async (req, res, next) => {
 };
 
 // Récupérer un employé par son ID
-export const getEmploye = async (req, res, next) => {
+const getEmploye = async (req, res, next) => {
   try {
     const id = req.params.id;
     const employe = doc(db, 'employes', id);
@@ -67,7 +58,7 @@ export const getEmploye = async (req, res, next) => {
 };
 
 // Mettre à jour un employé
-export const updateEmploye = async (req, res, next) => {
+const updateEmploye = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -80,7 +71,7 @@ export const updateEmploye = async (req, res, next) => {
 };
 
 // Supprimer un employé
-export const deleteEmploye = async (req, res, next) => {
+const deleteEmploye = async (req, res, next) => {
   try {
     const id = req.params.id;
     await deleteDoc(doc(db, 'employes', id));
@@ -89,3 +80,5 @@ export const deleteEmploye = async (req, res, next) => {
     res.status(400).send(error.message);
   }
 };
+
+module.exports = { createEmploye, getEmployes, getEmploye, updateEmploye, deleteEmploye };

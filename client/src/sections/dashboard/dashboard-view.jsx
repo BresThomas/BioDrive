@@ -592,6 +592,7 @@ export default function DashboardView() {
                 id: pompe.id_pompe,
                 title: `ID pompe : ${pompe.id_pompe}`,
                 description: `Carburants : ${pompe.carburants.join(", ")}`,
+                isRunning: `${pompe.isRunning}`,
                 image: `/assets/icons/borne.png`,
                 postedAt: "02/03/2023",
               }))}

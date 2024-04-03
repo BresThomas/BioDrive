@@ -27,7 +27,8 @@ exports.getPompes = async (req, res, next) => {
       pompes.forEach((doc) => {
         const pompe = new Pompe(
           doc.id,
-          doc.data().carburants
+          doc.data().carburants,
+          doc.data().isRunning,
         );
         pompeArray.push(pompe);
       });

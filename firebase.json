@@ -3,6 +3,17 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
+  "functions": [
+    {
+      "source": "server",
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" install --only=prod"
+      ]
+    }
+  ],
+  "scripts": {
+    "lint": "eslint ."
+  },
   "hosting": {
     "public": "client/build",
     "rewrites": [
@@ -18,4 +29,5 @@
     ],
     "404": "/pages/page-not-found.html"
   }
+
 }

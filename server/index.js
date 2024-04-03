@@ -34,8 +34,8 @@ app.use('/api', incidentRoute);
 app.use('/api', stockRoute);
 app.use('/api', reapproRoute);
 
-app.get("/hello", (req, res) => {
-  res.json({ message: "Hello from server!" });
+app.get('/hello', (req, res) => {
+  res.json({ message: 'Hello from server!' });
 });
 
 app.listen(config.port, () =>

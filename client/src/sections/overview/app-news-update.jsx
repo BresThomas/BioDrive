@@ -17,7 +17,7 @@ import Scrollbar from '../../components/scrollbar';
 
 // ----------------------------------------------------------------------
 
-export default function AppNewsUpdate({ title, subheader, list, path, ...other }) {
+export default function AppNewsUpdate({ title, subheader, list, path, isRunning, ...other }) {
   const navigate = useNavigate();
 
   const handleViewAllClick = () => {
@@ -54,13 +54,25 @@ AppNewsUpdate.propTypes = {
   subheader: PropTypes.string,
   list: PropTypes.array.isRequired,
   path: PropTypes.string.isRequired,
+  isRunning: PropTypes.bool,
 };
 
 // ----------------------------------------------------------------------
 
 function NewsItem({ news }) {
-  const { image, title, description, postedAt } = news;
+  const { image, title, description, postedAt, isRunning } = news;
 
+  let textToShow;
+  let isRunningReturn;
+
+  if (isRunning === null || isRunning === undefined) {
+    isRunningReturn = false;
+  } else if (isRunning === 'true') {
+    isRunningReturn = 'Actif';
+  } else {
+    isRunningReturn = "Inactif";
+  }
+  
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Box
@@ -77,9 +89,27 @@ function NewsItem({ news }) {
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
           {description}
+          { textToShow !== false && (
+          <Typography
+            variant="caption"
+            sx={{
+              pr: 3,
+              pl: 2,
+              fontWeight: 'bold',
+              flexShrink: 0,
+              color: isRunning === 'true' ? 'green' : 'red'
+            }}
+          >
+            {isRunningReturn}
+          </Typography>
+        )}
+
         </Typography>
+        
+
       </Box>
 
+      
       <Typography variant="caption" sx={{ pr: 3, flexShrink: 0, color: 'text.secondary' }}>
         {fToNow(postedAt)}
       </Typography>
@@ -93,5 +123,6 @@ NewsItem.propTypes = {
     title: PropTypes.string,
     description: PropTypes.string,
     postedAt: PropTypes.instanceOf(Date),
+    isRunning: PropTypes.bool,
   }),
 };

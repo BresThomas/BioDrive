@@ -1,20 +1,11 @@
-import firebase from '../Firebase.js';
-import Client from '../models/clientModel.js';
-import {
-  getFirestore,
-  collection,
-  doc,
-  addDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+const firebase = require('../Firebase.js');
+const Client = require('../models/clientModel.js');
+const { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc } = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
 // Créer un client
-export const createClient = async (req, res, next) => {
+exports.createClient = async (req, res, next) => {
   try {
     const data = req.body;
     await addDoc(collection(db, 'clients'), data);
@@ -25,7 +16,7 @@ export const createClient = async (req, res, next) => {
 };
 
 // Récupérer tous les clients
-export const getClients = async (req, res, next) => {
+exports.getClients = async (req, res, next) => {
   try {
     const clients = await getDocs(collection(db, 'clients'));
     const clientArray = [];
@@ -55,7 +46,7 @@ export const getClients = async (req, res, next) => {
 };
 
 // Récupérer un client par son ID
-export const getClient = async (req, res, next) => {
+exports.getClient = async (req, res, next) => {
   try {
     const id = req.params.id;
     const client = doc(db, 'clients', id);
@@ -71,7 +62,7 @@ export const getClient = async (req, res, next) => {
 };
 
 // Mettre à jour un client
-export const updateClient = async (req, res, next) => {
+exports.updateClient = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -84,7 +75,7 @@ export const updateClient = async (req, res, next) => {
 };
 
 // Supprimer un client
-export const deleteClient = async (req, res, next) => {
+exports.deleteClient = async (req, res, next) => {
   try {
     const id = req.params.id;
     await deleteDoc(doc(db, 'clients', id));

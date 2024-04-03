@@ -1,20 +1,11 @@
-import firebase from '../Firebase.js';
-import Incident from '../models/incidentModel.js';
-import {
-  getFirestore,
-  collection,
-  doc,
-  addDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+const firebase = require('../Firebase.js');
+const Incident = require('../models/incidentModel.js');
+const { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc } = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
 // Créer un incident
-export const createIncident = async (req, res, next) => {
+exports.createIncident = async (req, res, next) => {
   try {
     const data = req.body;
     await addDoc(collection(db, 'incidents'), data);
@@ -25,7 +16,7 @@ export const createIncident = async (req, res, next) => {
 };
 
 // Récupérer tous les incidents
-export const getIncidents = async (req, res, next) => {
+exports.getIncidents = async (req, res, next) => {
   try {
     const incidents = await getDocs(collection(db, 'incidents'));
     const incidentArray = [];
@@ -52,7 +43,7 @@ export const getIncidents = async (req, res, next) => {
 };
 
 // Récupérer un incident par son ID
-export const getIncident = async (req, res, next) => {
+exports.getIncident = async (req, res, next) => {
   try {
     const id = req.params.id;
     const incident = doc(db, 'incidents', id);
@@ -68,7 +59,7 @@ export const getIncident = async (req, res, next) => {
 };
 
 // Mettre à jour un incident
-export const updateIncident = async (req, res, next) => {
+exports.updateIncident = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -81,7 +72,7 @@ export const updateIncident = async (req, res, next) => {
 };
 
 // Supprimer un incident
-export const deleteIncident = async (req, res, next) => {
+exports.deleteIncident = async (req, res, next) => {
   try {
     const id = req.params.id;
     await deleteDoc(doc(db, 'incidents', id));

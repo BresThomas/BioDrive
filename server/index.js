@@ -14,6 +14,7 @@ const compteEnergieRoute = require('./routes/compteEnergieRoute.js');
 const incidentRoute = require('./routes/incidentRoute.js');
 const stockRoute = require('./routes/stockRoute.js');
 const reapproRoute = require('./routes/reapproRoute.js');
+const horairesBoutiqueRoute = require('./routes/horairesBoutiqueRoute.js');
 
 const app = express();
 
@@ -33,6 +34,7 @@ app.use('/api', compteEnergieRoute);
 app.use('/api', incidentRoute);
 app.use('/api', stockRoute);
 app.use('/api', reapproRoute);
+app.use('/api', horairesBoutiqueRoute);
 
 app.get('/hello', (req, res) => {
   res.json({ message: 'Hello from server!' });

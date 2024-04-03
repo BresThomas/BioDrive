@@ -37,25 +37,11 @@ export default function DashboardView() {
     const theme = useTheme();
     const router = useRouter();
 
-    const [products, setProducts] = useState([]);
-
-    useEffect(() => {
-      fetch('http://localhost:3001/api')
-        .then((response) => response.json())
-        .then((data) => {
-          // Assurez-vous que les données sont un tableau
-          if (Array.isArray(data)) {
-            setProducts(data);
-          } else {
-            console.error("Les données reçues ne sont pas un tableau.");
-          }
-        })
-        .catch((error) => {
-          console.error("Erreur lors de la récupération des données:", error);
-        });
-    }, []);
-
     const handleClick = () => {
+      router.push('/dashboard');
+    };    
+    
+    const handleClickHoraires = () => {
       router.push('/dashboard');
     };
 
@@ -76,6 +62,47 @@ export default function DashboardView() {
           variant="contained"
           color="inherit"
           onClick={handleClick}
+        >
+          Ajouter
+        </LoadingButton>
+      </Stack>
+    );
+
+    // =============================HoraireBoutique====================================== //
+
+    // Fonction pour mettre à jour les horaires de la boutique avec l'ID spécifié
+    const updateHoraireBoutique = async (id, horaires) => {
+      try {
+        const response = await fetch(`http://localhost:3001/api/updateHorairesBoutique/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(horaires)
+        });
+        if (!response.ok) {
+          throw new Error('Erreur lors de la mise à jour des horaires de la boutique');
+        }
+        console.log('Horaires de la boutique mis à jour avec succès');
+      } catch (error) {
+        console.error(error.message);
+      }
+    };
+
+    const changerHoraires = (title) => (
+      <Stack spacing={3} direction="row" alignItems="center">
+        <Typography variant="h6" sx={{ width: '30%' }}>{title}</Typography>
+        <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '70%' }}>
+          <TextField name="horaireDebut" label="Horaire début (ex: 08:00)" sx={{ width: '50%' }}/>
+          <TextField name="horaireFin" label="Horaire fin (ex: 18:00)" sx={{ width: '50%' }}/>
+        </Stack>
+        <LoadingButton
+          sx={{ width: '15%' }}
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          // onClick={clickFormHoraireBoutique}
         >
           Ajouter
         </LoadingButton>
@@ -179,7 +206,7 @@ export default function DashboardView() {
                     </Card>
                 </Grid>
                 <Grid xs={12.4} md={12.6} lg={12.4}>
-                    <Card sx={{ p: 3, width: 1,}}>
+                    <Card sx={{ p: 0, width: 1, height: 150, }}>
                       {listStock}
                     </Card>
                 </Grid>
@@ -187,6 +214,9 @@ export default function DashboardView() {
                   <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
                       <Card sx={{p: 2, width: 1,}}>
                         {ajouterTache('Nouvelle tâche 📝')}
+                      </Card>               
+                      <Card sx={{p: 2, width: 1, mt:3, }}>
+                        {changerHoraires('Changer les horaires de la boutique ⏰')}
                       </Card>
                   </Stack>
                 </Grid>

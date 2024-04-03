@@ -71,7 +71,6 @@ export default function DashboardView() {
       if (user && !loading) {
         // Récupérer le rôle de l'utilisateur depuis les informations de l'utilisateur
         const role = user.role;
-        console.log("Role:", role)
         if (role === 'gerant') {
           // Si l'utilisateur est un gérant, affichez le tableau de bord du gérant
           navigate('/dashboard');
@@ -111,6 +110,8 @@ export default function DashboardView() {
         });
        
   }, [navigate])
+
+  
 
     const handleClick = () => {
       router.push('/dashboard');
@@ -152,6 +153,24 @@ export default function DashboardView() {
         })
         .then(data => {
           setIncident(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);    
+    
+    const [horairesBoutique, setHorairesBoutique] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/horairesBoutique')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setHorairesBoutique(data);
         })
         .catch(error => {
           console.error("Erreur lors de la récupération des données:", error);
@@ -534,6 +553,11 @@ export default function DashboardView() {
               ERP 👋
             </Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
+              {horairesBoutique.length > 0 && (
+                <>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>{horairesBoutique[0].horaireDebut} : {horairesBoutique[0].horaireFin}</Typography>
+                </>
+              )}
               <NotificationsPopover />
               <AccountPopover />
             </Stack>

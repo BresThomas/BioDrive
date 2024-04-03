@@ -179,45 +179,6 @@ export default function DashboardView() {
 
 
       <Grid container spacing={3}>
-        <Grid item xs={36} sm={12} md={7} xl={7}>
-          <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-            ERP 👋
-          </Typography>
-          <Stack direction="row" spacing={2} sx={{ p: 2 }}>
-            {navConfig.map((item) => (
-              <NavItem key={item.title} item={item} />
-            ))}
-          </Stack>
-
-        <Grid container spacing={3}>
-
-          <Grid xs={12} sm={6} md={3}>
-            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-              <Card
-                sx={{
-                  p: 3,
-                  width: 1,
-                }}
-              >
-                {renderForm}
-              </Card>
-            </Stack>
-          </Grid>
-
-          <Grid xs={12} md={6} lg={4}>
-            <AppNewsUpdate
-              title="Derniers réapprovisionnements"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
-            />
-          </Grid>
-        </Grid>
-        </Grid>
         <Grid item xs={12} sm={12} md={5} xl={5}>
               <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
               Caisse 💶
@@ -265,6 +226,45 @@ export default function DashboardView() {
               </Grid>  
             </Grid>
           </Grid>
+        <Grid item xs={36} sm={12} md={7} xl={7}>
+          <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
+            ERP 👋
+          </Typography>
+          <Stack direction="row" spacing={2} sx={{ p: 2 }}>
+            {navConfig.map((item) => (
+              <NavItem key={item.title} item={item} />
+            ))}
+          </Stack>
+
+        <Grid container spacing={3}>
+
+          <Grid xs={12} sm={6} md={3}>
+            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+              <Card
+                sx={{
+                  p: 3,
+                  width: 1,
+                }}
+              >
+                {renderForm}
+              </Card>
+            </Stack>
+          </Grid>
+
+          <Grid xs={12} md={6} lg={4}>
+            <AppNewsUpdate
+              title="Derniers réapprovisionnements"
+              list={[...Array(5)].map((_, index) => ({
+                id: faker.string.uuid(),
+                title: faker.person.jobTitle(),
+                description: faker.commerce.productDescription(),
+                image: `/assets/images/covers/cover_${index + 1}.jpg`,
+                postedAt: faker.date.recent(),
+              }))}
+            />
+          </Grid>
+        </Grid>
+        </Grid>
       </Grid>
   </Container>
 

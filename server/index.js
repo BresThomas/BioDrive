@@ -1,23 +1,24 @@
-import express from 'express';
-import cors from 'cors';
+const functions = require('firebase-functions');
+const express = require('express');
+const cors = require('cors');
+const admin = require('firebase-admin');
 
-import config from './Config.js';
-import productRoute from './routes/productRoute.js';
+// Initialize Firebase Admin SDK
+admin.initializeApp();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-//routes
-app.use('/api', productRoute);
-
-app.get("/hello", (req, res) => {
-  res.json({ message: "Hello from server!" });
+// Routes
+app.get('/api', (req, res) => {
+  res.json({ message: 'API endpoint is working!' });
 });
 
-app.listen(config.port, () =>
-  console.log(`Server is live @ ${config.hostUrl}`),
-);
+app.get('/hello', (req, res) => {
+  res.json({ message: 'Hello from server!' });
+});
 
-
+// Expose Express app as a Cloud Function
+exports.app = functions.https.onRequest(app);

@@ -578,55 +578,51 @@ export default function DashboardView() {
           </Grid>
 
           <Grid container spacing={3}>
-          <Grid container spacing={3}> 
-          <Grid xs={12} md={6} lg={4}>
-            <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
-              title="Derniers incidents ⚠️"
-              path="/incidents"
-              list={incidents.slice(0,5).map((incident, index) => ({
-                id: incident.id_incident,
-                title: incident.intitule,
-                description: `${incident.description}, Gravité : ${incident.gravite}`, // Utilisez une description appropriée si disponible
-                image: '/assets/icons/incident.png',
-                postedAt: `${incident.date}`,
-              }))}             
-            />
-          </Grid>
+            <Grid xs={12} md={6} lg={4}>
+              <AppNewsUpdate 
+                title="Incidents ⚠️"
+                path="/incidents"
+                list={incidents.slice(0,5).map((incident, index) => ({
+                  id: incident.id_incident,
+                  title: incident.intitule,
+                  description: `${incident.description}, Gravité : ${incident.gravite}`, // Utilisez une description appropriée si disponible
+                  image: '/assets/icons/incident.png',
+                  postedAt: `${incident.date}`,
+                }))}             
+              />
+            </Grid>
           
             <Grid xs={12} md={6} lg={4}>
-            <AppNewsUpdate
-              sx={{ width: 520, height: 200, overflowY: 'auto' }}
-              title="Consulter les stocks 📦"
-              path="/stocks"
-              list={stocks.slice(0,5).map(stock => ({
-                id: stock.id_stock,
-                title: `ID stock : ${stock.id_stock}`,
-                description: `Contenu : ${stock.details ? stock.details.join(", ") : ', '}`,
-                image: `/assets/icons/stock.png`,
-              }))}
-            />
+              <AppNewsUpdate
+                title="Stocks 📦"
+                path="/stocks"
+                list={stocks.slice(0,5).map(stock => ({
+                  id: stock.id_stock,
+                  title: `ID : ${stock.id_stock}`,
+                  description: `Contenu : ${stock.details ? stock.details.join(", ") : ', '}`,
+                  image: `/assets/icons/stock.png`,
+                }))}
+              />
             </Grid>
-          </Grid>
-        <Grid container spacing={3}> 
-          <Grid xs={12} md={6} lg={4}>
-            <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
-              title="Pompes ⛽"
-              path="/pompes"
-              list={pompes.slice(0,5).map(pompe => ({
-                id: pompe.id_pompe,
-                title: `ID pompe : ${pompe.id_pompe}`,
-                description: `Carburants : ${pompe.carburants.join(", ")}`,
-                isRunning: `${pompe.isRunning}`,
-                image: `/assets/icons/borne.png`,
-                postedAt: "02/03/2023",
-              }))}
+            <Grid xs={12} md={6} lg={4}>
+              <AppNewsUpdate 
+                title="Pompes ⛽"
+                path="/pompes"
+                list={pompes.slice(0,5).map(pompe => ({
+                  id: pompe.id_pompe,
+                  title: `ID : ${pompe.id_pompe}`,
+                  description: `Carburants : ${pompe.carburants.join(", ")}`,
+                  isRunning: `${pompe.isRunning}`,
+                  image: `/assets/icons/borne.png`,
+                  postedAt: "02/03/2023",
+                }))}
 
-            />
-          </Grid>
+              />
+            </Grid>
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate
-                sx={{ width: 520, height: 200, overflowY: 'auto' }}
-                title="Rechercher client 👤"
+                // sx={{ width: 275, height: 200, overflowY: 'auto' }}
+                title="Client 👤"
                 path="/user"
                 list={clients.slice(0,5).map((client) => ({
                   id: client.id_client,
@@ -635,7 +631,6 @@ export default function DashboardView() {
                   image: `/assets/images/avatars/avatar_2.jpg`,
                 }))}
               />
-            </Grid>
           </Grid>
         </Grid>
         <Grid>

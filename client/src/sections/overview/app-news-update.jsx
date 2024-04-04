@@ -25,18 +25,22 @@ export default function AppNewsUpdate({ title, subheader, list, path, isRunning,
   };
 
   return (
-    <Card {...other}>
+    <Card 
+    sx={{
+      width: '344px',
+      height: '200px',
+      overflowY: 'auto',
+      ...other
+    }}>
       <Stack spacing={3} direction="row" alignItems="center" justifyContent="space-between">
-        <CardHeader title={title} subheader={subheader} />
-        <Box sx={{ textAlign: 'right', pt: 2.5, pr: 1 }}>
+        <CardHeader title={title} subheader={subheader}/>
+        <Box sx={{ textAlign: 'center', pt: 2.5, pr: 1.5 }}>
           <Button
             size="small"
             color="inherit"
             endIcon={<Iconify icon="eva:arrow-ios-forward-fill" />}
             onClick={handleViewAllClick}
-          >
-            View all
-          </Button>
+          />
         </Box>
       </Stack>
 
@@ -75,17 +79,28 @@ function NewsItem({ news }) {
   
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
-      <Box
-        component="img"
-        alt={title}
-        src={image}
-        sx={{ width: 48, height: 48, borderRadius: 1.5, flexShrink: 0 }}
-      />
-
       <Box sx={{ minWidth: 240, flexGrow: 1 }}>
-        <Link color="inherit" variant="subtitle2" underline="hover" noWrap>
-          {title}
-        </Link>
+        <Box
+          component="img"
+          alt={title}
+          src={image}
+          sx={{ width: 25, height: 25, borderRadius: 0.5, flexShrink: 0 }}
+        />
+<Link 
+  color="inherit" 
+  variant="subtitle2" 
+  underline="hover" 
+  noWrap 
+  sx={{ 
+    maxWidth: '20px',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap'
+  }}
+>
+  {title}
+</Link>
+
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
           {description}

@@ -339,16 +339,13 @@ export default function DashboardView() {
       const month = today.getMonth() + 1;
       const year = today.getFullYear();
       const date = today.getDate();
-      const hour = today.getHours().toString().padStart(2, '0');
-      const minutes = today.getMinutes().toString().padStart(2, '0');
-      const seconds = today.getSeconds().toString().padStart(2, '0');
-      return `${year}-${month}-${date}-${hour}:${minutes}:${seconds}`;
+      return `${month}/${date}/${year}`;
     };    
 
     const clickFormIncident = async () => {
       console.log(formDataIncident);
   
-      const response = await fetch('http://localhost:3001/api/newClient', {
+      const response = await fetch('http://localhost:3001/api/newIncident', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -356,7 +353,7 @@ export default function DashboardView() {
         body: JSON.stringify({
           id: formDataIncident.id_incident,
           gravite: formDataIncident.gravite,
-          date: formDataIncident.date,
+          date: getDate(),
           intitule: formDataIncident.intitule,
           description: formDataIncident.description,
         })

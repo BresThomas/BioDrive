@@ -86,21 +86,24 @@ function NewsItem({ news }) {
           src={image}
           sx={{ width: 25, height: 25, borderRadius: 0.5, flexShrink: 0 }}
         />
-<Link 
-  color="inherit" 
-  variant="subtitle2" 
-  underline="hover" 
-  noWrap 
-  sx={{ 
-    maxWidth: '20px',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap'
-  }}
->
-  {title}
-</Link>
+        <Link 
+          color="inherit" 
+          variant="subtitle2" 
+          underline="hover" 
+          noWrap 
+          sx={{ 
+            maxWidth: '20px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          {title}
+        </Link>
 
+        <Typography variant="caption" sx={{ pl: 1, flexShrink: 0, color: 'text.secondary' }}>
+          {fToNow(postedAt)}
+        </Typography>
 
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
           {description}
@@ -125,9 +128,6 @@ function NewsItem({ news }) {
       </Box>
 
       
-      <Typography variant="caption" sx={{ pr: 3, flexShrink: 0, color: 'text.secondary' }}>
-        {fToNow(postedAt)}
-      </Typography>
     </Stack>
   );
 }

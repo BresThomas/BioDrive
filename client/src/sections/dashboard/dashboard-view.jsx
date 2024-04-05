@@ -614,7 +614,6 @@ export default function DashboardView() {
                   description: `Carburants : ${pompe.carburants.join(", ")}`,
                   isRunning: `${pompe.isRunning}`,
                   image: `/assets/icons/borne.png`,
-                  postedAt: "02/03/2023",
                 }))}
 
               />
@@ -626,7 +625,7 @@ export default function DashboardView() {
                 path="/user"
                 list={clients.slice(0,5).map((client) => ({
                   id: client.id_client,
-                  title: `${client.nom} ${client.prenom}`,
+                  title: ` ${client.nom} ${client.prenom}`,
                   description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible
                   image: `/assets/images/avatars/avatar_2.jpg`,
                 }))}

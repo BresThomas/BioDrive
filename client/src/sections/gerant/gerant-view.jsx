@@ -1,3 +1,4 @@
+import { random } from 'lodash';
 import PropTypes from 'prop-types';
 import { base, faker } from '@faker-js/faker';
 import { useState, useEffect } from 'react';
@@ -31,11 +32,65 @@ const filtreRecherche = ['Tous', 'Nom du produit', 'Identifiant', 'Catégorie'];
 
 export default function DashboardView() {
 
-  const [enteredValue, setEnteredValue] = useState('');
 
-  const handleValueChange = (newValue) => {
-    setEnteredValue(newValue);
-  };
+  const [incidents, setIncident] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/incidents')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setIncident(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);  
+
+  const [pompes, setPompe] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/pompes')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des données');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setPompe(data);
+      })
+      .catch(error => {
+        console.error("Erreur lors de la récupération des données:", error);
+      });
+  }, []);
+
+  const [carburants, setCarburants] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/carburants')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des données');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setCarburants(data);
+      })
+      .catch(error => {
+        console.error("Erreur lors de la récupération des données:", error);
+      });
+  }, []);
+
+
+
+  
+
 
     const theme = useTheme();
     const router = useRouter();
@@ -365,27 +420,39 @@ export default function DashboardView() {
                   <AppNewsUpdate
                     sx={{ width: 540, height: 200, overflowY: 'auto'}}
                     title="Niveaux des cuves 🛢️"
-                    list={[...Array(5)].map((_, index) => ({
-                    id: faker.string.uuid(),
-                    title: faker.person.jobTitle(),
-                    description: faker.commerce.productDescription(),
-                    image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                    postedAt: faker.date.recent(),
+                    path="/pompes"
+                    list={pompes.slice(0,5).map(pompe => ({
+                      id: pompe.id_pompe,
+                      title: `Carburant : ${pompe.carburants.join(", ")}   ${random(0, 150)}/150L`,
+                      image: `/assets/icons/borne.png`,
+                      postedAt: new Date(Date.now() - 5 * 60 * 1000),
+
                     }))}
+                    /* TODO Le niveau des pompes n'existe pas l'ajouter dans firebase  */
                   />
               </Grid>
               <Grid xs={6} md={6} lg={6}>
-                <AppNewsUpdate
-                    sx={{ width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
-                    title="Modification des prix du carburant ⛽️"
-                    list={[...Array(5)].map((_, index) => ({
-                    id: faker.string.uuid(),
-                    title: faker.person.jobTitle(),
-                    description: faker.commerce.productDescription(),
-                    image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                    postedAt: faker.date.recent(),
-                    }))}
+              <AppNewsUpdate
+                      sx={{ width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
+                      title="Modification des prix du carburant ⛽️"
+                      path="/carburants"
+                      list={carburants.slice(0,5).map(carburant => ({
+                        id: carburant.id_carburant,
+                        title: ` ${carburant.carburant}`,
+                        description: ` ${carburant.prix}€/L`,
+                        image: `/assets/icons/borne.png`,
+                        button: <LoadingButton
+                          size="small"
+                          type="submit"
+                          variant="contained"
+                          color="inherit"
+                          onClick={handleClick}
+                        > Modifier</LoadingButton>,
+                    
+                      }))}
+                      
                 />
+                  
               </Grid>
             </Grid>
             <Grid container spacing={1} sx={{ marginBottom: 3 }}> 
@@ -404,17 +471,18 @@ export default function DashboardView() {
                   />
               </Grid>
               <Grid xs={6} md={6} lg={6}>
-                  <AppNewsUpdate
-                    sx={{ width: 540, height: 280, overflowY: 'auto', marginLeft: 2 }}
-                    title="Table Relevé des Incidents"
-                    list={[...Array(5)].map((_, index) => ({
-                    id: faker.string.uuid(),
-                    title: faker.person.jobTitle(),
-                    description: faker.commerce.productDescription(),
-                    image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                    postedAt: faker.date.recent(),
-                    }))}
-                  />
+                <AppNewsUpdate 
+                  sx={{ width: 540, height: 280, overflowY: 'auto', marginLeft: 2 }}
+                  title="Table Relevé des Incident ⚠️"
+                  path="/incidents"
+                  list={incidents.slice(0,5).map((incident, index) => ({
+                    id: incident.id_incident,
+                    title: incident.intitule,
+                    description: `${incident.description}, Gravité : ${incident.gravite}`, // Utilisez une description appropriée si disponible
+                    image: '/assets/icons/incident.png',
+                    postedAt: `${incident.date}`,
+                  }))}             
+                />
               </Grid>
             </Grid>
           </Stack>

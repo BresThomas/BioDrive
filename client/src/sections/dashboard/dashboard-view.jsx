@@ -320,10 +320,7 @@ export default function DashboardView() {
       const month = today.getMonth() + 1;
       const year = today.getFullYear();
       const date = today.getDate();
-      const hour = today.getHours().toString().padStart(2, '0');
-      const minutes = today.getMinutes().toString().padStart(2, '0');
-      const seconds = today.getSeconds().toString().padStart(2, '0');
-      return `${year}-${month}-${date}-${hour}:${minutes}:${seconds}`;
+      return `${month}/${date}/${year}`;
     };    
 
     const clickFormIncident = async () => {
@@ -336,6 +333,7 @@ export default function DashboardView() {
         },
         body: JSON.stringify({
           gravite: formDataIncident.gravite,
+          date: getDate(),
           intitule: formDataIncident.intitule,
           date: getDate(),
           description: formDataIncident.descriptionIncident,

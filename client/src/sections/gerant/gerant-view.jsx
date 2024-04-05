@@ -21,6 +21,9 @@ import { RouterLink } from '../../routes/components';
 import AppNewsUpdate from '../overview/app-news-update';
 import { usePathname, useRouter } from '../../routes/hooks';
 import navConfig from '../../layouts/dashboard/config-navigation';
+import Boutique from '../../_mock/form/Boutique';
+import AjouterTache from '../../_mock/form/AjouterTache';
+import AjouterClient from '../../_mock/form/AjouterClient';
 
 // ----------------------------------------------------------------------
 
@@ -37,50 +40,11 @@ export default function DashboardView() {
     const theme = useTheme();
     const router = useRouter();
 
-    const [products, setProducts] = useState([]);
-
-    useEffect(() => {
-      fetch('http://localhost:3001/api')
-        .then((response) => response.json())
-        .then((data) => {
-          // Assurez-vous que les données sont un tableau
-          if (Array.isArray(data)) {
-            setProducts(data);
-          } else {
-            console.error("Les données reçues ne sont pas un tableau.");
-          }
-        })
-        .catch((error) => {
-          console.error("Erreur lors de la récupération des données:", error);
-        });
-    }, []);
-
     const handleClick = () => {
       router.push('/dashboard');
-    };
+    };    
 
     const [paymentMode, setPaymentMode] = useState('');
-
-    const ajouterTache = (title) => (
-      <Stack spacing={3} direction="row" alignItems="center">
-        <Typography variant="h6" sx={{ width: '15%' }}>{title}</Typography>
-        <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '70%' }}>
-          <TextField name="Libelle" label="Libellé" sx={{ width: '33%' }}/>
-          <TextField name="DateButoire " label="Date Butoire" sx={{ width: '33%' }}/>
-          <TextField name="Assigne" label="Assigné" sx={{ width: '33%' }}/>
-        </Stack>
-        <LoadingButton
-          sx={{ width: '15%' }}
-          size="large"
-          type="submit"
-          variant="contained"
-          color="inherit"
-          onClick={handleClick}
-        >
-          Ajouter
-        </LoadingButton>
-      </Stack>
-    );
 
     const ajouterCredit = (title) => (
       <Stack spacing={3} direction="row" alignItems="center">
@@ -179,14 +143,21 @@ export default function DashboardView() {
                     </Card>
                 </Grid>
                 <Grid xs={12.4} md={12.6} lg={12.4}>
-                    <Card sx={{ p: 3, width: 1,}}>
+                    <Card sx={{ p: 0, width: 1, height: 150, }}>
                       {listStock}
                     </Card>
                 </Grid>
                 <Grid  xs={12.4} md={12.6} lg={12.4}>
                   <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+                      {/* form  */}
                       <Card sx={{p: 2, width: 1,}}>
-                        {ajouterTache('Nouvelle tâche 📝')}
+                        <AjouterTache />
+                      </Card>               
+                      <Card sx={{p: 2, width: 1, mt:3, }}>
+                        <Boutique />
+                      </Card>
+                      <Card sx={{p: 2, width: 1, mt:3, }}>
+                        <AjouterClient />
                       </Card>
                   </Stack>
                 </Grid>

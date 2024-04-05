@@ -68,6 +68,42 @@ export default function DashboardView() {
       </Stack>
     );
 
+    const [table_incidents, setTable_incidents] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/table_incidents')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setTable_incidents(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);    
+
+    const [table_transactions, setTable_transactions] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/table_transactions')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setTable_transactions(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);   
+
     // =============================HoraireBoutique====================================== //
 
     // Fonction pour mettre à jour les horaires de la boutique avec l'ID spécifié
@@ -326,12 +362,12 @@ export default function DashboardView() {
                   <AppNewsUpdate
                     sx={{ width: 540, height: 280, overflowY: 'auto'}}
                     title="Table Relevé des Transactions Journalières"
-                    list={[...Array(5)].map((_, index) => ({
-                    id: faker.string.uuid(),
-                    title: faker.person.jobTitle(),
-                    description: faker.commerce.productDescription(),
-                    image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                    postedAt: faker.date.recent(),
+                    list={table_transactions.slice(0,5).map((table_transaction, index) => ({
+                      id: table_transaction.id_table_releve,
+                      title: "table Relevé des Incidents du jour",
+                      description: `oui`, // Utilisez une description appropriée si disponible
+                      image: '/assets/icons/incident.png',
+                      postedAt: `05/04/2024`,
                     }))}
                   />
               </Grid>
@@ -339,13 +375,13 @@ export default function DashboardView() {
                   <AppNewsUpdate
                     sx={{ width: 540, height: 280, overflowY: 'auto', marginLeft: 2 }}
                     title="Table Relevé des Incidents"
-                    list={[...Array(5)].map((_, index) => ({
-                    id: faker.string.uuid(),
-                    title: faker.person.jobTitle(),
-                    description: faker.commerce.productDescription(),
-                    image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                    postedAt: faker.date.recent(),
-                    }))}
+                    list={table_incidents.slice(0,5).map((table_incident, index) => ({
+                      id: table_incident.id_table_releve,
+                      title: "table Relevé des Incidents du jour",
+                      description: `oui`, // Utilisez une description appropriée si disponible
+                      image: '/assets/icons/incident.png',
+                      postedAt: `05/04/2024`,
+                    }))} 
                   />
               </Grid>
             </Grid>

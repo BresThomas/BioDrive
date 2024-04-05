@@ -6,6 +6,8 @@ import SignUpPage from '../pages/signup';
 import DashboardLayout from '../layouts/dashboard';
 import TransactionsPage from '../pages/transactions';
 import PompesPage from '../pages/pompes';
+import StocksPage from '../pages/stocks';
+import IncidentsPage from '../pages/incidents';
 import ServicesAndLogistiquePage from '../pages/servicesAndLogistique';
 
 
@@ -53,7 +55,15 @@ export default function Router() {
     {
       path: 'pompes',
       element: <PompesPage />,
-    },     
+    },   
+    {
+      path: 'stocks',
+      element: <StocksPage />,
+    },    
+    {
+      path: 'incidents',
+      element: <IncidentsPage />,
+    },  
     {
       path: 'transactions',
       element: <TransactionsPage />,

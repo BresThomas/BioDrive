@@ -27,9 +27,12 @@ exports.getReappros = async (req, res, next) => {
       reappros.forEach((doc) => {
         const reappro = new Reappro(
           doc.id,
-          doc.data().noms,
-          doc.data().date_debut,
-          doc.data().date_fin
+          doc.data().id_produit,
+          doc.data().quantite,
+          doc.data().adresse_livraison,
+          doc.data().date_livraison,
+          doc.data().prix
+
         );
         reapproArray.push(reappro);
       });

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { faker } from '@faker-js/faker';
+import { base, faker } from '@faker-js/faker';
 import { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
@@ -40,7 +40,7 @@ export default function DashboardView() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-      fetch('http://localhost:3001/api')
+      fetch('http://localhost:3001/api/reappros')
         .then((response) => response.json())
         .then((data) => {
           // Assurez-vous que les données sont un tableau
@@ -161,7 +161,107 @@ export default function DashboardView() {
       </Stack>
     );  
 
+
+        // ==================DEMANDE DE REAPPRO================ //
+
+        const initialFormDataReappro = {
+          id_produit: '',
+          quantite: '',
+          adresse_livraison: '',
+          date_livraison: '',
+          prix: '',
+        };
+      
+        const [formDataReappro, setFormDataReappro] = useState(initialFormDataReappro);
+      
+        const handleChangeReappro = (event) => {
+          const { name, value } = event.target;
+          setFormDataReappro(prevFormDataReappro => ({
+            ...prevFormDataReappro,
+            [name]: value
+          }));
+        };
+
+        const handleChangeSearchReappro = (event, value) => {
+          if (value) { // Check if value is not null
+            setFormDataReappro(prevFormDataReappro => ({
+              ...prevFormDataReappro,
+              id_produit: value.id
+            }));
+          }
+        };
+        
     
+        const clickFormReappro = async () => {
+          console.log(formDataReappro);
+
+          // Calcul du prix de la réappro
+          const prix_total = calculateTotalPrice(formDataReappro.quantite, 5); // TODO 5 est temporaire quand on pourra recupérer le prix on mettra là
+      
+          const response = await fetch('http://localhost:3001/api/newReappro', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+    
+              id_produit: formDataReappro.id_produit,
+              quantite: formDataReappro.quantite,
+              adresse_livraison: formDataReappro.adresse_livraison,
+              date_livraison: formDataReappro.date_livraison,
+              prix: prix_total,
+            })
+          });
+    
+          if (response.ok) {
+            // Réinitialiser les champs du formulaire à leur valeur initiale vide
+            setFormDataReappro(initialFormDataReappro);
+            console.log("Formulaire soumis avec succès!");
+            window.location.reload(true);
+          } else {
+            console.error("Erreur lors de la soumission du formulaire");
+          }
+        };
+        
+        function calculateTotalPrice(quantity, basePrice) {
+          // Ensure that quantity and basePrice are valid numbers
+          if (quantity.isNaN || basePrice.isNaN || quantity < 0 || basePrice < 0) {
+            return 'Invalid input'; // Handle invalid input
+          }
+        
+          // Calculate total price
+          const totalPrice = quantity * basePrice;
+        
+          return totalPrice;
+        }        
+    
+        const renderFormReappro = (
+          <Stack spacing={3} direction="row" alignItems="center">
+            <Typography variant="h6">Demande de réappro</Typography>
+        
+            <Stack spacing={3} direction="row" alignItems="center">
+              
+              <PostSearch posts={posts} onChange={handleChangeSearchReappro}/>
+              
+              <TextField name="quantite" value={formDataReappro.quantite} label="Quantité" onChange={handleChangeReappro} sx={{ width: '40%' }}/>
+              <TextField name="adresse_livraison" value={formDataReappro.adresse_livraison} label="Adresse livraison" onChange={handleChangeReappro} sx={{ width: '60%' }}/>
+              <TextField name="date_livraison" value={formDataReappro.date_livraison} label="Date livraison MM/DD/YYYY" onChange={handleChangeReappro} sx={{ width: '80%' }}/>
+            </Stack>
+        
+            <LoadingButton
+              sx={{ width: '10%' }}
+              size="large"
+              type="submit"
+              variant="contained"
+              color="inherit"
+              onClick={clickFormReappro}
+            >
+              Valider
+            </LoadingButton>
+          </Stack>
+        );    
+
+    // ========================================================================================== //
 
   return (
 <Container maxWidth="xxl">
@@ -235,6 +335,14 @@ export default function DashboardView() {
         <Grid item >
           <Stack alignItems="center" justifyContent="center" sx={{ height: 1 ,}}>
             <Grid container spacing={1} sx={{ marginBottom: 3 }}> 
+
+              <Grid  xs={12.4} md={12.6} lg={12.4}>
+                  <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+                      <Card sx={{p: 2, width: 1,}}>
+                        {renderFormReappro}
+                      </Card>
+                  </Stack>
+                </Grid>
               <Grid xs={6} md={6} lg={6} >
                   <AppNewsUpdate
                     sx={{  width: 540, height: 200, overflowY: 'auto'}}

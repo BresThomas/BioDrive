@@ -36,7 +36,9 @@ exports.getTaches = async (req, res, next) => {
       taches.forEach((doc) => {
         const tache = new Tache(
           doc.id,
-          doc.data().but
+          doc.data().assigne,
+          doc.data().dateButoire,
+          doc.data().libelle
         );
         tacheArray.push(tache);
       });

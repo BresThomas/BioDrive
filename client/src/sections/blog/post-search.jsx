@@ -25,7 +25,7 @@ export default function PostSearch({ posts, onChange }) {
         },
       }}
       options={posts}
-      getOptionLabel={(post) => post.title}
+      getOptionLabel={(post) => post.nom}
       isOptionEqualToValue={(option, value) => option.id === value.id}
       onChange={onChange}
       renderInput={(params) => (

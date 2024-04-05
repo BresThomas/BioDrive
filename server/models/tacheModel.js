@@ -1,7 +1,9 @@
 class Tache {
-    constructor(id_tache, but) {
+    constructor(id_tache, libelle, dateButoire, assigne) {
         this.id_tache = id_tache;
-        this.but = but;
+        this.libelle = libelle;
+        this.dateButoire = dateButoire;
+        this.assigne = assigne;
     }
 }
 

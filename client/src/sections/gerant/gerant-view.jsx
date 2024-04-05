@@ -21,6 +21,8 @@ import { RouterLink } from '../../routes/components';
 import AppNewsUpdate from '../overview/app-news-update';
 import { usePathname, useRouter } from '../../routes/hooks';
 import navConfig from '../../layouts/dashboard/config-navigation';
+import Boutique from '../../_mock/form/Boutique';
+import AjouterTache from '../../_mock/form/AjouterTache';
 
 // ----------------------------------------------------------------------
 
@@ -39,75 +41,9 @@ export default function DashboardView() {
 
     const handleClick = () => {
       router.push('/dashboard');
-    };    
-    
-    const handleClickHoraires = () => {
-      router.push('/dashboard');
-    };
+    }; 
 
     const [paymentMode, setPaymentMode] = useState('');
-
-    const ajouterTache = (title) => (
-      <Stack spacing={3} direction="row" alignItems="center">
-        <Typography variant="h6" sx={{ width: '15%' }}>{title}</Typography>
-        <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '70%' }}>
-          <TextField name="Libelle" label="Libellé" sx={{ width: '33%' }}/>
-          <TextField name="DateButoire " label="Date Butoire" sx={{ width: '33%' }}/>
-          <TextField name="Assigne" label="Assigné" sx={{ width: '33%' }}/>
-        </Stack>
-        <LoadingButton
-          sx={{ width: '15%' }}
-          size="large"
-          type="submit"
-          variant="contained"
-          color="inherit"
-          onClick={handleClick}
-        >
-          Ajouter
-        </LoadingButton>
-      </Stack>
-    );
-
-    // =============================HoraireBoutique====================================== //
-
-    // Fonction pour mettre à jour les horaires de la boutique avec l'ID spécifié
-    const updateHoraireBoutique = async (id, horaires) => {
-      try {
-        const response = await fetch(`http://localhost:3001/api/updateHorairesBoutique/${id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(horaires)
-        });
-        if (!response.ok) {
-          throw new Error('Erreur lors de la mise à jour des horaires de la boutique');
-        }
-        console.log('Horaires de la boutique mis à jour avec succès');
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
-
-    const changerHoraires = (title) => (
-      <Stack spacing={3} direction="row" alignItems="center">
-        <Typography variant="h6" sx={{ width: '30%' }}>{title}</Typography>
-        <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '70%' }}>
-          <TextField name="horaireDebut" label="Horaire début (ex: 08:00)" sx={{ width: '50%' }}/>
-          <TextField name="horaireFin" label="Horaire fin (ex: 18:00)" sx={{ width: '50%' }}/>
-        </Stack>
-        <LoadingButton
-          sx={{ width: '15%' }}
-          size="large"
-          type="submit"
-          variant="contained"
-          color="inherit"
-          // onClick={clickFormHoraireBoutique}
-        >
-          Ajouter
-        </LoadingButton>
-      </Stack>
-    );
 
     const ajouterCredit = (title) => (
       <Stack spacing={3} direction="row" alignItems="center">
@@ -213,10 +149,10 @@ export default function DashboardView() {
                 <Grid  xs={12.4} md={12.6} lg={12.4}>
                   <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
                       <Card sx={{p: 2, width: 1,}}>
-                        {ajouterTache('Nouvelle tâche 📝')}
+                        <AjouterTache />
                       </Card>               
                       <Card sx={{p: 2, width: 1, mt:3, }}>
-                        {changerHoraires('Changer les horaires de la boutique ⏰')}
+                        <Boutique />
                       </Card>
                   </Stack>
                 </Grid>

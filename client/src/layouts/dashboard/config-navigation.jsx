@@ -8,7 +8,7 @@ const icon = (name) => (
 
 const navConfig = [ 
   {
-    title: 'ERP',
+    title: 'ERP Employé',
     path: '/dashboard',
     icon: icon('ic_analytics'),
   },
@@ -23,6 +23,16 @@ const navConfig = [
     icon: icon('ic_user'),
   },  
   {
+    title: 'stocks',
+    path: '/stocks',
+    icon: icon('ic_user'),
+  },  
+  {
+    title: 'incidents',
+    path: '/incidents',
+    icon: icon('ic_user'),
+  },  
+  {
     title: 'services et logistique',
     path: '/servicesAndLogistique',
     icon: icon('ic_analytics'),
@@ -33,7 +43,7 @@ const navConfig = [
     icon: icon('ic_user'),
   },
   {
-    title: 'gerant',
+    title: 'ERP Gérant',
     path: '/gerant',
     icon: icon('ic_user'),
   }

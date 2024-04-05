@@ -71,6 +71,7 @@ export default function DashboardView() {
       if (user && !loading) {
         // Récupérer le rôle de l'utilisateur depuis les informations de l'utilisateur
         const role = user.role;
+        console.log("Role:", role)
         if (role === 'gerant') {
           // Si l'utilisateur est un gérant, affichez le tableau de bord du gérant
           navigate('/dashboard');
@@ -110,8 +111,6 @@ export default function DashboardView() {
         });
        
   }, [navigate])
-
-  
 
     const handleClick = () => {
       router.push('/dashboard');
@@ -153,24 +152,6 @@ export default function DashboardView() {
         })
         .then(data => {
           setIncident(data);
-        })
-        .catch(error => {
-          console.error("Erreur lors de la récupération des données:", error);
-        });
-    }, []);    
-    
-    const [horairesBoutique, setHorairesBoutique] = useState([]);
-
-    useEffect(() => {
-      fetch('http://localhost:3001/api/horairesBoutique')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des données');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setHorairesBoutique(data);
         })
         .catch(error => {
           console.error("Erreur lors de la récupération des données:", error);
@@ -339,10 +320,7 @@ export default function DashboardView() {
       const month = today.getMonth() + 1;
       const year = today.getFullYear();
       const date = today.getDate();
-      const hour = today.getHours().toString().padStart(2, '0');
-      const minutes = today.getMinutes().toString().padStart(2, '0');
-      const seconds = today.getSeconds().toString().padStart(2, '0');
-      return `${year}-${month}-${date}-${hour}:${minutes}:${seconds}`;
+      return `${month}/${date}/${year}`;
     };    
 
     const clickFormIncident = async () => {
@@ -355,6 +333,7 @@ export default function DashboardView() {
         },
         body: JSON.stringify({
           gravite: formDataIncident.gravite,
+          date: getDate(),
           intitule: formDataIncident.intitule,
           date: getDate(),
           description: formDataIncident.descriptionIncident,
@@ -553,11 +532,6 @@ export default function DashboardView() {
               ERP 👋
             </Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
-              {horairesBoutique.length > 0 && (
-                <>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>{horairesBoutique[0].horaireDebut} : {horairesBoutique[0].horaireFin}</Typography>
-                </>
-              )}
               <NotificationsPopover />
               <AccountPopover />
             </Stack>
@@ -578,51 +552,55 @@ export default function DashboardView() {
           </Grid>
 
           <Grid container spacing={3}>
-            <Grid xs={12} md={6} lg={4}>
-              <AppNewsUpdate 
-                title="Incidents ⚠️"
-                path="/incidents"
-                list={incidents.slice(0,5).map((incident, index) => ({
-                  id: incident.id_incident,
-                  title: incident.intitule,
-                  description: `${incident.description}, Gravité : ${incident.gravite}`, // Utilisez une description appropriée si disponible
-                  image: '/assets/icons/incident.png',
-                  postedAt: `${incident.date}`,
-                }))}             
-              />
-            </Grid>
+          <Grid container spacing={3}> 
+          <Grid xs={12} md={6} lg={4}>
+            <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
+              title="Derniers incidents ⚠️"
+              path="/incidents"
+              list={incidents.slice(0,5).map((incident, index) => ({
+                id: incident.id_incident,
+                title: incident.intitule,
+                description: `${incident.description}, Gravité : ${incident.gravite}`, // Utilisez une description appropriée si disponible
+                image: '/assets/icons/incident.png',
+                postedAt: `${incident.date}`,
+              }))}             
+            />
+          </Grid>
           
             <Grid xs={12} md={6} lg={4}>
-              <AppNewsUpdate
-                title="Stocks 📦"
-                path="/stocks"
-                list={stocks.slice(0,5).map(stock => ({
-                  id: stock.id_stock,
-                  title: `ID : ${stock.id_stock}`,
-                  description: `Contenu : ${stock.details ? stock.details.join(", ") : ', '}`,
-                  image: `/assets/icons/stock.png`,
-                }))}
-              />
+            <AppNewsUpdate
+              sx={{ width: 520, height: 200, overflowY: 'auto' }}
+              title="Consulter les stocks 📦"
+              path="/stocks"
+              list={stocks.slice(0,5).map(stock => ({
+                id: stock.id_stock,
+                title: `ID stock : ${stock.id_stock}`,
+                description: `Contenu : ${stock.details ? stock.details.join(", ") : ', '}`,
+                image: `/assets/icons/stock.png`,
+              }))}
+            />
             </Grid>
-            <Grid xs={12} md={6} lg={4}>
-              <AppNewsUpdate 
-                title="Pompes ⛽"
-                path="/pompes"
-                list={pompes.slice(0,5).map(pompe => ({
-                  id: pompe.id_pompe,
-                  title: `ID : ${pompe.id_pompe}`,
-                  description: `Carburants : ${pompe.carburants.join(", ")}`,
-                  isRunning: `${pompe.isRunning}`,
-                  image: `/assets/icons/borne.png`,
-                  postedAt: "02/03/2023",
-                }))}
+          </Grid>
+        <Grid container spacing={3}> 
+          <Grid xs={12} md={6} lg={4}>
+            <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
+              title="Pompes ⛽"
+              path="/pompes"
+              list={pompes.slice(0,5).map(pompe => ({
+                id: pompe.id_pompe,
+                title: `ID pompe : ${pompe.id_pompe}`,
+                description: `Carburants : ${pompe.carburants.join(", ")}`,
+                isRunning: `${pompe.isRunning}`,
+                image: `/assets/icons/borne.png`,
+                postedAt: "02/03/2023",
+              }))}
 
-              />
-            </Grid>
+            />
+          </Grid>
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate
-                // sx={{ width: 275, height: 200, overflowY: 'auto' }}
-                title="Client 👤"
+                sx={{ width: 520, height: 200, overflowY: 'auto' }}
+                title="Rechercher client 👤"
                 path="/user"
                 list={clients.slice(0,5).map((client) => ({
                   id: client.id_client,
@@ -631,6 +609,7 @@ export default function DashboardView() {
                   image: `/assets/images/avatars/avatar_2.jpg`,
                 }))}
               />
+            </Grid>
           </Grid>
         </Grid>
         <Grid>

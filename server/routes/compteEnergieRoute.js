@@ -1,12 +1,11 @@
-import express from 'express';
-
-import {
+const express = require('express');
+const {
   createCompteEnergie,
   getCompteEnergie,
   getComptesEnergie,
   updateCompteEnergie,
   deleteCompteEnergie,
-} from '../controllers/compteEnergieController.js';
+} = require('../controllers/compteEnergieController.js');
 
 const router = express.Router();
 
@@ -16,4 +15,4 @@ router.get('/compteEnergie/:id', getCompteEnergie);
 router.put('/updateCompteEnergie/:id', updateCompteEnergie);
 router.delete('/deleteCompteEnergie/:id', deleteCompteEnergie);
 
-export default router;
+module.exports = router;

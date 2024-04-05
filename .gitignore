@@ -57,3 +57,7 @@ packages/react-devtools-timeline/dist
 
 .env
 biodrive-d778e-firebase-adminsdk-m6dcg-bde0066ab3.json
+
+.firebase
+.log
+.logs

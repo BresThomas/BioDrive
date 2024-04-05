@@ -5,4 +5,4 @@ class Tache {
     }
 }
 
-export default Tache;
+module.exports = Tache;

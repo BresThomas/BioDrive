@@ -22,7 +22,8 @@ const LoginView = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // Add state for password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -32,17 +33,41 @@ const LoginView = () => {
         const user = userCredential.user;
         navigate("/dashboard");
       })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log(errorCode, errorMessage);
+      .catch((errorMessage) => {
+        // Handle login errors
+        // Traduire l'erreur en un message convivial pour l'utilisateur
+        switch (errorMessage.code) {
+          case "auth/user-not-found":
+            errorMessage = "Aucun compte trouvé avec cette adresse e-mail. Veuillez vous inscrire d'abord.";
+            break;
+          case "auth/wrong-password":
+            errorMessage = "Le mot de passe saisi est incorrect. Veuillez réessayer.";
+            break;
+          case "auth/invalid-email":
+            errorMessage = "L'email est invalide. Veuillez réessayer.";
+            break;
+          case "auth/invalid-credential":
+            errorMessage = "L'email ou le mot de passe fourni est incorrect. Veuillez vérifier les informations que vous avez saisies pour vous connecter.";
+            break;
+          case "auth/too-many-requests":
+            errorMessage = "Accès à ce compte temporairement désactivé en raison de trop de tentatives de connexion échouées. Réessayer ultérieurement.";
+            break;
+          // Ajoutez d'autres cas pour d'autres erreurs Firebase courantes ici
+          default:
+            break;
+        }
+  
+        // Mettre à jour le state avec le message d'erreur convivial
+        setError(errorMessage);
       });
   };
+  
 
   const renderForm = (
     <>
       <Stack spacing={3}>
         <TextField
+          required 
           name="email"
           label="Email address"
           value={email}
@@ -50,6 +75,7 @@ const LoginView = () => {
         />
 
         <TextField
+          required 
           name="password"
           label="Mot de passe"
           type={showPassword ? 'text' : 'password'}
@@ -83,6 +109,12 @@ const LoginView = () => {
       >
         Se connecter
       </LoadingButton>
+
+      {error && (
+        <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+          {error.toString()}
+        </Typography>
+      )}
     </>
   );
 

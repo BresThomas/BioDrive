@@ -1,20 +1,11 @@
-import firebase from '../Firebase.js';
-import Paiement from '../models/paiementModel.js';
-import {
-  getFirestore,
-  collection,
-  doc,
-  addDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+const firebase = require('../Firebase.js');
+const Paiement = require('../models/paiementModel.js');
+const { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc } = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
 // Créer un paiement
-export const createPaiement = async (req, res, next) => {
+const createPaiement = async (req, res, next) => {
   try {
     const data = req.body;
     await addDoc(collection(db, 'paiements'), data);
@@ -25,7 +16,7 @@ export const createPaiement = async (req, res, next) => {
 };
 
 // Récupérer tous les paiements
-export const getPaiements = async (req, res, next) => {
+const getPaiements = async (req, res, next) => {
   try {
     const paiements = await getDocs(collection(db, 'paiements'));
     const paiementArray = [];
@@ -50,7 +41,7 @@ export const getPaiements = async (req, res, next) => {
 };
 
 // Récupérer un paiement par son ID
-export const getPaiement = async (req, res, next) => {
+const getPaiement = async (req, res, next) => {
   try {
     const id = req.params.id;
     const paiement = doc(db, 'paiements', id);
@@ -66,7 +57,7 @@ export const getPaiement = async (req, res, next) => {
 };
 
 // Mettre à jour un paiement
-export const updatePaiement = async (req, res, next) => {
+const updatePaiement = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -79,7 +70,7 @@ export const updatePaiement = async (req, res, next) => {
 };
 
 // Supprimer un paiement
-export const deletePaiement = async (req, res, next) => {
+const deletePaiement = async (req, res, next) => {
   try {
     const id = req.params.id;
     await deleteDoc(doc(db, 'paiements', id));
@@ -88,3 +79,5 @@ export const deletePaiement = async (req, res, next) => {
     res.status(400).send(error.message);
   }
 };
+
+module.exports = { createPaiement, getPaiements, getPaiement, updatePaiement, deletePaiement };

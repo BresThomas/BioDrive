@@ -1,20 +1,11 @@
-import firebase from '../Firebase.js';
-import CompteEnergie from '../models/compteEnergieModel.js';
-import {
-  getFirestore,
-  collection,
-  doc,
-  addDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+const firebase = require('../Firebase.js');
+const CompteEnergie = require('../models/compteEnergieModel.js');
+const { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc } = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
 // Créer un compte énergie
-export const createCompteEnergie = async (req, res, next) => {
+exports.createCompteEnergie = async (req, res, next) => {
   try {
     const data = req.body;
     await addDoc(collection(db, 'comptesEnergie'), data);
@@ -25,7 +16,7 @@ export const createCompteEnergie = async (req, res, next) => {
 };
 
 // Récupérer tous les comptes énergie
-export const getComptesEnergie = async (req, res, next) => {
+exports.getComptesEnergie = async (req, res, next) => {
   try {
     const comptesEnergie = await getDocs(collection(db, 'comptesEnergie'));
     const compteEnergieArray = [];
@@ -51,7 +42,7 @@ export const getComptesEnergie = async (req, res, next) => {
 };
 
 // Récupérer un compte énergie par son ID
-export const getCompteEnergie = async (req, res, next) => {
+exports.getCompteEnergie = async (req, res, next) => {
   try {
     const id = req.params.id;
     const compteEnergie = doc(db, 'comptesEnergie', id);
@@ -67,7 +58,7 @@ export const getCompteEnergie = async (req, res, next) => {
 };
 
 // Mettre à jour un compte énergie
-export const updateCompteEnergie = async (req, res, next) => {
+exports.updateCompteEnergie = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -80,7 +71,7 @@ export const updateCompteEnergie = async (req, res, next) => {
 };
 
 // Supprimer un compte énergie
-export const deleteCompteEnergie = async (req, res, next) => {
+exports.deleteCompteEnergie = async (req, res, next) => {
   try {
     const id = req.params.id;
     await deleteDoc(doc(db, 'comptesEnergie', id));

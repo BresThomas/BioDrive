@@ -1,19 +1,20 @@
-import express from 'express';
-import cors from 'cors';
-import config from './config.js';
-import productRoute from './routes/productRoute.js';
-import transactionRoute from './routes/transactionRoute.js';
-import carburantRoute from './routes/carburantRoute.js';
-import tacheRoute from './routes/tacheRoute.js';
-import pompeRoute from './routes/pompeRoute.js';
-import paiementRoute from './routes/paiementRoute.js';
-import employeRoute from './routes/employeRoute.js';
-import avantageRoute from './routes/avantageRoute.js';
-import clientRoute from './routes/clientRoute.js';
-import compteEnergieRoute from './routes/compteEnergieRoute.js';
-import incidentRoute from './routes/incidentRoute.js';
-import stockRoute from './routes/stockRoute.js';
-import reapproRoute from './routes/reapproRoute.js';
+const express = require('express');
+const cors = require('cors');
+const config = require('./config.js');
+const productRoute = require('./routes/productRoute.js');
+const transactionRoute = require('./routes/transactionRoute.js');
+const carburantRoute = require('./routes/carburantRoute.js');
+const tacheRoute = require('./routes/tacheRoute.js');
+const pompeRoute = require('./routes/pompeRoute.js');
+const paiementRoute = require('./routes/paiementRoute.js');
+const employeRoute = require('./routes/employeRoute.js');
+const avantageRoute = require('./routes/avantageRoute.js');
+const clientRoute = require('./routes/clientRoute.js');
+const compteEnergieRoute = require('./routes/compteEnergieRoute.js');
+const incidentRoute = require('./routes/incidentRoute.js');
+const stockRoute = require('./routes/stockRoute.js');
+const reapproRoute = require('./routes/reapproRoute.js');
+const horairesBoutiqueRoute = require('./routes/horairesBoutiqueRoute.js');
 
 const app = express();
 
@@ -33,9 +34,10 @@ app.use('/api', compteEnergieRoute);
 app.use('/api', incidentRoute);
 app.use('/api', stockRoute);
 app.use('/api', reapproRoute);
+app.use('/api', horairesBoutiqueRoute);
 
-app.get("/hello", (req, res) => {
-  res.json({ message: "Hello from server!" });
+app.get('/hello', (req, res) => {
+  res.json({ message: 'Hello from server!' });
 });
 
 app.listen(config.port, () =>

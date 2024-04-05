@@ -1,8 +1,9 @@
 class Pompe {
-    constructor(id_pompe, carburants) {
+    constructor(id_pompe, carburants, isRunning) {
         this.id_pompe = id_pompe;
         this.carburants = carburants;
+        this.isRunning = isRunning;
     }
 }
 
-export default Pompe;
+module.exports = Pompe;

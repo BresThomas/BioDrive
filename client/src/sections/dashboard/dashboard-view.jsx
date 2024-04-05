@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import Container from '@mui/material/Container';
@@ -16,10 +16,7 @@ import Card from '@mui/material/Card';
 import InputAdornment from '@mui/material/InputAdornment';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-
-import { useNavigate } from 'react-router-dom';
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from '../../Firebase';
+import { onAuthStateChanged } from 'firebase/auth';
 
 import PostSearch from '../blog/post-search';
 import Iconify from '../../components/iconify';
@@ -28,8 +25,6 @@ import { usePathname, useRouter } from '../../routes/hooks';
 import Popup from '../../components/popup/popup';
 import AccountPopover from '../../layouts/dashboard/common/account-popover';
 import NotificationsPopover from '../../layouts/dashboard/common/notifications-popover';
-
-
 
 import AppTasks from '../overview/app-tasks';
 import AppNewsUpdate from '../overview/app-news-update';
@@ -46,13 +41,49 @@ import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
 import { posts } from '../../_mock/blog';
 
+import { auth } from '../../Firebase';
 
 // ----------------------------------------------------------------------
 
 
 const paymentModes = ['Cartes bancaire', 'Liquide'];
 export default function DashboardView() {
-  
+
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, (userLogged) => {
+        if (userLogged) {
+          setUser(userLogged);
+          setLoading(false);
+        } else {
+          navigate('/login');
+        }
+      });
+
+      return () => unsubscribe();
+    }, [navigate]);
+
+    useEffect(() => {
+      // Vérifier le rôle de l'utilisateur lorsque les informations de l'utilisateur sont disponibles
+      if (user && !loading) {
+        // Récupérer le rôle de l'utilisateur depuis les informations de l'utilisateur
+        const role = user.role;
+        if (role === 'gerant') {
+          // Si l'utilisateur est un gérant, affichez le tableau de bord du gérant
+          navigate('/dashboard');
+        } else if (role === 'employe') {
+          // Si l'utilisateur est un employé, affichez le tableau de bord de l'employé
+          navigate('/dashboard');
+        } else {
+          // Si le rôle n'est pas défini ou est invalide, déconnectez l'utilisateur
+          navigate('/dashboard');
+        }
+      }
+    }, [user, loading, navigate]);
+
   const [enteredValue, setEnteredValue] = useState('');
   
   const handleValueChange = (newValue) => {
@@ -65,14 +96,13 @@ export default function DashboardView() {
   
   const [products, setProducts] = useState([]);
 
-  const navigate = useNavigate();
-    useEffect(()=>{
-      onAuthStateChanged(auth, (user) => {
-          if (user) {
-            // User is signed in, see docs for a list of available properties
-            // https://firebase.google.com/docs/reference/js/firebase.User
-            const uid = user.uid;
-            navigate('/dashboard'); 
+    useEffect(() => {
+      fetch('http://localhost:3001/api/products')
+        .then((response) => response.json())
+        .then((data) => {
+          // Assurez-vous que les données sont un tableau
+          if (Array.isArray(data)) {
+            setProducts(data);
           } else {
             // User is signed out
             navigate('/login'); 
@@ -80,6 +110,8 @@ export default function DashboardView() {
         });
        
   }, [navigate])
+
+  
 
     const handleClick = () => {
       router.push('/dashboard');
@@ -105,7 +137,6 @@ export default function DashboardView() {
         body: JSON.stringify({
           paymentMode,
           value: enteredValue,
-          date: new Date().toLocaleString()
         })
       });
     };
@@ -122,6 +153,24 @@ export default function DashboardView() {
         })
         .then(data => {
           setIncident(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);    
+    
+    const [horairesBoutique, setHorairesBoutique] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/horairesBoutique')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setHorairesBoutique(data);
         })
         .catch(error => {
           console.error("Erreur lors de la récupération des données:", error);
@@ -184,6 +233,8 @@ export default function DashboardView() {
 
     const [paymentMode, setPaymentMode] = useState('');
 
+    
+
     // =============================CLIENT====================================== //
     
     const initialFormDataClient = {
@@ -199,8 +250,8 @@ export default function DashboardView() {
   
     const handleChangeClient = (event) => {
       const { name, value } = event.target;
-      setFormDataClient(prevFormData => ({
-        ...prevFormData,
+      setFormDataClient(prevFormDataClient => ({
+        ...prevFormDataClient,
         [name]: value
       }));
     };
@@ -222,14 +273,12 @@ export default function DashboardView() {
           adresse: formDataClient.adresse_post,
         })
       });
-  
-      console.log(response);
-      console.log(response.ok);
 
       if (response.ok) {
         // Réinitialiser les champs du formulaire à leur valeur initiale vide
         setFormDataClient(initialFormDataClient);
         console.log("Formulaire soumis avec succès!");
+        window.location.reload(true);
       } else {
         console.error("Erreur lors de la soumission du formulaire");
       }
@@ -237,27 +286,34 @@ export default function DashboardView() {
     
     
     const renderFormClient = (title) => (
-      <Stack spacing={3} direction="row" alignItems="center">
-        <Typography variant="h6" sx={{ width: '25%' }}>{title}</Typography>
+      <Card
+      sx={{
+        p: 3,
+        width: 1,
+      }}
+      >
         <Stack spacing={3} direction="row" alignItems="center">
-          <TextField name="email" label="Email" sx={{ width: '40%' }} onChange={handleChangeClient}/>
-          <TextField name="nom" label="Nom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
-          <TextField name="prenom" label="Prénom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
-          <TextField name="tel" label="Tel." sx={{ width: '40%' }} onChange={handleChangeClient}/>
-          <TextField name="adresse_post" label="Adresse Post." sx={{ width: '40%' }} onChange={handleChangeClient}/>
-          <TextField name="date_naissance" label="Date de Naissance" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <Typography variant="h6" sx={{ width: '25%' }}>{title}</Typography>
+          <Stack spacing={3} direction="row" alignItems="center">
+            <TextField name="email" value={formDataClient.email} label="Email" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+            <TextField name="nom" value={formDataClient.nom} label="Nom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+            <TextField name="prenom" value={formDataClient.prenom} label="Prénom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+            <TextField name="tel" value={formDataClient.tel} label="Tel." sx={{ width: '40%' }} onChange={handleChangeClient}/>
+            <TextField name="adresse_post" value={formDataClient.adresse_post} label="Adresse Post." sx={{ width: '40%' }} onChange={handleChangeClient}/>
+            <TextField name="date_naissance" value={formDataClient.date_naissance} label="Date de Naissance" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          </Stack>
+          <LoadingButton
+            sx={{ width: '22.5%' }}
+            size="large"
+            type="submit"
+            variant="contained"
+            color="inherit"
+            onClick={clickFormClient}
+          >
+            Submit
+          </LoadingButton>
         </Stack>
-        <LoadingButton
-          sx={{ width: '22.5%' }}
-          size="large"
-          type="submit"
-          variant="contained"
-          color="inherit"
-          onClick={clickFormClient}
-        >
-          Submit
-        </LoadingButton>
-      </Stack>
+      </Card>
     );
 
     // =====================INCIDENT======================//
@@ -272,8 +328,8 @@ export default function DashboardView() {
   
     const handleChangeIncident = (event) => {
       const { name, value } = event.target;
-      setFormDataIncident(prevFormData => ({
-        ...prevFormData,
+      setFormDataIncident(prevFormDataIncident => ({
+        ...prevFormDataIncident,
         [name]: value
       }));
     };
@@ -283,7 +339,10 @@ export default function DashboardView() {
       const month = today.getMonth() + 1;
       const year = today.getFullYear();
       const date = today.getDate();
-      return `${date}/${month}/${year}`;
+      const hour = today.getHours().toString().padStart(2, '0');
+      const minutes = today.getMinutes().toString().padStart(2, '0');
+      const seconds = today.getSeconds().toString().padStart(2, '0');
+      return `${year}-${month}-${date}-${hour}:${minutes}:${seconds}`;
     };    
 
     const clickFormIncident = async () => {
@@ -295,7 +354,6 @@ export default function DashboardView() {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          id_incident: "Sid5N6leQMFIhEHupQhy",
           gravite: formDataIncident.gravite,
           intitule: formDataIncident.intitule,
           date: getDate(),
@@ -307,6 +365,7 @@ export default function DashboardView() {
         // Réinitialiser les champs du formulaire à leur valeur initiale vide
         setFormDataIncident(initialFormDataIncident);
         console.log("Formulaire soumis avec succès!");
+        window.location.reload(true);
       } else {
         console.error("Erreur lors de la soumission du formulaire");
       }
@@ -339,7 +398,7 @@ export default function DashboardView() {
           type="submit"
           variant="contained"
           color="inherit"
-          onClick={clickFormIncident}// Click -> envoie formulaire
+          onClick={clickFormIncident}
         >
           Submit
         </LoadingButton>
@@ -494,10 +553,16 @@ export default function DashboardView() {
               ERP 👋
             </Typography>
             <Stack direction="row" alignItems="center" spacing={1}>
+              {horairesBoutique.length > 0 && (
+                <>
+                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>{horairesBoutique[0].horaireDebut} : {horairesBoutique[0].horaireFin}</Typography>
+                </>
+              )}
               <NotificationsPopover />
               <AccountPopover />
             </Stack>
           </Stack>
+
           <Stack direction="row" spacing={2} sx={{ p: 2 }}>
             {navConfig.map((item) => (
               <NavItem key={item.title} item={item} />
@@ -508,78 +573,68 @@ export default function DashboardView() {
 
           <Grid xs={12} sm={6} md={3}>
             <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-              <Card
-                sx={{
-                  p: 3,
-                  width: 1,
-                }}
-              >
                 {renderFormClient('Ajouter client 👤')}
-              </Card>
             </Stack>
           </Grid>
 
           <Grid container spacing={3}>
-          <Grid container spacing={3}> 
-          <Grid xs={12} md={6} lg={4}>
-            <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
-              title="Derniers incidents ⚠️"
-              path="/users"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
-            />
-          </Grid>
+            <Grid xs={12} md={6} lg={4}>
+              <AppNewsUpdate 
+                title="Incidents ⚠️"
+                path="/incidents"
+                list={incidents.slice(0,5).map((incident, index) => ({
+                  id: incident.id_incident,
+                  title: incident.intitule,
+                  description: `${incident.description}, Gravité : ${incident.gravite}`, // Utilisez une description appropriée si disponible
+                  image: '/assets/icons/incident.png',
+                  postedAt: `${incident.date}`,
+                }))}             
+              />
+            </Grid>
           
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate
-                sx={{ width: 520, height: 200, overflowY: 'auto' }}
-                title="Consulter les stocks 📦"
+                title="Stocks 📦"
+                path="/stocks"
                 list={stocks.slice(0,5).map(stock => ({
                   id: stock.id_stock,
-                  title: `Stock :`,
-                  description: ` : ${stock.details.join(", ")}`, // Utilisez une description appropriée si disponible
-                  image: `https://www.maison-kayser.com/1950-large_default/coca-cola-50-cl.jpg`, // Utilisez une logique appropriée pour l'image
-                  postedAt: "02/03/2020", // Utilisez une date appropriée si disponible
+                  title: `ID : ${stock.id_stock}`,
+                  description: `Contenu : ${stock.details ? stock.details.join(", ") : ', '}`,
+                  image: `/assets/icons/stock.png`,
                 }))}
               />
             </Grid>
-          </Grid>
-        <Grid container spacing={3}> 
-          <Grid xs={12} md={6} lg={4}>
-            <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
-              title="Pompes ⛽"
-              path="/pompes"
-              list={[...Array(5)].map((_, index) => ({
-                id: faker.string.uuid(),
-                title: faker.person.jobTitle(),
-                description: faker.commerce.productDescription(),
-                image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                postedAt: faker.date.recent(),
-              }))}
-            />
-          </Grid>
+            <Grid xs={12} md={6} lg={4}>
+              <AppNewsUpdate 
+                title="Pompes ⛽"
+                path="/pompes"
+                list={pompes.slice(0,5).map(pompe => ({
+                  id: pompe.id_pompe,
+                  title: `ID : ${pompe.id_pompe}`,
+                  description: `Carburants : ${pompe.carburants.join(", ")}`,
+                  isRunning: `${pompe.isRunning}`,
+                  image: `/assets/icons/borne.png`,
+                  postedAt: "02/03/2023",
+                }))}
+
+              />
+            </Grid>
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate
-                sx={{ width: 520, height: 200, overflowY: 'auto' }}
-                title="Rechercher client 👤"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
+                // sx={{ width: 275, height: 200, overflowY: 'auto' }}
+                title="Client 👤"
+                path="/user"
+                list={clients.slice(0,5).map((client) => ({
+                  id: client.id_client,
+                  title: `${client.nom} ${client.prenom}`,
+                  description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible
+                  image: `/assets/images/avatars/avatar_2.jpg`,
                 }))}
               />
-            </Grid>
           </Grid>
         </Grid>
-        <Grid xs={12} sm={6} md={3} pt={3}>
-            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+        <Grid>
+            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }} pt={3}>
               <Card
                 sx={{
                   p: 3,

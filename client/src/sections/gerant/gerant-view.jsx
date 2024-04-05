@@ -23,6 +23,7 @@ import { usePathname, useRouter } from '../../routes/hooks';
 import navConfig from '../../layouts/dashboard/config-navigation';
 import Boutique from '../../_mock/form/Boutique';
 import AjouterTache from '../../_mock/form/AjouterTache';
+import AjouterClient from '../../_mock/form/AjouterClient';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +42,7 @@ export default function DashboardView() {
 
     const handleClick = () => {
       router.push('/dashboard');
-    }; 
+    };    
 
     const [paymentMode, setPaymentMode] = useState('');
 
@@ -148,11 +149,15 @@ export default function DashboardView() {
                 </Grid>
                 <Grid  xs={12.4} md={12.6} lg={12.4}>
                   <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+                      {/* form  */}
                       <Card sx={{p: 2, width: 1,}}>
                         <AjouterTache />
                       </Card>               
                       <Card sx={{p: 2, width: 1, mt:3, }}>
                         <Boutique />
+                      </Card>
+                      <Card sx={{p: 2, width: 1, mt:3, }}>
+                        <AjouterClient />
                       </Card>
                   </Stack>
                 </Grid>

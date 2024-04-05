@@ -569,13 +569,6 @@ export default function DashboardView() {
             ))}
           </Stack>
           
-        <Grid container spacing={3}>
-
-          <Grid xs={12} sm={6} md={3}>
-            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
-                {renderFormClient('Ajouter client 👤')}
-            </Stack>
-          </Grid>
 
           <Grid container spacing={3}>
             <Grid xs={12} md={6} lg={4}>
@@ -646,7 +639,6 @@ export default function DashboardView() {
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
   </Container>
 
   );

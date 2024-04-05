@@ -329,16 +329,17 @@ export default function DashboardView() {
     const clickFormIncident = async () => {
       console.log(formDataIncident);
   
-      const response = await fetch('http://localhost:3001/api/newIncident', {
+      const response = await fetch('http://localhost:3001/api/newClient', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
+          id: formDataIncident.id_incident,
           gravite: formDataIncident.gravite,
+          date: formDataIncident.date,
           intitule: formDataIncident.intitule,
-          date: getDate(),
-          description: formDataIncident.descriptionIncident,
+          description: formDataIncident.description,
         })
       });
   
@@ -539,11 +540,11 @@ export default function DashboardView() {
             </Stack>
           </Stack>
 
-          <Stack direction="row" spacing={2} sx={{ p: 2 }}>
+          {/* <Stack direction="row" spacing={2} sx={{ p: 2 }}>
             {navConfig.map((item) => (
               <NavItem key={item.title} item={item} />
             ))}
-          </Stack>
+          </Stack> */}
           
         <Grid container spacing={3}>
 

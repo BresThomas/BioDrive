@@ -1,12 +1,11 @@
-import express from 'express';
-
-import {
+const express = require('express');
+const {
   createStock,
   getStock,
   getStocks,
   updateStock,
   deleteStock,
-} from '../controllers/stockController.js';
+} = require('../controllers/stockController.js');
 
 const router = express.Router();
 
@@ -16,4 +15,4 @@ router.get('/stock/:id', getStock);
 router.put('/updateStock/:id', updateStock);
 router.delete('/deleteStock/:id', deleteStock);
 
-export default router;
+module.exports = router;

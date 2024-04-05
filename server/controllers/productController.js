@@ -1,7 +1,7 @@
-import firebase from '../Firebase.js';
-import Product from '../models/productModel.js';
+const firebase = require('../Firebase.js');
+const Product = require('../models/productModel.js');
 
-import {
+const {
   getFirestore,
   collection,
   doc,
@@ -10,11 +10,11 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
-} from 'firebase/firestore';
+} = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
-export const createProduct = async (req, res, next) => {
+exports.createProduct = async (req, res, next) => {
     try {
       const data = req.body;
       await addDoc(collection(db, 'products'), data);
@@ -23,7 +23,8 @@ export const createProduct = async (req, res, next) => {
       res.status(400).send(error.message);
     }
   };
-  export const getProducts = async (req, res, next) => {
+
+exports.getProducts = async (req, res, next) => {
     try {
       const products = await getDocs(collection(db, 'products'));
       const productArray = [];
@@ -48,8 +49,8 @@ export const createProduct = async (req, res, next) => {
       res.status(400).send(error.message);
     }
   };
-  
-  export const getProduct = async (req, res, next) => {
+
+exports.getProduct = async (req, res, next) => {
     try {
       const id = req.params.id;
       const product = doc(db, 'products', id);
@@ -63,7 +64,8 @@ export const createProduct = async (req, res, next) => {
       res.status(400).send(error.message);
     }
   };
-  export const updateProduct = async (req, res, next) => {
+
+exports.updateProduct = async (req, res, next) => {
     try {
       const id = req.params.id;
       const data = req.body;
@@ -75,7 +77,7 @@ export const createProduct = async (req, res, next) => {
     }
   };
 
-  export const deleteProduct = async (req, res, next) => {
+exports.deleteProduct = async (req, res, next) => {
     try {
       const id = req.params.id;
       await deleteDoc(doc(db, 'products', id));

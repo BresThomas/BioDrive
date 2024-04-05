@@ -7,4 +7,4 @@ class Employe {
     }
 }
 
-export default Employe;
+module.exports = Employe;

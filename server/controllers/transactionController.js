@@ -1,6 +1,6 @@
-import firebase from '../Firebase.js';
-import Transaction from '../models/transactionModel.js';
-import {
+const firebase = require('../Firebase.js');
+const Transaction = require('../models/transactionModel.js');
+const {
   getFirestore,
   collection,
   doc,
@@ -9,12 +9,12 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
-} from 'firebase/firestore';
+} = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
 // Créer une transaction
-export const createTransaction = async (req, res, next) => {
+exports.createTransaction = async (req, res, next) => {
   try {
     const data = req.body;
     await addDoc(collection(db, 'transactions'), data);
@@ -25,7 +25,7 @@ export const createTransaction = async (req, res, next) => {
 };
 
 // Récupérer toutes les transactions
-export const getTransactions = async (req, res, next) => {
+exports.getTransactions = async (req, res, next) => {
   try {
     const transactions = await getDocs(collection(db, 'transactions'));
     const transactionArray = [];
@@ -50,7 +50,7 @@ export const getTransactions = async (req, res, next) => {
 };
 
 // Récupérer une transaction par son ID
-export const getTransaction = async (req, res, next) => {
+exports.getTransaction = async (req, res, next) => {
   try {
     const id = req.params.id;
     const transaction = doc(db, 'transactions', id);
@@ -66,7 +66,7 @@ export const getTransaction = async (req, res, next) => {
 };
 
 // Mettre à jour une transaction
-export const updateTransaction = async (req, res, next) => {
+exports.updateTransaction = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -79,7 +79,7 @@ export const updateTransaction = async (req, res, next) => {
 };
 
 // Supprimer une transaction
-export const deleteTransaction = async (req, res, next) => {
+exports.deleteTransaction = async (req, res, next) => {
   try {
     const id = req.params.id;
     await deleteDoc(doc(db, 'transactions', id));

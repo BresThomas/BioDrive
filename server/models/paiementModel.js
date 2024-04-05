@@ -6,4 +6,4 @@ class Paiement {
     }
 }
 
-export default Paiement;
+module.exports = Paiement;

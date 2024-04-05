@@ -7,4 +7,4 @@ class Carburant {
     }
 }
 
-export default Carburant;
+module.exports = Carburant;

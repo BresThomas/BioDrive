@@ -1,18 +1,15 @@
 import PropTypes from 'prop-types';
-
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
-
 import Iconify from '../../components/iconify';
-
-// ----------------------------------------------------------------------
 
 PostSearch.propTypes = {
   posts: PropTypes.array.isRequired,
+  onChange: PropTypes.func.isRequired, // Add onChange prop
 };
 
-export default function PostSearch({ posts }) {
+export default function PostSearch({ posts, onChange }) {
   return (
     <Autocomplete
       fullWidth
@@ -28,18 +25,9 @@ export default function PostSearch({ posts }) {
         },
       }}
       options={posts}
-      // getOptionLabel={(post) => (
-      //   post.title &&
-      //   post.cover && (
-      //     <img
-      //       src={post.cover}
-      //       alt={`Cover ${post.title}`}
-      //       style={{ width: 20, height: 20, marginRight: 5 }}
-      //     />
-      //   )
-      // )}
-      getOptionLabel={(post) => post.title}
+      getOptionLabel={(post) => post.nom}
       isOptionEqualToValue={(option, value) => option.id === value.id}
+      onChange={onChange}
       renderInput={(params) => (
         <TextField
           {...params}

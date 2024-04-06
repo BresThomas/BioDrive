@@ -25,11 +25,12 @@ export default function Router() {
   const routes = useRoutes([
     {
       element: (
-        <DashboardLayout>
-          <Suspense>
-            <Outlet />
-          </Suspense>
-        </DashboardLayout>
+        // <DashboardLayout>
+          // <Suspense>
+            // <Outlet />
+          // </Suspense>
+        // </DashboardLayout>
+        <DashboardPage />
       ),
       children: [
         { element: <IndexPage />, index: true },

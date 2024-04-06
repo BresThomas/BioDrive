@@ -25,6 +25,7 @@ import { usePathname, useRouter } from '../../routes/hooks';
 import Popup from '../../components/popup/popup';
 import AccountPopover from '../../layouts/dashboard/common/account-popover';
 import NotificationsPopover from '../../layouts/dashboard/common/notifications-popover';
+import AjouterCompteEnergie from '../../_mock/form/AjouterCompteEnergie';
 
 import AppTasks from '../overview/app-tasks';
 import AppNewsUpdate from '../overview/app-news-update';
@@ -335,7 +336,6 @@ export default function DashboardView() {
           gravite: formDataIncident.gravite,
           date: getDate(),
           intitule: formDataIncident.intitule,
-          date: getDate(),
           description: formDataIncident.descriptionIncident,
         })
       });
@@ -352,7 +352,7 @@ export default function DashboardView() {
 
     const renderFormIncident = (title) => (
       <Stack spacing={3} direction="row" alignItems="center">
-        <Typography variant="h6" sx={{ width: '20%' }}>{title}</Typography>
+        <Typography variant="h6" sx={{ width: '25%' }}>{title}</Typography>
         <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '55%' }}>
         <TextField name="intitule" value={formDataIncident.intitule} label="Intitulé" sx={{ width: '30%' }} onChange={handleChangeIncident} />
         <TextField name="descriptionIncident" value={formDataIncident.descriptionIncident} label="Description de l'incident" sx={{ width: '70%' }} onChange={handleChangeIncident} />
@@ -554,8 +554,9 @@ export default function DashboardView() {
           <Grid container spacing={3}>
           <Grid container spacing={3}> 
           <Grid xs={12} md={6} lg={4}>
-            <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
-              title="Derniers incidents ⚠️"
+            <AppNewsUpdate 
+              sx={{ width: 520, height: 200, overflowY: 'auto' }}
+              title="Incidents ⚠️"
               path="/incidents"
               list={incidents.slice(0,5).map((incident, index) => ({
                 id: incident.id_incident,
@@ -570,7 +571,7 @@ export default function DashboardView() {
             <Grid xs={12} md={6} lg={4}>
             <AppNewsUpdate
               sx={{ width: 520, height: 200, overflowY: 'auto' }}
-              title="Consulter les stocks 📦"
+              title="Stocks 📦"
               path="/stocks"
               list={stocks.slice(0,5).map(stock => ({
                 id: stock.id_stock,
@@ -600,7 +601,7 @@ export default function DashboardView() {
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate
                 sx={{ width: 520, height: 200, overflowY: 'auto' }}
-                title="Rechercher client 👤"
+                title="Client 👤"
                 path="/user"
                 list={clients.slice(0,5).map((client) => ({
                   id: client.id_client,
@@ -622,6 +623,9 @@ export default function DashboardView() {
               >
                 {renderFormIncident('Créer un incident ⚠️')}
               </Card>
+            <Card sx={{p: 2, width: 1, mt: 3, }}>
+              <AjouterCompteEnergie />
+            </Card>
             </Stack>
           </Grid>
         </Grid>

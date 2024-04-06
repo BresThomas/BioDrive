@@ -20,6 +20,7 @@ export default function UserTableRow({
   selected,
   id,
   name,
+  id_compte_energie,
   avatarUrl,
   phone,
   adresse,
@@ -68,6 +69,8 @@ export default function UserTableRow({
           </Stack>
         </TableCell>
 
+        <TableCell>{id_compte_energie}</TableCell>
+
         <TableCell>{phone}</TableCell>
 
         <TableCell>{adresse}</TableCell>
@@ -110,6 +113,7 @@ UserTableRow.propTypes = {
   id: PropTypes.any,
   avatarUrl: PropTypes.any,
   phone: PropTypes.any,
+  id_compte_energie: PropTypes.any,
   adresse: PropTypes.any,
   handleClick: PropTypes.func,
   date_naissance: PropTypes.any,

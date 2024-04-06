@@ -37,6 +37,7 @@ import AppConversionRates from '../overview/app-conversion-rates';
 import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
 import { posts } from '../../_mock/blog';
+import Header from '../../layouts/dashboard/header';
 
 // ----------------------------------------------------------------------
 
@@ -348,15 +349,9 @@ export default function ServicesAndLogistiqueView() {
 
             
         <Grid item xs={36} sm={12} md={7} xl={7}>
-          <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-            ERP 👋
-          </Typography>
-          <Stack direction="row" spacing={2} sx={{ p: 2 }}>
-            {navConfig.map((item) => (
-              <NavItem key={item.title} item={item} />
-            ))}
-          </Stack>
-
+        <Box sx={{ pb: 10 }}>
+          <Header />
+        </Box>
 
         <Grid container spacing={3}>
 

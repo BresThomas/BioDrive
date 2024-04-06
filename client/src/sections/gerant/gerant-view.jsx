@@ -25,6 +25,7 @@ import navConfig from '../../layouts/dashboard/config-navigation';
 import Boutique from '../../_mock/form/Boutique';
 import AjouterTache from '../../_mock/form/AjouterTache';
 import AjouterClient from '../../_mock/form/AjouterClient';
+import Header from '../../layouts/dashboard/header';
 
 // ----------------------------------------------------------------------
 
@@ -466,14 +467,9 @@ export default function DashboardView() {
       </Grid>
       </Grid>
     <Grid item xs={36} sm={12} md={7} xl={7}>
-      <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-        ERP 👋
-      </Typography>
-      <Stack direction="row" spacing={2} sx={{ p: 2 }}>
-        {navConfig.map((item) => (
-        <NavItem key={item.title} item={item} />
-        ))}
-      </Stack>
+      <Box sx={{ pb: 10 }}>
+        <Header />
+      </Box>
       <Grid container spacing={5}>
         <Grid item >
           <Stack alignItems="center" justifyContent="center" sx={{ height: 1 ,}}>

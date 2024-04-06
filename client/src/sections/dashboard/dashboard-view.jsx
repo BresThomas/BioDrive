@@ -43,6 +43,7 @@ import navConfig from '../../layouts/dashboard/config-navigation';
 import { posts } from '../../_mock/blog';
 
 import { auth } from '../../Firebase';
+import Header from '../../layouts/dashboard/header';
 
 // ----------------------------------------------------------------------
 
@@ -527,16 +528,9 @@ export default function DashboardView() {
               </Grid>
             </Grid>
         <Grid item xs={36} sm={12} md={7} xl={7}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} sx={{ p: 2 }}>
-            <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-              ERP 👋
-            </Typography>
-            <Stack direction="row" alignItems="center" spacing={1}>
-              <NotificationsPopover />
-              <AccountPopover />
-            </Stack>
-          </Stack>
-
+          <Box sx={{ pb: 10 }}>
+            <Header />
+          </Box>
           <Stack direction="row" spacing={2} sx={{ p: 2 }}>
             {navConfig.map((item) => (
               <NavItem key={item.title} item={item} />
@@ -601,11 +595,11 @@ export default function DashboardView() {
             <Grid xs={12} md={6} lg={4}>
               <AppNewsUpdate
                 sx={{ width: 520, height: 200, overflowY: 'auto' }}
-                title="Client 👤"
+                title="Clients 👤"
                 path="/user"
                 list={clients.slice(0,5).map((client) => ({
                   id: client.id_client,
-                  title: `${client.nom} ${client.prenom}`,
+                  title: ` ${client.nom} ${client.prenom}`,
                   description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible
                   image: `/assets/images/avatars/avatar_2.jpg`,
                 }))}

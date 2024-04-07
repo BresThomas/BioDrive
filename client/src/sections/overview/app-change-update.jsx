@@ -6,18 +6,16 @@ import Link from '@mui/material/Link';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import CardHeader from '@mui/material/CardHeader';
 
 import { fToNow } from '../../utils/format-time';
 
 import Iconify from '../../components/iconify';
-import Scrollbar from '../../components/scrollbar';
 
 // ----------------------------------------------------------------------
 
-export default function AppChangeUpdate({ title, subheader, list, path, isRunning, button1, button2, ...other }) {
+export default function AppChangeUpdate({ title, subheader, list, path, isRunning, button1, button2 ,postedAt , ...other }) {
     const navigate = useNavigate();
 
     const handleViewAllClick = () => {
@@ -57,6 +55,7 @@ AppChangeUpdate.propTypes = {
     subheader: PropTypes.string.isRequired,
     list: PropTypes.arrayOf(PropTypes.object).isRequired,
     path: PropTypes.string.isRequired,
+    postedAt: PropTypes.instanceOf(Date).isRequired,
     isRunning: PropTypes.bool.isRequired,
     button1: PropTypes.node.isRequired,
     button2: PropTypes.node.isRequired,
@@ -127,7 +126,7 @@ return (
         
 
     </Box>
-    <Box>
+    <Box style={{ display: 'flex', gap: '5px' }}>
         {button1}
         {button2}
     </Box>

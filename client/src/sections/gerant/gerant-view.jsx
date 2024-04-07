@@ -91,69 +91,16 @@ export default function DashboardView() {
   }, []);
 
 
-  const handleIncrement = (id) => {
-    const carburant = carburants.find(c => c.id_carburant === id.id_carburant);
-    if (carburant) {
-      fetch(`http://localhost:3001/api/UpdateCarburant/:${id}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            id_carburant: carburant.id_carburant,
-            carburant: carburant.carburant,
-            prix: carburant.prix + 1,
-            stock_carburant: carburant.stock_carburant,
-            date: new Date().toLocaleString(),
-          }),
-        }
-      );
-    } else {
-      console.error(`No carburant found with id ${id}`);
-    }
-  };
-
-  // const handleDecrement = async (id) => {
-  //   const response = await fetch('http://localhost:3001/api/Upda', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({
-  //       email: formDataClient.email,
-  //       nom: formDataClient.nom,
-  //       prenom: formDataClient.prenom,
-  //       date_naissance: formDataClient.date_naissance,
-  //       numero_portable: formDataClient.tel,
-  //       adresse: formDataClient.adresse_post,
-  //     })
-  //   });
-
-  //   if (response.ok) {
-  //     // Réinitialiser les champs du formulaire à leur valeur initiale vide
-  //     setFormDataClient(initialFormDataClient);
-  //     console.log("Formulaire soumis avec succès!");
-  //     window.location.reload(true);
-  //   } else {
-  //     console.error("Erreur lors de la soumission du formulaire");
-  //   }
-  // };
-
-
-  const handleDecrement = async (id,ide) => {
+  const handleIncrement = async (value) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/updateCarburant/${ide}`, {
-        method: 'POST',
+      const response = await fetch(`http://localhost:3001/api/updateCarburant/NnYGtIeHfVN6tHSrAJJZ`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(
           {
-            "id_carburant": "NnYGtIeHfVN6tHSrAJJZ",
-            "carburant": "SP-98",
-            "prix": 2.05,
-            "stock_carburant": 2500
+            "prix": value,
           }
         )
       });
@@ -161,44 +108,26 @@ export default function DashboardView() {
         throw new Error('Erreur lors de la mise à jour des données');
       }
       console.log('Données mises à jour avec succès');
+      window.location.reload(true);
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  
-  // const handleDecrement = (id) => {
-  //   fetch(`http://localhost:3001/api/UpdateCarburant/${id}`, {
-  //     method: 'POST',
-  //   })
-  //   .then(response => {
-  //     if (!response.ok) {
-  //       throw new Error('Erreur lors de la mise à jour des données');
-  //     }
-  //     return response.json();
-  //   })
-  //   .then(data => {
-  //     // Mettre à jour l'état des carburants ici si nécessaire
-  //   })
-  //   .catch(error => {
-  //     console.error("Erreur lors de la mise à jour des données:", error);
-  //   });
-  // };
-
-  const handleDeleteTache = (id) => {
-    fetch(`http://localhost:3001/api/UpdateCarburant/:id${id}`, {
-      method: 'POST',
-    })
-    .then(response => {
+  const handleDeleteTache = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/deleteTache/CBTqgnapkm48xoq8hNX0 `, {
+        method: 'DELETE',
+      });
       if (!response.ok) {
         throw new Error('Erreur lors de la mise à jour des données');
       }
-      return response.json();
-    })
+      console.log('Données mises à jour avec succès');
+      window.location.reload(true);
+    } catch (error) {
+      console.error(error.message);
+    }
   };
-
-  
-
 
     const theme = useTheme();
     const router = useRouter();
@@ -566,7 +495,7 @@ export default function DashboardView() {
                           description: tache.assigne,
                           image: `/assets/icons/glass/ic_glass_message.png`,
                           postedAt: tache.dateButoire,
-                          button1: <Button onClick={handleDeleteTache} >Supprimer</Button>,
+                          button1: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={handleDeleteTache} >Supprimer</Button>,
                         }))}
                         /* TODO Le niveau des pompes n'existe pas l'ajouter dans firebase  */
                       />
@@ -644,10 +573,10 @@ export default function DashboardView() {
                     list={carburants.slice(0,5).map(carburant => ({
                       id: carburant.id_carburant,
                       title: ` ${carburant.carburant}`,
-                      description: ` ${carburant.prix}€/L`,
+                      description: ` ${carburant.prix.toFixed(2)}€/L`,
                       image: `/assets/icons/borne.png`,
-                      button1: <Button onClick={() => handleDecrement(carburant.id)} >-</Button>,
-                      button2: <Button onClick={handleIncrement} >+</Button>,
+                      button1: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleIncrement(carburant.prix-0.01)} >-</Button>,
+                      button2: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleIncrement(carburant.prix+0.01)} >+</Button>,
                     }))}
                   />
                   

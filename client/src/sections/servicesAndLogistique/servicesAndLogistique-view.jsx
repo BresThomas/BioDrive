@@ -170,7 +170,7 @@ export default function ServicesAndLogistiqueView() {
           color="inherit"
           onClick={handleClick}
         >
-          Submit
+          Vendre un ticket : 1.5€
         </LoadingButton>
       </Stack>
     );  
@@ -188,7 +188,7 @@ export default function ServicesAndLogistiqueView() {
           color="inherit"
           onClick={handleClick}
         >
-          Submit
+          Vendre un Abonnement : 15.0€/mois
         </LoadingButton>
       </Stack>
     );  
@@ -211,7 +211,7 @@ export default function ServicesAndLogistiqueView() {
           color="inherit"
           onClick={handleClick}
         >
-          Submit
+          Confirmer
         </LoadingButton>
       </Stack>
     );
@@ -231,7 +231,7 @@ export default function ServicesAndLogistiqueView() {
           onClick={handleClick}
           startIcon={<Iconify icon="tabler:reload" />}
           >
-          Clear
+          Rafraichir
         </LoadingButton>        
         <LoadingButton
           sx={{ width: '22.5%' }}

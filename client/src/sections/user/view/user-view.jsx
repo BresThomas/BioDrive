@@ -160,7 +160,7 @@ export default function UserPage() {
           color="inherit"
           onClick={clickFormClient}
         >
-          Submit
+          Ajouter
         </LoadingButton>
       </Stack>
     </Card>

@@ -293,7 +293,7 @@ export default function DashboardView() {
             color="inherit"
             onClick={clickFormClient}
           >
-            Submit
+            Ajouter
           </LoadingButton>
         </Stack>
       </Card>
@@ -380,7 +380,7 @@ export default function DashboardView() {
           color="inherit"
           onClick={clickFormIncident}
         >
-          Submit
+          Créer
         </LoadingButton>
       </Stack>
     );

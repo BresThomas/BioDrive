@@ -82,7 +82,7 @@ const AjouterClient = () => {
             variant="contained"
             color="inherit"
           >
-            Submit
+            Ajouter
           </LoadingButton>
         </Stack>
       </form>

@@ -1,34 +1,57 @@
 export default class Cart {
-  constructor() {
-    this.cart = new Map();
-    this.itemCount = 0;
-    this.total = 0;
+  constructor(cart = new Map()) {
+    this.items = cart;
+    if (cart.size === 0) {
+      this.itemCount = 0;
+      this.total = 0;
+    } else {
+      this.updateCart();
+    }
+  }
+
+  hasItem(productId) {
+    return this.items instanceof Map ? this.items.has(productId) : null;
   }
 
   addItem(product) {
-    if (this.cart.has(product.id)) {
-      this.cart.set(product.id, this.cart.get(product.id) + 1);
-    } else {
-      this.cart.set(product.id, 1);
-    }
-    this.itemCount += 1;
-    this.total += product.prixClient;
-  }
-
-  removeItem(product) {
-    if (this.cart.has(product.id)) {
-      if (this.cart.get(product.id) === 1) {
-        this.cart.delete(product.id);
+    if(this.items instanceof Map) {
+      if (this.hasItem(product)) {
+        this.items.set(product, this.items.get(product) + 1);
       } else {
-        this.cart.set(product.id, this.cart.get(product.id) - 1);
+        this.items.set(product, 1);
       }
-      this.itemCount -= 1;
-      this.total -= product.prixClient;
+    }
+    this.updateCart();
+  }
+
+  removeItem(productId) {
+    if (this.hasItem(productId)) {
+      this.itemCount -= this.items.get(productId);
+      this.total -= this.items.get(productId) * productId.prixClient;
+      this.items.delete(productId);
     }
   }
 
-  getCart() {
-    return this.cart;
+  setQuantity(productId, quantity) {
+    if (this.hasItem(productId)) {
+      this.items.set(productId, quantity);
+      this.updateCart();
+    }
+  }
+
+  updateCart() {
+    this.itemCount = 0;
+    this.total = 0;
+    if (this.items instanceof Map) {
+      this.items.forEach((quantity, product) => {
+        this.itemCount += quantity;
+        this.total += quantity * product.prixClient;
+      });
+    }
+  }
+  
+  getItems() {
+    return this.items;
   }
 
   getItemCount() {
@@ -40,12 +63,7 @@ export default class Cart {
   }
 
   getSize() {
-    return this.cart.size;
+    return this.items.size;
   }
 
-  clearCart() {
-    this.cart.clear();
-    this.itemCount = 0;
-    this.total = 0;
-  }
 }

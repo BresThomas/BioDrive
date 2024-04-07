@@ -38,8 +38,8 @@ import { NAV } from "../../layouts/dashboard/config-layout";
 import navConfig from "../../layouts/dashboard/config-navigation";
 import { posts } from "../../_mock/blog";
 import Product from "../products/product";
-import Cart from "../products/product-cart";
 import CartView from "../products/view/cart-view";
+import Cart from "../products/product-cart";
 
 // ----------------------------------------------------------------------
 
@@ -47,14 +47,15 @@ const paymentModes = ["Cartes bancaire", "Liquide"];
 
 let selectedProduct;
 
-const cart = new Cart();
-
 function setSelectedProduct(newValue) {
     selectedProduct = newValue;
 }
 
 export default function DashboardView() {
+
+    const [cart, setCart] = useState(window.localStorage.getItem('cart') ? new Cart(JSON.parse(window.localStorage.getItem('cart'))) : new Cart([]));
     const [enteredValue, setEnteredValue] = useState("");
+    const [paymentMode, setPaymentMode] = useState("");
 
     const handleValueChange = (newValue) => {
         console.log("New value:", newValue);
@@ -89,11 +90,6 @@ export default function DashboardView() {
         router.push("/dashboard");
     };
 
-    const handleAddProduct = () => {
-        cart.addItem(selectedProduct);
-        window.location.reload(true);
-    };
-
     const handlePayment = async () => {
         if (enteredValue === "") {
             alert("Veuillez valider le montant à régler");
@@ -101,8 +97,22 @@ export default function DashboardView() {
             alert("Veuillez choisir un mode de paiement");
         } else {
             alert("Paiement effectué avec succès");
-            await sendTransaction();
         }
+    };
+
+    const handleAddProduct = () => {
+        if (selectedProduct) {
+            const updatedCart = new Cart(cart.getItems());
+            updatedCart.addItem(selectedProduct);
+            setCart(updatedCart);
+            window.localStorage.setItem('cart', JSON.stringify(updatedCart));
+        }
+    };
+
+    const handleClearCart = () => {
+        const updatedCart = new Cart();
+        setCart(updatedCart);
+        window.localStorage.setItem('cart', JSON.stringify(updatedCart));
     };
 
     const sendTransaction = async (event) => {
@@ -122,7 +132,6 @@ export default function DashboardView() {
         );
     };
 
-    const [paymentMode, setPaymentMode] = useState("");
 
     const renderFormClient = (title) => (
         <Stack spacing={3} direction="row" alignItems="center">
@@ -214,7 +223,7 @@ export default function DashboardView() {
                     type="submit"
                     variant="outlined"
                     color="inherit"
-                    onClick={handleClick}
+                    onClick={handleClearCart}
                     startIcon={<Iconify icon="tabler:reload" />}
                 >
                     Clear
@@ -243,11 +252,7 @@ export default function DashboardView() {
             <Stack spacing={3} direction="row" alignItems="center">
                 <Typography variant="h6">Somme total à régler:</Typography>
                 <Typography variant="h6">
-                    {products.map((product, index) => (
-                        <div key={index}>
-                            <p>{product.price}€</p>
-                        </div>
-                    ))}
+                    {enteredValue} €
                 </Typography>
 
                 <Select
@@ -329,7 +334,7 @@ export default function DashboardView() {
                                         />
                                     </Grid>
                                     <Grid>
-                                        <CartView cart={cart} />
+                                        <CartView cart={cart}/>
                                     </Grid>
                                 </Grid>
                             </Stack>

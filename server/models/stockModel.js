@@ -1,8 +1,8 @@
 class Stock {
-    constructor(id_stock, stock_details) {
+    constructor(id_stock, details) {
         this.id_stock = id_stock;
-        this.stock_details = stock_details;
+        this.details = details;
     }
 }
 
-export default Stock;
+module.exports = Stock;

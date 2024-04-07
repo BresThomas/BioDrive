@@ -7,12 +7,12 @@ import { TransactionsView } from '../sections/transactions';
 
 export default function TransactionsPage() {
   return (
-    <>
-      <Helmet>
-        <title> Transactions </title>
-      </Helmet>
+      <>
+        <Helmet>
+          <title> Transactions </title>
+        </Helmet>
 
-      <TransactionsView />
-    </>
+        <TransactionsView />
+      </>
   );
 }

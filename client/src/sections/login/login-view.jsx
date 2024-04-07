@@ -1,52 +1,73 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import TextField from '@mui/material/TextField';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { alpha, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
-import LoadingButton from '@mui/lab/LoadingButton';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton'; // Import from correct path
+import InputAdornment from '@mui/material/InputAdornment';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import { alpha, useTheme } from '@mui/material/styles';
-import InputAdornment from '@mui/material/InputAdornment';
-import axios from 'axios'; // Importez axios pour effectuer des requêtes HTTP
-
-import { useRouter } from '../../routes/hooks';
-import { bgGradient } from '../../theme/css';
-import Logo from '../../components/logo';
+import { auth } from '../../Firebase';
 import Iconify from '../../components/iconify';
+import Logo from '../../components/logo';
+import { bgGradient } from '../../theme/css';
 
-export default function LoginView() {
+const LoginView = () => {
   const theme = useTheme();
-  const router = useRouter();
-  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleLogin = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.post('http://localhost:3001/api/login', {
-        email,
-        password
+  const handleLogin = (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        navigate("/dashboard");
+      })
+      .catch((errorMessage) => {
+        // Handle login errors
+        // Traduire l'erreur en un message convivial pour l'utilisateur
+        switch (errorMessage.code) {
+          case "auth/user-not-found":
+            errorMessage = "Aucun compte trouvé avec cette adresse e-mail. Veuillez vous inscrire d'abord.";
+            break;
+          case "auth/wrong-password":
+            errorMessage = "Le mot de passe saisi est incorrect. Veuillez réessayer.";
+            break;
+          case "auth/invalid-email":
+            errorMessage = "L'email est invalide. Veuillez réessayer.";
+            break;
+          case "auth/invalid-credential":
+            errorMessage = "L'email ou le mot de passe fourni est incorrect. Veuillez vérifier les informations que vous avez saisies pour vous connecter.";
+            break;
+          case "auth/too-many-requests":
+            errorMessage = "Accès à ce compte temporairement désactivé en raison de trop de tentatives de connexion échouées. Réessayer ultérieurement.";
+            break;
+          // Ajoutez d'autres cas pour d'autres erreurs Firebase courantes ici
+          default:
+            break;
+        }
+  
+        // Mettre à jour le state avec le message d'erreur convivial
+        setError(errorMessage);
       });
-      console.log(response.data); // Gérer la réponse du serveur
-      router.push('/dashboard'); // Redirection vers la page de tableau de bord
-    } catch (error) {
-      console.error('Erreur lors de la connexion :', error);
-      // Gérer les erreurs de connexion (par exemple, afficher un message d'erreur à l'utilisateur)
-    } finally {
-      setLoading(false);
-    }
   };
+  
 
   const renderForm = (
     <>
       <Stack spacing={3}>
         <TextField
+          required 
           name="email"
           label="Email address"
           value={email}
@@ -54,6 +75,7 @@ export default function LoginView() {
         />
 
         <TextField
+          required 
           name="password"
           label="Mot de passe"
           type={showPassword ? 'text' : 'password'}
@@ -84,10 +106,15 @@ export default function LoginView() {
         variant="contained"
         color="inherit"
         onClick={handleLogin}
-        loading={loading}
       >
         Se connecter
       </LoadingButton>
+
+      {error && (
+        <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+          {error.toString()}
+        </Typography>
+      )}
     </>
   );
 
@@ -117,12 +144,20 @@ export default function LoginView() {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Connexion à EcoDrive</Typography>
-            <Divider sx={{ my: 3 }} />
-          
+          <Typography variant="h4">Sign in to ERP 👋</Typography>
+
+          <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
+            Don’t have an account?
+            <Link href="/signup" variant="subtitle2" sx={{ ml: 0.5 }}>
+              Get started
+            </Link>
+          </Typography>
+
           {renderForm}
         </Card>
       </Stack>
     </Box>
   );
-}
+};
+
+export default LoginView;

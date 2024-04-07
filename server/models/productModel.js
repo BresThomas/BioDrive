@@ -8,4 +8,4 @@ class Product {
   }
 }
 
-export default Product;
+module.exports = Product;

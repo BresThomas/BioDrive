@@ -1,20 +1,11 @@
-import firebase from '../Firebase.js';
-import Avantage from '../models/avantageModel.js';
-import {
-  getFirestore,
-  collection,
-  doc,
-  addDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+const firebase = require('../Firebase.js');
+const Avantage = require('../models/avantageModel.js');
+const { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc } = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
 // Créer un avantage
-export const createAvantage = async (req, res, next) => {
+exports.createAvantage = async (req, res, next) => {
   try {
     const data = req.body;
     await addDoc(collection(db, 'avantages'), data);
@@ -25,7 +16,7 @@ export const createAvantage = async (req, res, next) => {
 };
 
 // Récupérer tous les avantages
-export const getAvantages = async (req, res, next) => {
+exports.getAvantages = async (req, res, next) => {
   try {
     const avantages = await getDocs(collection(db, 'avantages'));
     const avantageArray = [];
@@ -51,7 +42,7 @@ export const getAvantages = async (req, res, next) => {
 };
 
 // Récupérer un avantage par son ID
-export const getAvantage = async (req, res, next) => {
+exports.getAvantage = async (req, res, next) => {
   try {
     const id = req.params.id;
     const avantage = doc(db, 'avantages', id);
@@ -67,7 +58,7 @@ export const getAvantage = async (req, res, next) => {
 };
 
 // Mettre à jour un avantage
-export const updateAvantage = async (req, res, next) => {
+exports.updateAvantage = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -80,7 +71,7 @@ export const updateAvantage = async (req, res, next) => {
 };
 
 // Supprimer un avantage
-export const deleteAvantage = async (req, res, next) => {
+exports.deleteAvantage = async (req, res, next) => {
   try {
     const id = req.params.id;
     await deleteDoc(doc(db, 'avantages', id));

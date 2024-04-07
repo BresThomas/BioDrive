@@ -18,12 +18,13 @@ import Iconify from '../../components/iconify';
 
 export default function UserTableRow({
   selected,
+  id,
   name,
+  id_compte_energie,
   avatarUrl,
-  company,
-  role,
-  isVerified,
-  status,
+  phone,
+  adresse,
+  date_naissance,
   handleClick,
 }) {
   const [open, setOpen] = useState(null);
@@ -35,15 +36,31 @@ export default function UserTableRow({
   const handleCloseMenu = () => {
     setOpen(null);
   };
+  
+  const handleDeleteClient = async (id_client) => {
+    setOpen(null);
+  
+    const response = await fetch(`http://localhost:3001/api/deleteClient/${id_client}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    });
+  
+    if (response.ok) {
+      console.log("Suppression réussie !");
+      window.location.reload(true);
+    } else {
+      console.error("Erreur lors de la suppression du client");
+    }
+  };
+  
 
   return (
     <>
       <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
-        <TableCell padding="checkbox">
-          <Checkbox disableRipple checked={selected} onChange={handleClick} />
-        </TableCell>
 
-        <TableCell component="th" scope="row" padding="none">
+        <TableCell component="th" scope="row" padding-left="5">
           <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar alt={name} src={avatarUrl} />
             <Typography variant="subtitle2" noWrap>
@@ -52,15 +69,13 @@ export default function UserTableRow({
           </Stack>
         </TableCell>
 
-        <TableCell>{company}</TableCell>
+        <TableCell>{id_compte_energie}</TableCell>
 
-        <TableCell>{role}</TableCell>
+        <TableCell>{phone}</TableCell>
 
-        <TableCell align="center">{isVerified ? 'Yes' : 'No'}</TableCell>
-
-        <TableCell>
-          <Label color={(status === 'banned' && 'error') || 'success'}>{status}</Label>
-        </TableCell>
+        <TableCell>{adresse}</TableCell>
+        
+        <TableCell align="center">{date_naissance}</TableCell>
 
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
@@ -84,22 +99,24 @@ export default function UserTableRow({
           Edit
         </MenuItem>
 
-        <MenuItem onClick={handleCloseMenu} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={() => handleDeleteClient(id)} sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
           Delete
         </MenuItem>
+
       </Popover>
     </>
   );
 }
 
 UserTableRow.propTypes = {
+  id: PropTypes.any,
   avatarUrl: PropTypes.any,
-  company: PropTypes.any,
+  phone: PropTypes.any,
+  id_compte_energie: PropTypes.any,
+  adresse: PropTypes.any,
   handleClick: PropTypes.func,
-  isVerified: PropTypes.any,
+  date_naissance: PropTypes.any,
   name: PropTypes.any,
-  role: PropTypes.any,
   selected: PropTypes.any,
-  status: PropTypes.string,
 };

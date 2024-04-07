@@ -1,10 +1,12 @@
 class Reappro {
-    constructor(id_reappro, noms, date_debut, date_fin) {
+    constructor(id_reappro, id_produit, quantite, adresse_livraison, date_livraison, prix) {
         this.id_reappro = id_reappro;
-        this.noms = noms;
-        this.date_debut = date_debut;
-        this.date_fin = date_fin;
+        this.id_produit = id_produit;
+        this.quantite = quantite;
+        this.adresse_livraison = adresse_livraison
+        this.date_livraison = date_livraison
+        this.prix = prix
     }
 }
 
-export default Reappro;
+module.exports = Reappro;

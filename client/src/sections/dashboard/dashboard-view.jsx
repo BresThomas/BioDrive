@@ -53,6 +53,42 @@ function setSelectedProduct(newValue) {
 
 export default function DashboardView() {
 
+    const navigate = useNavigate();
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
+    
+    useEffect(() => {
+      const unsubscribe = onAuthStateChanged(auth, (userLogged) => {
+        if (userLogged) {
+          setUser(userLogged);
+          setLoading(false);
+        } else {
+          navigate('/login');
+        }
+      });
+
+      return () => unsubscribe();
+    }, [navigate]);
+
+    useEffect(() => {
+      // Vérifier le rôle de l'utilisateur lorsque les informations de l'utilisateur sont disponibles
+      if (user && !loading) {
+        // Récupérer le rôle de l'utilisateur depuis les informations de l'utilisateur
+        const role = user.role;
+        console.log("Role:", role)
+        if (role === 'gerant') {
+          // Si l'utilisateur est un gérant, affichez le tableau de bord du gérant
+          navigate('/dashboard');
+        } else if (role === 'employe') {
+          // Si l'utilisateur est un employé, affichez le tableau de bord de l'employé
+          navigate('/dashboard');
+        } else {
+          // Si le rôle n'est pas défini ou est invalide, déconnectez l'utilisateur
+          navigate('/dashboard');
+        }
+      }
+    }, [user, loading, navigate]);
+
     const [cart, setCart] = useState(window.localStorage.getItem('cart') ? new Cart(JSON.parse(window.localStorage.getItem('cart'))) : new Cart([]));
     const [enteredValue, setEnteredValue] = useState("");
     const [paymentMode, setPaymentMode] = useState("");
@@ -89,6 +125,7 @@ export default function DashboardView() {
     const handleClick = () => {
         router.push("/dashboard");
     };
+    
 
     const handlePayment = async () => {
         if (enteredValue === "") {
@@ -132,6 +169,78 @@ export default function DashboardView() {
         );
     };
 
+    const [incidents, setIncident] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/incidents')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setIncident(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
+    const [stocks, setStock] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/stocks')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setStock(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
+    const [pompes, setPompe] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/pompes')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setPompe(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
+    const [clients, setClient] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/clients')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setClient(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);
+
 
     const renderFormClient = (title) => (
         <Stack spacing={3} direction="row" alignItems="center">
@@ -169,6 +278,58 @@ export default function DashboardView() {
             </LoadingButton>
         </Stack>
     );
+
+    // =====================INCIDENT======================//
+
+    const initialFormDataIncident = {
+      intitule: '',
+      descriptionIncident: '',
+      gravite: ''
+    };
+  
+    const [formDataIncident, setFormDataIncident] = useState(initialFormDataIncident);
+  
+    const handleChangeIncident = (event) => {
+      const { name, value } = event.target;
+      setFormDataIncident(prevFormDataIncident => ({
+        ...prevFormDataIncident,
+        [name]: value
+      }));
+    };
+
+    const getDate = () => {
+      const today = new Date();
+      const month = today.getMonth() + 1;
+      const year = today.getFullYear();
+      const date = today.getDate();
+      return `${month}/${date}/${year}`;
+    };    
+
+    const clickFormIncident = async () => {
+      console.log(formDataIncident);
+  
+      const response = await fetch('http://localhost:3001/api/newIncident', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          gravite: formDataIncident.gravite,
+          date: getDate(),
+          intitule: formDataIncident.intitule,
+          description: formDataIncident.descriptionIncident,
+        })
+      });
+  
+      if (response.ok) {
+        // Réinitialiser les champs du formulaire à leur valeur initiale vide
+        setFormDataIncident(initialFormDataIncident);
+        console.log("Formulaire soumis avec succès!");
+        window.location.reload(true);
+      } else {
+        console.error("Erreur lors de la soumission du formulaire");
+      }
+    };
 
     const renderFormIncident = (title) => (
         <Stack spacing={3} direction="row" alignItems="center">

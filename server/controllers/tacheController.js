@@ -1,6 +1,6 @@
-import firebase from '../Firebase.js';
-import Tache from '../models/tacheModel.js';
-import {
+const firebase = require('../Firebase.js');
+const Tache = require('../models/tacheModel.js');
+const {
   getFirestore,
   collection,
   doc,
@@ -9,12 +9,12 @@ import {
   getDocs,
   updateDoc,
   deleteDoc,
-} from 'firebase/firestore';
+} = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
 // Créer une tâche
-export const createTache = async (req, res, next) => {
+exports.createTache = async (req, res, next) => {
   try {
     const data = req.body;
     await addDoc(collection(db, 'taches'), data);
@@ -25,7 +25,7 @@ export const createTache = async (req, res, next) => {
 };
 
 // Récupérer toutes les tâches
-export const getTaches = async (req, res, next) => {
+exports.getTaches = async (req, res, next) => {
   try {
     const taches = await getDocs(collection(db, 'taches'));
     const tacheArray = [];
@@ -36,7 +36,9 @@ export const getTaches = async (req, res, next) => {
       taches.forEach((doc) => {
         const tache = new Tache(
           doc.id,
-          doc.data().but
+          doc.data().assigne,
+          doc.data().dateButoire,
+          doc.data().libelle
         );
         tacheArray.push(tache);
       });
@@ -49,7 +51,7 @@ export const getTaches = async (req, res, next) => {
 };
 
 // Récupérer une tâche par son ID
-export const getTache = async (req, res, next) => {
+exports.getTache = async (req, res, next) => {
   try {
     const id = req.params.id;
     const tache = doc(db, 'taches', id);
@@ -65,7 +67,7 @@ export const getTache = async (req, res, next) => {
 };
 
 // Mettre à jour une tâche
-export const updateTache = async (req, res, next) => {
+exports.updateTache = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -78,7 +80,7 @@ export const updateTache = async (req, res, next) => {
 };
 
 // Supprimer une tâche
-export const deleteTache = async (req, res, next) => {
+exports.deleteTache = async (req, res, next) => {
   try {
     const id = req.params.id;
     await deleteDoc(doc(db, 'taches', id));

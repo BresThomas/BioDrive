@@ -1,19 +1,12 @@
-import express from 'express';
-
-import {
-  createCarburant,
-  getCarburant,
-  getCarburants,
-  updateCarburant,
-  deleteCarburant,
-} from '../controllers/carburantController.js';
+const express = require('express');
+const carburantController = require('../controllers/carburantController.js');
 
 const router = express.Router();
 
-router.get('/carburants', getCarburants);
-router.post('/newCarburant', createCarburant);
-router.get('/carburant/:id', getCarburant);
-router.put('/updateCarburant/:id', updateCarburant);
-router.delete('/deleteCarburant/:id', deleteCarburant);
+router.get('/carburants', carburantController.getCarburants);
+router.post('/newCarburant', carburantController.createCarburant);
+router.get('/carburant/:id', carburantController.getCarburant);
+router.put('/updateCarburant/:id', carburantController.updateCarburant);
+router.delete('/deleteCarburant/:id', carburantController.deleteCarburant);
 
-export default router;
+module.exports = router;

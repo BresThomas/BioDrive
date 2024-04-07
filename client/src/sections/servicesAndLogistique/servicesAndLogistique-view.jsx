@@ -37,6 +37,7 @@ import AppConversionRates from '../overview/app-conversion-rates';
 import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
 import { posts } from '../../_mock/blog';
+import Header from '../../layouts/dashboard/header';
 
 // ----------------------------------------------------------------------
 
@@ -69,19 +70,77 @@ export default function ServicesAndLogistiqueView() {
     };
 
     const [paymentMode, setPaymentMode] = useState('');
+
+    // ==================DEMANDE DE REAPPRO================ //
+
+    const initialFormDataReappro = {
+      id_produit: '',
+      quantite: '',
+      adresse_livraison: '',
+      date_livraison: '',
+      prix: '',
+    };
+  
+    const [formDataReappro, setFormDataReappro] = useState(initialFormDataReappro);
+  
+    const handleChangeReappro = (event) => {
+      const { name, value } = event.target;
+      setFormDataReappro(prevFormDataReappro => ({
+        ...prevFormDataReappro,
+        [name]: value
+      }));
+    };
+
+    const handleChangeSearchReappro = (event, value) => { // Recupere specifiquement l'id dans la list posts
+      // const { name, value } = event.target;
+      setFormDataReappro(prevFormDataReappro => ({
+        ...prevFormDataReappro,
+        id_produit: value.id
+      }));
+    };
+
+    const clickFormReappro = async () => {
+      console.log("vababab");
+      console.log(formDataReappro);
+  
+      const response = await fetch('http://localhost:3001/api/newReappro', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+
+          id_produit: formDataReappro.id_produit,
+          quantite: formDataReappro.quantite,
+          adresse_livraison: formDataReappro.adresse_livraison,
+          date_livraison: formDataReappro.date_livraison,
+          prix: formDataReappro.prix,
+        })
+      });
+
+      if (response.ok) {
+        // Réinitialiser les champs du formulaire à leur valeur initiale vide
+        setFormDataReappro(initialFormDataReappro);
+        console.log("Formulaire soumis avec succès!");
+        // window.location.reload(true);
+      } else {
+        console.error("Erreur lors de la soumission du formulaire");
+      }
+    };
     
     
+
     const renderForm = (
       <Stack spacing={3} direction="row" alignItems="center">
         <Typography variant="h6">Demande de réappro</Typography>
     
         <Stack spacing={3} direction="row" alignItems="center">
           
-          <PostSearch posts={posts} />
-          <TextField name="email" label="Quantité" />
-          <TextField name="email" label="Adresse livraison" />
-          <TextField name="email" label="Date livraison" />
-          <TextField name="email" label="Prix" />
+          <PostSearch posts={posts} onChange={handleChangeSearchReappro}/>
+          <TextField name="quantite" label="Quantité" onChange={handleChangeReappro} />
+          <TextField name="adresse_livraison" label="Adresse livraison" onChange={handleChangeReappro} />
+          <TextField name="date_livraison" label="Date livraison" onChange={handleChangeReappro} />
+          <TextField name="prix" label="Prix" onChange={handleChangeReappro} />
         </Stack>
     
         <LoadingButton
@@ -90,7 +149,7 @@ export default function ServicesAndLogistiqueView() {
           type="submit"
           variant="contained"
           color="inherit"
-          onClick={handleClick}
+          onClick={clickFormReappro}
         >
           Submit
         </LoadingButton>
@@ -98,7 +157,7 @@ export default function ServicesAndLogistiqueView() {
     );    
 
     const renderForm2 = (
-      <Stack spacing={30} direction="row" alignItems="center">
+      <Stack spacing={30} direction="row" alignItems="center" sx={{ width: '1000px'}}>
     <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Tickets de transport en commun</Typography>
     <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Nombre restant :  XX</Typography> 
         
@@ -111,10 +170,51 @@ export default function ServicesAndLogistiqueView() {
           color="inherit"
           onClick={handleClick}
         >
-          Submit
+          Vendre un ticket : 1.5€
         </LoadingButton>
       </Stack>
     );  
+
+    const renderForm3 = (
+      <Stack spacing={30} direction="row" alignItems="center" sx={{ width: '1000px'}}>
+      <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Abonnement  aux transport en commun</Typography>
+        
+
+        <LoadingButton
+          sx={{ width: '22.5%' }}
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          onClick={handleClick}
+        >
+          Vendre un Abonnement : 15.0€/mois
+        </LoadingButton>
+      </Stack>
+    );  
+
+    const renderForm4 = (
+      <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '1000px'}}>
+        <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Réserver un service entre particulier</Typography>
+    
+        <Stack spacing={3} direction="row" alignItems="center">
+          
+          <PostSearch posts={posts} />
+          <TextField name="email" label="EMail du client" />
+        </Stack>
+    
+        <LoadingButton
+          sx={{ width: '22.5%' }}
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          onClick={handleClick}
+        >
+          Confirmer
+        </LoadingButton>
+      </Stack>
+    );
     
     const addProductFrom = (
       <Stack spacing={3} alignItems="left">
@@ -131,7 +231,7 @@ export default function ServicesAndLogistiqueView() {
           onClick={handleClick}
           startIcon={<Iconify icon="tabler:reload" />}
           >
-          Clear
+          Rafraichir
         </LoadingButton>        
         <LoadingButton
           sx={{ width: '22.5%' }}
@@ -249,15 +349,9 @@ export default function ServicesAndLogistiqueView() {
 
             
         <Grid item xs={36} sm={12} md={7} xl={7}>
-          <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-            ERP 👋
-          </Typography>
-          <Stack direction="row" spacing={2} sx={{ p: 2 }}>
-            {navConfig.map((item) => (
-              <NavItem key={item.title} item={item} />
-            ))}
-          </Stack>
-
+        <Box sx={{ pb: 10 }}>
+          <Header />
+        </Box>
 
         <Grid container spacing={3}>
 
@@ -282,16 +376,16 @@ export default function ServicesAndLogistiqueView() {
                   width: 1,
                 }}
               >
-                {renderForm}
+                {renderForm3}
               </Card>
             </Stack>
           </Grid>
 
           <Grid xs={12} md={6} lg={4}>
             
-            <Grid container spacing={3} columns={6}>
+            <Grid container spacing={3} >
               <Grid xs={12} sm={6} md={3}>
-              <AppNewsUpdate
+              <AppNewsUpdate sx={{ width: 520, height: 180, overflowY: 'auto' }}
                 title="Parkings disponibles"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
@@ -304,7 +398,7 @@ export default function ServicesAndLogistiqueView() {
               </Grid>
               
             <Grid xs={12} sm={6} md={3}>
-              <AppNewsUpdate
+              <AppNewsUpdate sx={{ width: 520, height: 180, overflowY: 'auto' }}
                 title="Services de livraison spéciaux"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
@@ -317,20 +411,20 @@ export default function ServicesAndLogistiqueView() {
             </Grid>
 
             <Grid xs={12} sm={6} md={6}>
-            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+            <Stack alignItems="center" justifyContent="center" sx={{ height: 1}}>
               <Card
                 sx={{
                   p: 3,
                   width: 1,
                 }}
               >
-                {renderForm}
+                {renderForm4}
               </Card>
             </Stack>
           </Grid>
 
-          <Grid xs={12} sm={6} md={3}>
-              <AppNewsUpdate
+          <Grid xs={15} sm={6} md={3}>
+              <AppNewsUpdate sx={{ width: 520, height: 280, overflowY: 'auto' }}
                 title="Consulter les plannings"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),
@@ -342,8 +436,8 @@ export default function ServicesAndLogistiqueView() {
               />
               </Grid>
               
-            <Grid xs={12} sm={6} md={3}>
-              <AppNewsUpdate
+            <Grid xs={15} sm={6} md={3}>
+              <AppNewsUpdate sx={{ width: 520, height: 280, overflowY: 'auto' }}
                 title="Consulter les tables de transaction"
                 list={[...Array(5)].map((_, index) => ({
                   id: faker.string.uuid(),

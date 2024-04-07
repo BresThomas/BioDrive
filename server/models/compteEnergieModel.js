@@ -7,4 +7,4 @@ class CompteEnergie {
     }
 }
 
-export default CompteEnergie;
+module.exports = CompteEnergie;

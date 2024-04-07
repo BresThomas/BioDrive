@@ -1,20 +1,11 @@
-import firebase from '../Firebase.js';
-import Stock from '../models/stockModel.js';
-import {
-  getFirestore,
-  collection,
-  doc,
-  addDoc,
-  getDoc,
-  getDocs,
-  updateDoc,
-  deleteDoc,
-} from 'firebase/firestore';
+const firebase = require('../Firebase.js');
+const Stock = require('../models/stockModel.js');
+const { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, deleteDoc } = require('firebase/firestore');
 
 const db = getFirestore(firebase);
 
 // Créer un stock
-export const createStock = async (req, res, next) => {
+exports.createStock = async (req, res, next) => {
   try {
     const data = req.body;
     await addDoc(collection(db, 'stocks'), data);
@@ -25,7 +16,7 @@ export const createStock = async (req, res, next) => {
 };
 
 // Récupérer tous les stocks
-export const getStocks = async (req, res, next) => {
+exports.getStocks = async (req, res, next) => {
   try {
     const stocks = await getDocs(collection(db, 'stocks'));
     const stockArray = [];
@@ -36,7 +27,7 @@ export const getStocks = async (req, res, next) => {
       stocks.forEach((doc) => {
         const stock = new Stock(
           doc.id,
-          doc.data().stock_details
+          doc.data().details
         );
         stockArray.push(stock);
       });
@@ -49,7 +40,7 @@ export const getStocks = async (req, res, next) => {
 };
 
 // Récupérer un stock par son ID
-export const getStock = async (req, res, next) => {
+exports.getStock = async (req, res, next) => {
   try {
     const id = req.params.id;
     const stock = doc(db, 'stocks', id);
@@ -65,7 +56,7 @@ export const getStock = async (req, res, next) => {
 };
 
 // Mettre à jour un stock
-export const updateStock = async (req, res, next) => {
+exports.updateStock = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -78,7 +69,7 @@ export const updateStock = async (req, res, next) => {
 };
 
 // Supprimer un stock
-export const deleteStock = async (req, res, next) => {
+exports.deleteStock = async (req, res, next) => {
   try {
     const id = req.params.id;
     await deleteDoc(doc(db, 'stocks', id));

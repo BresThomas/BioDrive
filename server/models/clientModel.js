@@ -1,6 +1,7 @@
 class Client {
-    constructor(id_client, nom, prenom, adresse, date_naissance, numero_portable, id_compte_energie) {
+    constructor(id_client, email, nom, prenom, adresse, date_naissance, numero_portable, id_compte_energie) {
         this.id_client = id_client;
+        this.email = email;
         this.nom = nom;
         this.prenom = prenom;
         this.adresse = adresse;
@@ -10,4 +11,4 @@ class Client {
     }
 }
 
-export default Client;
+module.exports = Client;

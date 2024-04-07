@@ -4,10 +4,7 @@ import { useState } from 'react'; // Import useState hook
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
-
 import Iconify from '../../components/iconify';
-
-// ----------------------------------------------------------------------
 
 PostSearch.propTypes = {
   items: PropTypes.array.isRequired,
@@ -39,6 +36,7 @@ export default function PostSearch({ items, onValueChange }) {
       options={items}
       getOptionLabel={(product) => product.nom}
       isOptionEqualToValue={(option, value) => option.id === value.id}
+      onChange={onChange}
       renderInput={(params) => (
         <TextField
           {...params}

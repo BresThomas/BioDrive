@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
@@ -9,6 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 
+import { auth } from '../../../Firebase';
 import { account } from '../../../_mock/account';
 
 // ----------------------------------------------------------------------
@@ -32,6 +35,17 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => {
+      unsubscribe(); // Déabonnement lorsque le composant est démonté
+    };
+  }, []); // Exécute l'effet uniquement lors du premier rendu
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -39,6 +53,18 @@ export default function AccountPopover() {
 
   const handleClose = () => {
     setOpen(null);
+  };
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    auth.signOut()
+      .then(() => {
+        console.log('Déconnexion réussie');
+        // Mettre en œuvre toute autre logique nécessaire après la déconnexion, comme rediriger l'utilisateur vers une autre page, etc.
+      })
+      .catch((error) => {
+        console.error('Erreur lors de la déconnexion :', error.message);
+        // Gérer les erreurs de déconnexion ici, si nécessaire
+      });
   };
 
   return (
@@ -57,14 +83,14 @@ export default function AccountPopover() {
       >
         <Avatar
           src={account.photoURL}
-          alt={account.displayName}
+          alt={user?.displayName}
           sx={{
             width: 36,
             height: 36,
             border: (theme) => `solid 2px ${theme.palette.background.default}`,
           }}
         >
-          {account.displayName.charAt(0).toUpperCase()}
+          {user?.displayName?.charAt(0).toUpperCase()}
         </Avatar>
       </IconButton>
 
@@ -85,10 +111,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {user?.displayName}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {user?.email}
           </Typography>
         </Box>
 
@@ -105,7 +131,7 @@ export default function AccountPopover() {
         <MenuItem
           disableRipple
           disableTouchRipple
-          onClick={handleClose}
+          onClick={handleLogout}
           sx={{ typography: 'body2', color: 'error.main', py: 1.5 }}
         >
           Logout

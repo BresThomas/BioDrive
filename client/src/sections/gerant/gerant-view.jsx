@@ -8,6 +8,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import TextField from '@mui/material/TextField';
@@ -16,6 +17,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 
+import AppChangeUpdate from '../overview/app-change-update';
 import { posts } from '../../_mock/blog';
 import PostSearch from '../blog/post-search';
 import { RouterLink } from '../../routes/components';
@@ -52,10 +54,10 @@ export default function DashboardView() {
         });
     }, []);  
 
-  const [pompes, setPompe] = useState([]);
+  const [taches, setTaches] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/pompes')
+    fetch('http://localhost:3001/api/taches')
       .then(response => {
         if (!response.ok) {
           throw new Error('Erreur lors de la récupération des données');
@@ -63,7 +65,7 @@ export default function DashboardView() {
         return response.json();
       })
       .then(data => {
-        setPompe(data);
+        setTaches(data);
       })
       .catch(error => {
         console.error("Erreur lors de la récupération des données:", error);
@@ -89,6 +91,111 @@ export default function DashboardView() {
   }, []);
 
 
+  const handleIncrement = (id) => {
+    const carburant = carburants.find(c => c.id_carburant === id.id_carburant);
+    if (carburant) {
+      fetch(`http://localhost:3001/api/UpdateCarburant/:${id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id_carburant: carburant.id_carburant,
+            carburant: carburant.carburant,
+            prix: carburant.prix + 1,
+            stock_carburant: carburant.stock_carburant,
+            date: new Date().toLocaleString(),
+          }),
+        }
+      );
+    } else {
+      console.error(`No carburant found with id ${id}`);
+    }
+  };
+
+  // const handleDecrement = async (id) => {
+  //   const response = await fetch('http://localhost:3001/api/Upda', {
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json'
+  //     },
+  //     body: JSON.stringify({
+  //       email: formDataClient.email,
+  //       nom: formDataClient.nom,
+  //       prenom: formDataClient.prenom,
+  //       date_naissance: formDataClient.date_naissance,
+  //       numero_portable: formDataClient.tel,
+  //       adresse: formDataClient.adresse_post,
+  //     })
+  //   });
+
+  //   if (response.ok) {
+  //     // Réinitialiser les champs du formulaire à leur valeur initiale vide
+  //     setFormDataClient(initialFormDataClient);
+  //     console.log("Formulaire soumis avec succès!");
+  //     window.location.reload(true);
+  //   } else {
+  //     console.error("Erreur lors de la soumission du formulaire");
+  //   }
+  // };
+
+
+  const handleDecrement = async (id,ide) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/updateCarburant/${ide}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+          {
+            "id_carburant": "NnYGtIeHfVN6tHSrAJJZ",
+            "carburant": "SP-98",
+            "prix": 2.05,
+            "stock_carburant": 2500
+          }
+        )
+      });
+      if (!response.ok) {
+        throw new Error('Erreur lors de la mise à jour des données');
+      }
+      console.log('Données mises à jour avec succès');
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  
+  // const handleDecrement = (id) => {
+  //   fetch(`http://localhost:3001/api/UpdateCarburant/${id}`, {
+  //     method: 'POST',
+  //   })
+  //   .then(response => {
+  //     if (!response.ok) {
+  //       throw new Error('Erreur lors de la mise à jour des données');
+  //     }
+  //     return response.json();
+  //   })
+  //   .then(data => {
+  //     // Mettre à jour l'état des carburants ici si nécessaire
+  //   })
+  //   .catch(error => {
+  //     console.error("Erreur lors de la mise à jour des données:", error);
+  //   });
+  // };
+
+  const handleDeleteTache = (id) => {
+    fetch(`http://localhost:3001/api/UpdateCarburant/:id${id}`, {
+      method: 'POST',
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Erreur lors de la mise à jour des données');
+      }
+      return response.json();
+    })
+  };
 
   
 
@@ -449,16 +556,19 @@ export default function DashboardView() {
                     />
                   </Grid>
                   <Grid xs={6} md={6} lg={4}>
-                      <AppNewsUpdate
-                        sx={{ width: 500, height: 300, overflowY: 'auto', marginLeft: 2 }}
+                      <AppChangeUpdate
+                        sx={{ width: 540, height: 200, overflowY: 'auto'}}
                         title="Tâches 📝"
-                        list={[...Array(5)].map((_, index) => ({
-                          id: faker.string.uuid(),
-                          title: faker.person.jobTitle(),
-                          description: faker.commerce.productDescription(),
-                          image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                          postedAt: faker.date.recent(),
+                        path="/taches"
+                        list={taches.slice(0,5).map(tache => ({
+                          id: tache.id_tache,
+                          title: tache.libelle,
+                          description: tache.assigne,
+                          image: `/assets/icons/glass/ic_glass_message.png`,
+                          postedAt: tache.dateButoire,
+                          button1: <Button onClick={handleDeleteTache} >Supprimer</Button>,
                         }))}
+                        /* TODO Le niveau des pompes n'existe pas l'ajouter dans firebase  */
                       />
                   </Grid>
                 </Grid>
@@ -514,10 +624,11 @@ export default function DashboardView() {
                   <AppNewsUpdate
                     sx={{ width: 540, height: 200, overflowY: 'auto'}}
                     title="Niveaux des cuves 🛢️"
-                    path="/pompes"
-                    list={pompes.slice(0,5).map(pompe => ({
-                      id: pompe.id_pompe,
-                      title: `Carburant : ${pompe.carburants.join(", ")}   ${random(0, 150)}/150L`,
+                    path="/carburants"
+                    list={carburants.slice(0,5).map(carburant => ({
+                      id: carburant.id_carburant,
+                      title: `Carburant : ${carburant.carburant} ` ,
+                      description:`Stock restant : ${carburant.stock_carburant}/150L`,
                       image: `/assets/icons/borne.png`,
                       postedAt: new Date(Date.now() - 5 * 60 * 1000),
 
@@ -526,26 +637,19 @@ export default function DashboardView() {
                   />
               </Grid>
               <Grid xs={6} md={6} lg={6}>
-              <AppNewsUpdate
-                      sx={{ width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
-                      title="Modification des prix du carburant ⛽️"
-                      path="/carburants"
-                      list={carburants.slice(0,5).map(carburant => ({
-                        id: carburant.id_carburant,
-                        title: ` ${carburant.carburant}`,
-                        description: ` ${carburant.prix}€/L`,
-                        image: `/assets/icons/borne.png`,
-                        button: <LoadingButton
-                          size="small"
-                          type="submit"
-                          variant="contained"
-                          color="inherit"
-                          onClick={handleClick}
-                        > Modifier</LoadingButton>,
-                    
-                      }))}
-                      
-                />
+                <AppChangeUpdate
+                    sx={{ width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
+                    title="Modification des prix du carburant ⛽️"
+                    path="/carburants"
+                    list={carburants.slice(0,5).map(carburant => ({
+                      id: carburant.id_carburant,
+                      title: ` ${carburant.carburant}`,
+                      description: ` ${carburant.prix}€/L`,
+                      image: `/assets/icons/borne.png`,
+                      button1: <Button onClick={() => handleDecrement(carburant.id)} >-</Button>,
+                      button2: <Button onClick={handleIncrement} >+</Button>,
+                    }))}
+                  />
                   
               </Grid>
             </Grid>

@@ -195,7 +195,7 @@ export default function ServicesAndLogistiqueView() {
 
     const renderForm4 = (
       <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '1000px'}}>
-        <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Réserver un service entre perticulier</Typography>
+        <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Réserver un service entre particulier</Typography>
     
         <Stack spacing={3} direction="row" alignItems="center">
           

@@ -1,45 +1,54 @@
-import { faker } from "@faker-js/faker";
-import { useState, useEffect } from "react";
-import Button from "@mui/material/Button";
-import PropTypes from "prop-types";
+import { faker } from '@faker-js/faker';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Unstable_Grid2";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import ListItemButton from "@mui/material/ListItemButton";
-import Stack from "@mui/material/Stack";
-import { alpha, useTheme } from "@mui/material/styles";
-import LoadingButton from "@mui/lab/LoadingButton";
-import TextField from "@mui/material/TextField";
-import Card from "@mui/material/Card";
-import InputAdornment from "@mui/material/InputAdornment";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Unstable_Grid2';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ListItemButton from '@mui/material/ListItemButton';
+import Stack from '@mui/material/Stack';
+import { alpha, useTheme } from '@mui/material/styles';
+import LoadingButton from '@mui/lab/LoadingButton';
+import TextField from '@mui/material/TextField';
+import Card from '@mui/material/Card';
+import InputAdornment from '@mui/material/InputAdornment';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import { onAuthStateChanged } from 'firebase/auth';
 
-import PostSearch from "../blog/post-search";
-import Iconify from "../../components/iconify";
-import { RouterLink } from "../../routes/components";
-import { usePathname, useRouter } from "../../routes/hooks";
-import Popup from "../../components/popup/popup";
+import PostSearch from '../blog/post-search';
+import Iconify from '../../components/iconify';
+import { RouterLink } from '../../routes/components';
+import { usePathname, useRouter } from '../../routes/hooks';
+import Popup from '../../components/popup/popup';
+import AccountPopover from '../../layouts/dashboard/common/account-popover';
+import NotificationsPopover from '../../layouts/dashboard/common/notifications-popover';
+import AjouterCompteEnergie from '../../_mock/form/AjouterCompteEnergie';
 
-import AppTasks from "../overview/app-tasks";
-import AppNewsUpdate from "../overview/app-news-update";
-import AppOrderTimeline from "../overview/app-order-timeline";
-import AppCurrentVisits from "../overview/app-current-visits";
-import AppWebsiteVisits from "../overview/app-website-visits";
-import AppWidgetSummary from "../overview/app-widget-summary";
-import AppTrafficBySite from "../overview/app-traffic-by-site";
-import AppCurrentSubject from "../overview/app-current-subject";
-import AppConversionRates from "../overview/app-conversion-rates";
-import AppNumPad from "../overview/app-numpad";
+import AppTasks from '../overview/app-tasks';
+import AppNewsUpdate from '../overview/app-news-update';
+import AppOrderTimeline from '../overview/app-order-timeline';
+import AppCurrentVisits from '../overview/app-current-visits';
+import AppWebsiteVisits from '../overview/app-website-visits';
+import AppWidgetSummary from '../overview/app-widget-summary';
+import AppTrafficBySite from '../overview/app-traffic-by-site';
+import AppCurrentSubject from '../overview/app-current-subject';
+import AppConversionRates from '../overview/app-conversion-rates';
+import AppNumPad from '../overview/app-numpad';
 
-import { NAV } from "../../layouts/dashboard/config-layout";
-import navConfig from "../../layouts/dashboard/config-navigation";
-import { posts } from "../../_mock/blog";
-import Product from "../products/product";
-import CartView from "../products/view/cart-view";
-import Cart from "../products/product-cart";
+import { NAV } from '../../layouts/dashboard/config-layout';
+import navConfig from '../../layouts/dashboard/config-navigation';
+import { posts } from '../../_mock/blog';
+
+import { auth } from '../../Firebase';
+import Header from '../../layouts/dashboard/header';
+
+import Cart from '../products/product-cart';
+import CartView from '../products/view/cart-view';
+
 
 // ----------------------------------------------------------------------
 

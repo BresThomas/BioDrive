@@ -557,14 +557,14 @@ export default function DashboardView() {
       </Grid>
       </Grid>
     <Grid item xs={36} sm={12} md={7} xl={7}>
-    <Box sx={{ pb: 10 }}>
-            <Header />
-          </Box>
-          <Stack direction="row" spacing={2} sx={{ p: 2 }}>
-            {navConfig.map((item) => (
-              <NavItem key={item.title} item={item} />
-            ))}
-          </Stack>
+      <Box sx={{ pb: 10 }}>
+        <Header />
+      </Box>
+      <Stack direction="row" spacing={2} sx={{ p: 2 }}>
+        {navConfig.map((item) => (
+          <NavItem key={item.title} item={item} />
+        ))}
+      </Stack>
       <Grid container spacing={5}>
         <Grid item >
           <Stack alignItems="center" justifyContent="center" sx={{ height: 1 ,}}>

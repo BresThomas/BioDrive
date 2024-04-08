@@ -1,5 +1,5 @@
 export default class Cart {
-  constructor(cart = new Map()) {
+  constructor(cart = JSON.parse(window.localStorage.getItem('cart')) || new Map()) {
     this.items = cart;
     if (cart.size === 0) {
       this.itemCount = 0;

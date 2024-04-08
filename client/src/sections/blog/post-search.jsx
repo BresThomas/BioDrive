@@ -1,17 +1,28 @@
 import PropTypes from 'prop-types';
+import { useState } from 'react'; // Import useState hook
+
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Autocomplete, { autocompleteClasses } from '@mui/material/Autocomplete';
+
 import Iconify from '../../components/iconify';
+
+// ----------------------------------------------------------------------
 
 PostSearch.propTypes = {
   posts: PropTypes.array.isRequired,
-  onChange: PropTypes.func.isRequired, // Add onChange prop
+  onChange: PropTypes.func, // Prop to pass selected value to parent component
 };
 
 export default function PostSearch({ posts, onChange }) {
+
+  const handlePostChange = (event, newValue) => {
+    onChange(newValue); // Pass selected value to parent component
+  };
+
   return (
     <Autocomplete
+      onChange={handlePostChange} // Call handleProductChange on value change
       fullWidth
       autoHighlight
       popupIcon={null}
@@ -25,9 +36,8 @@ export default function PostSearch({ posts, onChange }) {
         },
       }}
       options={posts}
-      getOptionLabel={(post) => post.nom}
+      getOptionLabel={(product) => product.nom}
       isOptionEqualToValue={(option, value) => option.id === value.id}
-      onChange={onChange}
       renderInput={(params) => (
         <TextField
           {...params}

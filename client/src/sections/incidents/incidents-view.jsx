@@ -146,7 +146,7 @@ export default function IncidentsView() {
         color="inherit"
         onClick={clickFormIncident}
       >
-        Submit
+        Ajouter
       </LoadingButton>
     </Stack>
   );

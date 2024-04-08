@@ -20,7 +20,8 @@ import PostSearch from '../blog/post-search';
 import { RouterLink } from '../../routes/components';
 import AppNewsUpdate from '../overview/app-news-update';
 import { usePathname, useRouter } from '../../routes/hooks';
-import navConfig from '../../layouts/dashboard/config-navigation';
+import Header from '../../layouts/dashboard/header';
+
 
 // ----------------------------------------------------------------------
 
@@ -219,14 +220,9 @@ export default function DashboardView() {
               </Grid>
             </Grid>
         <Grid item xs={36} sm={12} md={7} xl={7}>
-          <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-            ERP 👋
-          </Typography>
-          <Stack direction="row" spacing={2} sx={{ p: 2 }}>
-            {navConfig.map((item) => (
-              <NavItem key={item.title} item={item} />
-            ))}
-          </Stack>
+          <Box sx={{ pb: 10 }}>
+            <Header />
+          </Box>
           <Grid xs={12.4} md={12.6} lg={12.4}>
             <Card sx={{p: 2, width: 1,}}>
               {listClient}

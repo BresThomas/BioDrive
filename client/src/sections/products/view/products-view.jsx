@@ -13,7 +13,6 @@ import { products } from '../../../_mock/products';
 import ProductCard from '../product-card';
 import ProductSort from '../product-sort';
 import ProductFilters from '../product-filters';
-import ProductCartWidget from '../product-cart-widget';
 
 import { auth } from '../../../Firebase';
 
@@ -79,8 +78,6 @@ export default function ProductsView() {
           </Grid>
         ))}
       </Grid>
-
-      <ProductCartWidget />
     </Container>
   );
 }

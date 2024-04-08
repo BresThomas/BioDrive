@@ -64,7 +64,7 @@ export default function NotFoundView() {
           />
 
           <Button href="/dashboard" size="large" variant="contained" component={RouterLink}>
-            Go to Home
+            Retour à l&apos;accueil
           </Button>
         </Box>
       </Container>

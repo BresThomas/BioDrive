@@ -33,5 +33,6 @@ export function useUsers() {
     phone: client.numero_portable,
     adresse: client.adresse,
     date_naissance: client.date_naissance,
+    id_compte_energie: client.id_compte_energie,
   }));
 }

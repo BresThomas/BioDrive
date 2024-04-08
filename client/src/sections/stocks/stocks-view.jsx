@@ -42,7 +42,7 @@ export default function StocksView() {
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('name');
+  const [orderBy, setOrderBy] = useState('produit');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -75,9 +75,8 @@ export default function StocksView() {
   });
 
   const initialFormDataStock = {
-    intitule: '',
-    descriptionStock: '',
-    gravite: ''
+    produit: '',
+    quantité: ''
   };
 
   const [formDataStock, setFormDataStock] = useState(initialFormDataStock);
@@ -100,10 +99,8 @@ export default function StocksView() {
       },
       body: JSON.stringify({
         id: formDataStock.id_Stock,
-        gravite: formDataStock.gravite,
-        date: formDataStock.date,
-        intitule: formDataStock.intitule,
-        description: formDataStock.description,
+        produit : formDataStock.produit,
+        quantité : formDataStock.quantité
       })
     });
 
@@ -119,24 +116,23 @@ export default function StocksView() {
 
   const renderFormStock = (title) => (
     <Stack spacing={3} direction="row" alignItems="center">
-      <Typography variant="h6" sx={{ width: '20%' }}>{title}</Typography>
+      <Typography variant="h6" sx={{ width: '15%' }}>{title}</Typography>
       <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '55%' }}>
-      <TextField name="intitule" value={formDataStock.intitule} label="Intitulé" sx={{ width: '30%' }} onChange={handleChangeStock} />
-      <TextField name="descriptionStock" value={formDataStock.descriptionStock} label="Description du stock" sx={{ width: '70%' }} onChange={handleChangeStock} />
-      <TextField name="quantitéStock" value={formDataStock.quantitéStock} label="Quantité" sx={{ width: '70%' }} onChange={handleChangeStock} />
+      <TextField name="produit" value={formDataStock.produit} label="Produit" sx={{ width: '40%' }} onChange={handleChangeStock} />
+      <TextField name="quantité" value={formDataStock.quantité} label="Quantité" sx={{ width: '40%' }} onChange={handleChangeStock} />
       </Stack>
 
-      
+
 
       <LoadingButton
-        sx={{ width: '20%' }}
+        sx={{ width: '30%' }}
         size="large"
         type="submit"
         variant="contained"
         color="inherit"
         onClick={clickFormStock}
       >
-        Submit
+        Ajouter
       </LoadingButton>
     </Stack>
   );
@@ -174,6 +170,8 @@ export default function StocksView() {
                 onRequestSort={handleSort}
                 headLabel={[
                   { id: 'id', label: 'ID' },
+                  { id: 'produit', label: 'Produit' },
+                  { id: 'quantité', label: 'Quantité' },
                   { id: '' },
                 ]}
               />
@@ -183,10 +181,8 @@ export default function StocksView() {
                   .map((row) => (
                     <StockTableRow
                     id={row.id}
-                    intitule={row.intitule}
-                    description={row.description}
-                    gravite={row.gravite}
-                    date={row.date}
+                    produit={row.produit}
+                    quantité={row.quantité}
                     selected={selected.indexOf(row.name) !== -1}
                     />
                     ))}

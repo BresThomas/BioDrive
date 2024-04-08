@@ -28,9 +28,7 @@ export function useStocks() {
 
   return stocks.map((stock, index) => ({
     id: stock.id_stock,
-    gravite: stock.gravite,
-    date: stock.date,
-    intitule: stock.intitule,
-    description: stock.description,
+    produit : stock.produit,
+    quantité : stock.quantité,
   }));
 }

@@ -1,4 +1,4 @@
-import { random } from 'lodash';
+import { get, random } from 'lodash';
 import PropTypes from 'prop-types';
 import { base, faker } from '@faker-js/faker';
 import { useState, useEffect } from 'react';
@@ -57,38 +57,46 @@ export default function DashboardView() {
   const [taches, setTaches] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/taches')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Erreur lors de la récupération des données');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setTaches(data);
-      })
-      .catch(error => {
-        console.error("Erreur lors de la récupération des données:", error);
-      });
+    getTaches();
   }, []);
+
+  const getTaches = async () => {
+    await fetch('http://localhost:3001/api/taches')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setTaches(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+  };
 
   const [carburants, setCarburants] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/carburants')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Erreur lors de la récupération des données');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setCarburants(data);
-      })
-      .catch(error => {
-        console.error("Erreur lors de la récupération des données:", error);
-      });
+    getCarburants();
   }, []);
+
+  const getCarburants = async () => {
+    await fetch('http://localhost:3001/api/carburants')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setCarburants(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+  };
 
   const [stocks, setStocks] = useState([]);
 
@@ -109,16 +117,16 @@ export default function DashboardView() {
   }, []);
 
 
-  const handleIncrement = async (value) => {
+  const handleIncrement = async (id,newPrice) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/updateCarburant/NnYGtIeHfVN6tHSrAJJZ`, {
+      const response = await fetch(`http://localhost:3001/api/updateCarburant/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(
           {
-            "prix": value,
+            "prix": newPrice,
           }
         )
       });
@@ -126,22 +134,23 @@ export default function DashboardView() {
         throw new Error('Erreur lors de la mise à jour des données');
       }
       console.log('Données mises à jour avec succès');
-      window.location.reload(true);
+      getCarburants();
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  const handleDeleteTache = async () => {
+  const handleDeleteTache = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/deleteTache/CBTqgnapkm48xoq8hNX0 `, {
+      const response = await fetch(`http://localhost:3001/api/deleteTache/${id} `, {
         method: 'DELETE',
       });
       if (!response.ok) {
         throw new Error('Erreur lors de la mise à jour des données');
       }
       console.log('Données mises à jour avec succès');
-      window.location.reload(true);
+      getTaches();
+      // window.location.reload(true);
     } catch (error) {
       console.error(error.message);
     }
@@ -318,17 +327,17 @@ export default function DashboardView() {
     const listStock = (
       <Stack alignItems="left">
         <Stack direction="row" alignItems="center">
-        <AppNewsUpdate
-                sx={{ width: 920, height: 200, overflowY: 'auto' }}
-                title="Stocks"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
-                }))}
-              />
+          <AppChangeUpdate
+            sx={{ width: 1020, height: 300, overflowY: 'auto'}}
+            title="Stocks 📦"
+            path="/stocks"
+            list={stocks.slice(0,6).map(stock => ({
+              id: stock.id_stock,
+              title: `id : ${stock.id_stock}`,
+              description: `quantité : ${stock.details}`,
+              image: `/assets/icons/stock.png`,
+            }))}
+          />
         </Stack>
       </Stack>
     );  
@@ -349,9 +358,8 @@ export default function DashboardView() {
               />
         </Stack>
       </Stack>
-    );  
-
-
+    ); 
+    
         // ==================DEMANDE DE REAPPRO================ //
 
 
@@ -479,6 +487,8 @@ export default function DashboardView() {
       <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
         Principal
       </Typography>
+      
+      
       <Grid container spacing={3}>
             <Grid item >
               <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
@@ -537,20 +547,24 @@ export default function DashboardView() {
                           description: tache.assigne,
                           image: `/assets/icons/glass/ic_glass_message.png`,
                           postedAt: tache.dateButoire,
-                          button1: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={handleDeleteTache} >Supprimer</Button>,
+                          button1: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleDeleteTache(tache.id_tache)} >Supprimer</Button>,
                         }))}
-                        /* TODO Le niveau des pompes n'existe pas l'ajouter dans firebase  */
                       />
                   </Grid>
                 </Grid>
-              </Stack>    
+              </Stack> 
             </Grid>  
       </Grid>
       </Grid>
     <Grid item xs={36} sm={12} md={7} xl={7}>
-      <Box sx={{ pb: 10 }}>
-        <Header />
-      </Box>
+    <Box sx={{ pb: 10 }}>
+            <Header />
+          </Box>
+          <Stack direction="row" spacing={2} sx={{ p: 2 }}>
+            {navConfig.map((item) => (
+              <NavItem key={item.title} item={item} />
+            ))}
+          </Stack>
       <Grid container spacing={5}>
         <Grid item >
           <Stack alignItems="center" justifyContent="center" sx={{ height: 1 ,}}>
@@ -608,7 +622,7 @@ export default function DashboardView() {
                   />
               </Grid>
               <Grid xs={6} md={6} lg={6}>
-                <AppChangeUpdate
+                  <AppChangeUpdate
                     sx={{ width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
                     title="Modification des prix du carburant ⛽️"
                     path="/carburants"
@@ -617,11 +631,10 @@ export default function DashboardView() {
                       title: ` ${carburant.carburant}`,
                       description: ` ${carburant.prix.toFixed(2)}€/L`,
                       image: `/assets/icons/borne.png`,
-                      button1: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleIncrement(carburant.prix-0.01)} >-</Button>,
-                      button2: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleIncrement(carburant.prix+0.01)} >+</Button>,
+                      button1: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleIncrement(carburant.id_carburant,carburant.prix-0.01)} >-</Button>,
+                      button2: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleIncrement(carburant.id_carburant,carburant.prix+0.01)} >+</Button>,
                     }))}
                   />
-                  
               </Grid>
             </Grid>
             <Grid container spacing={1} sx={{ marginBottom: 3 }}> 

@@ -113,39 +113,48 @@ export default function DashboardView() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:3001/api/products")
-            .then((response) => response.json())
-            .then((data) => {
-                // Assurez-vous que les données sont un tableau
-                if (Array.isArray(data)) {
-                    setProducts(data);
-                } else {
-                    console.error("Les données reçues ne sont pas un tableau.");
-                }
-            })
-            .catch((error) => {
-                console.error(
-                    "Erreur lors de la récupération des données:",
-                    error
-                );
-            });
-    }, []);
+        fetch('http://localhost:3001/api/products')
+          .then((response) => response.json())
+          .then((data) => {
+            // Assurez-vous que les données sont un tableau
+            if (Array.isArray(data)) {
+              setProducts(data);
+            } else {
+              // User is signed out
+              navigate('/login'); 
+            }
+          });
+         
+    }, [navigate])
+  
 
     const handleClick = () => {
         router.push("/dashboard");
     };
-    
 
     const handlePayment = async () => {
-        if (enteredValue === "") {
-            alert("Veuillez valider le montant à régler");
-        } else if (paymentMode === "") {
-            alert("Veuillez choisir un mode de paiement");
+        if(enteredValue === '') {
+          alert('Veuillez valider le montant à régler');
         } else {
-            alert("Paiement effectué avec succès");
+          alert('Paiement effectué avec succès');
+          await sendTransaction();
         }
-    };
-
+      };
+  
+      const sendTransaction = async (event) => {
+  
+        const response = await fetch('http://localhost:3001/api/newTransaction', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            paymentMode,
+            value: enteredValue,
+          })
+        });
+      };
+  
     const handleAddProduct = () => {
         if (selectedProduct) {
             const updatedCart = new Cart(cart.getItems());
@@ -161,219 +170,245 @@ export default function DashboardView() {
         window.localStorage.setItem('cart', JSON.stringify(updatedCart));
     };
 
-    const sendTransaction = async (event) => {
-        const response = await fetch(
-            "http://localhost:3001/api/newTransaction",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    paymentMode,
-                    value: enteredValue,
-                    date: new Date().toLocaleString(),
-                }),
-            }
-        );
-    };
-
     const [incidents, setIncident] = useState([]);
 
     useEffect(() => {
-      fetch('http://localhost:3001/api/incidents')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des données');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setIncident(data);
-        })
-        .catch(error => {
-          console.error("Erreur lors de la récupération des données:", error);
-        });
-    }, []);
+        fetch('http://localhost:3001/api/incidents')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Erreur lors de la récupération des données');
+            }
+            return response.json();
+          })
+          .then(data => {
+            setIncident(data);
+          })
+          .catch(error => {
+            console.error("Erreur lors de la récupération des données:", error);
+          });
+      }, []);
+  
+      const [stocks, setStock] = useState([]);
+  
+      useEffect(() => {
+        fetch('http://localhost:3001/api/stocks')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Erreur lors de la récupération des données');
+            }
+            return response.json();
+          })
+          .then(data => {
+            setStock(data);
+          })
+          .catch(error => {
+            console.error("Erreur lors de la récupération des données:", error);
+          });
+      }, []);
+  
+      const [pompes, setPompe] = useState([]);
+  
+      useEffect(() => {
+        fetch('http://localhost:3001/api/pompes')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Erreur lors de la récupération des données');
+            }
+            return response.json();
+          })
+          .then(data => {
+            setPompe(data);
+          })
+          .catch(error => {
+            console.error("Erreur lors de la récupération des données:", error);
+          });
+      }, []);
+  
+      const [clients, setClient] = useState([]);
+  
+      useEffect(() => {
+        fetch('http://localhost:3001/api/clients')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Erreur lors de la récupération des données');
+            }
+            return response.json();
+          })
+          .then(data => {
+            setClient(data);
+          })
+          .catch(error => {
+            console.error("Erreur lors de la récupération des données:", error);
+          });
+      }, []);
+  
+// =============================CLIENT====================================== //
+    
+const initialFormDataClient = {
+    email: '',
+    nom: '',
+    prenom: '',
+    date_naissance: '',
+    tel: '',
+    adresse_post: '',
+  };
 
-    const [stocks, setStock] = useState([]);
+  const [formDataClient, setFormDataClient] = useState(initialFormDataClient);
 
-    useEffect(() => {
-      fetch('http://localhost:3001/api/stocks')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des données');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setStock(data);
-        })
-        .catch(error => {
-          console.error("Erreur lors de la récupération des données:", error);
-        });
-    }, []);
+  const handleChangeClient = (event) => {
+    const { name, value } = event.target;
+    setFormDataClient(prevFormDataClient => ({
+      ...prevFormDataClient,
+      [name]: value
+    }));
+  };
 
-    const [pompes, setPompe] = useState([]);
+  const clickFormClient = async () => {
+    console.log(formDataClient);
 
-    useEffect(() => {
-      fetch('http://localhost:3001/api/pompes')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des données');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setPompe(data);
-        })
-        .catch(error => {
-          console.error("Erreur lors de la récupération des données:", error);
-        });
-    }, []);
+    const response = await fetch('http://localhost:3001/api/newClient', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: formDataClient.email,
+        nom: formDataClient.nom,
+        prenom: formDataClient.prenom,
+        date_naissance: formDataClient.date_naissance,
+        numero_portable: formDataClient.tel,
+        adresse: formDataClient.adresse_post,
+      })
+    });
 
-    const [clients, setClient] = useState([]);
-
-    useEffect(() => {
-      fetch('http://localhost:3001/api/clients')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Erreur lors de la récupération des données');
-          }
-          return response.json();
-        })
-        .then(data => {
-          setClient(data);
-        })
-        .catch(error => {
-          console.error("Erreur lors de la récupération des données:", error);
-        });
-    }, []);
-
-
-    const renderFormClient = (title) => (
+    if (response.ok) {
+      // Réinitialiser les champs du formulaire à leur valeur initiale vide
+      setFormDataClient(initialFormDataClient);
+      console.log("Formulaire soumis avec succès!");
+      window.location.reload(true);
+    } else {
+      console.error("Erreur lors de la soumission du formulaire");
+    }
+  };
+  
+  
+  const renderFormClient = (title) => (
+    <Card
+    sx={{
+      p: 3,
+      width: 1,
+    }}
+    >
+      <Stack spacing={3} direction="row" alignItems="center">
+        <Typography variant="h6" sx={{ width: '25%' }}>{title}</Typography>
         <Stack spacing={3} direction="row" alignItems="center">
-            <Typography variant="h6" sx={{ width: "25%" }}>
-                {title}
-            </Typography>
-            <Stack spacing={3} direction="row" alignItems="center">
-                <PostSearch posts={posts} />
-                <TextField
-                    name="email"
-                    label="Quantité"
-                    sx={{ width: "60%" }}
-                />
-                <TextField
-                    name="email"
-                    label="Adresse livraison"
-                    sx={{ width: "70%" }}
-                />
-                <TextField
-                    name="email"
-                    label="Date livraison"
-                    sx={{ width: "70%" }}
-                />
-                <TextField name="email" label="Prix" sx={{ width: "40%" }} />
-            </Stack>
-            <LoadingButton
-                sx={{ width: "22.5%" }}
-                size="large"
-                type="submit"
-                variant="contained"
-                color="inherit"
-                onClick={handleClick}
-            >
-                Submit
-            </LoadingButton>
+          <TextField name="email" value={formDataClient.email} label="Email" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="nom" value={formDataClient.nom} label="Nom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="prenom" value={formDataClient.prenom} label="Prénom" sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="tel" value={formDataClient.tel} label="Tel." sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="adresse_post" value={formDataClient.adresse_post} label="Adresse Post." sx={{ width: '40%' }} onChange={handleChangeClient}/>
+          <TextField name="date_naissance" value={formDataClient.date_naissance} label="Date de Naissance" sx={{ width: '40%' }} onChange={handleChangeClient}/>
         </Stack>
-    );
+        <LoadingButton
+          sx={{ width: '22.5%' }}
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          onClick={clickFormClient}
+        >
+          Ajouter
+        </LoadingButton>
+      </Stack>
+    </Card>
+  );
 
-    // =====================INCIDENT======================//
+  // =====================INCIDENT======================//
 
-    const initialFormDataIncident = {
-      intitule: '',
-      descriptionIncident: '',
-      gravite: ''
-    };
-  
-    const [formDataIncident, setFormDataIncident] = useState(initialFormDataIncident);
-  
-    const handleChangeIncident = (event) => {
-      const { name, value } = event.target;
-      setFormDataIncident(prevFormDataIncident => ({
-        ...prevFormDataIncident,
-        [name]: value
-      }));
-    };
+  const initialFormDataIncident = {
+    intitule: '',
+    descriptionIncident: '',
+    gravite: ''
+  };
 
-    const getDate = () => {
-      const today = new Date();
-      const month = today.getMonth() + 1;
-      const year = today.getFullYear();
-      const date = today.getDate();
-      return `${month}/${date}/${year}`;
-    };    
+  const [formDataIncident, setFormDataIncident] = useState(initialFormDataIncident);
 
-    const clickFormIncident = async () => {
-      console.log(formDataIncident);
-  
-      const response = await fetch('http://localhost:3001/api/newIncident', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          gravite: formDataIncident.gravite,
-          date: getDate(),
-          intitule: formDataIncident.intitule,
-          description: formDataIncident.descriptionIncident,
-        })
-      });
-  
-      if (response.ok) {
-        // Réinitialiser les champs du formulaire à leur valeur initiale vide
-        setFormDataIncident(initialFormDataIncident);
-        console.log("Formulaire soumis avec succès!");
-        window.location.reload(true);
-      } else {
-        console.error("Erreur lors de la soumission du formulaire");
-      }
-    };
+  const handleChangeIncident = (event) => {
+    const { name, value } = event.target;
+    setFormDataIncident(prevFormDataIncident => ({
+      ...prevFormDataIncident,
+      [name]: value
+    }));
+  };
 
-    const renderFormIncident = (title) => (
-        <Stack spacing={3} direction="row" alignItems="center">
-            <Typography variant="h6" sx={{ width: "20%" }}>
-                {title}
-            </Typography>
-            <Stack
-                spacing={3}
-                direction="row"
-                alignItems="center"
-                sx={{ width: "55%" }}
-            >
-                <TextField
-                    name="intitule"
-                    label="Intitulé"
-                    sx={{ width: "30%" }}
-                />
-                <TextField
-                    name="descriptionIncident"
-                    label="Description de l'incident"
-                    sx={{ width: "70%" }}
-                />
-            </Stack>
-            <LoadingButton
-                sx={{ width: "20%" }}
-                size="large"
-                type="submit"
-                variant="contained"
-                color="inherit"
-                onClick={handleClick}
-            >
-                Submit
-            </LoadingButton>
-        </Stack>
-    );
+  const getDate = () => {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    const date = today.getDate();
+    return `${month}/${date}/${year}`;
+  };    
+
+  const clickFormIncident = async () => {
+    console.log(formDataIncident);
+
+    const response = await fetch('http://localhost:3001/api/newIncident', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        gravite: formDataIncident.gravite,
+        date: getDate(),
+        intitule: formDataIncident.intitule,
+        description: formDataIncident.descriptionIncident,
+      })
+    });
+
+    if (response.ok) {
+      // Réinitialiser les champs du formulaire à leur valeur initiale vide
+      setFormDataIncident(initialFormDataIncident);
+      console.log("Formulaire soumis avec succès!");
+      window.location.reload(true);
+    } else {
+      console.error("Erreur lors de la soumission du formulaire");
+    }
+  };
+
+  const renderFormIncident = (title) => (
+    <Stack spacing={3} direction="row" alignItems="center">
+      <Typography variant="h6" sx={{ width: '25%' }}>{title}</Typography>
+      <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '55%' }}>
+      <TextField name="intitule" value={formDataIncident.intitule} label="Intitulé" sx={{ width: '30%' }} onChange={handleChangeIncident} />
+      <TextField name="descriptionIncident" value={formDataIncident.descriptionIncident} label="Description de l'incident" sx={{ width: '70%' }} onChange={handleChangeIncident} />
+      </Stack>
+
+      <TextField
+        select
+        name="gravite"
+        label="Gravité"
+        sx={{ width: '30%' }}
+        value={formDataIncident.gravite}
+        onChange={handleChangeIncident}
+      >
+        <MenuItem value={1}>1</MenuItem>
+        <MenuItem value={2}>2</MenuItem>
+        <MenuItem value={3}>3</MenuItem>
+      </TextField>
+
+      <LoadingButton
+        sx={{ width: '20%' }}
+        size="large"
+        type="submit"
+        variant="contained"
+        color="inherit"
+        onClick={clickFormIncident}
+      >
+        Créer
+      </LoadingButton>
+    </Stack>
+  );
+
 
     const addProductForm = (
         <Stack spacing={3} alignItems="left">

@@ -1,192 +1,254 @@
-import { useState, useEffect} from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { faker } from '@faker-js/faker';
-
-import { onAuthStateChanged } from 'firebase/auth';
+import PropTypes from 'prop-types';
 
 import Grid from '@mui/material/Unstable_Grid2';
-
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
+import { alpha, useTheme } from '@mui/material/styles';
+import Table from '@mui/material/Table';
+import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
+import TableBody from '@mui/material/TableBody';
+import TextField from '@mui/material/TextField';
 import LoadingButton from '@mui/lab/LoadingButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import Iconify from '../../components/iconify';
-import { useRouter } from '../../routes/hooks';
+import Typography from '@mui/material/Typography';
+import TableContainer from '@mui/material/TableContainer';
+import ListItemButton from '@mui/material/ListItemButton';
+import TablePagination from '@mui/material/TablePagination';
+import MenuItem from '@mui/material/MenuItem';
 import { RouterLink } from '../../routes/components';
+import { emptyRows, applyFilter, getComparator } from './utils';
 
-import { auth } from '../../Firebase';
+import Scrollbar from '../../components/scrollbar';
 
-import Logo from '../../components/logo';
+import TableNoData from './jsx/table-no-data';
+import PompesTableRow from './jsx/pompes-table-row';
+import PompesTableHead from './jsx/pompes-table-head';
+import TableEmptyRows from './jsx/table-empty-rows';
+import PompesTableToolbar from './jsx/pompes-table-toolbar';
+import { usePompes } from '../../_mock/usePompes';
 
-import AppOrderTimeline from '../overview/app-order-timeline';
-import AppWebsiteVisits from '../overview/app-website-visits';
+import { usePathname } from '../../routes/hooks';
+import navConfig from '../../layouts/dashboard/config-navigation';
 
 // ----------------------------------------------------------------------
 
 export default function PompesView() {
 
   const navigate = useNavigate();
+  const pompes = usePompes();
 
-  useEffect(()=>{
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // User is signed in, see docs for a list of available properties
-          // https://firebase.google.com/docs/reference/js/firebase.User
-          const uid = user.uid;
-          navigate('/pompes'); 
-        } else {
-          // User is signed out
-          navigate('/login'); 
-        }
-      });
-      
-  }, [navigate])
+  const [page, setPage] = useState(0);
+  const [order, setOrder] = useState('asc');
+  const [selected, setSelected] = useState([]);
+  const [orderBy, setOrderBy] = useState('name');
+  const [filterName, setFilterName] = useState('');
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const [hello, setHello] = useState("");
-   
-    useEffect(() => {
-      fetch('http://localhost:3001/hello')
-        .then((response) => response.json())
-        .then((data) => setHello(data.message));
-    }, []);
-
-  const router = useRouter();
-
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClick = () => {
-    router.push('/dashboard');
+  const handleSort = (event, id) => {
+    const isAsc = orderBy === id && order === 'asc';
+    if (id !== '') {
+      setOrder(isAsc ? 'desc' : 'asc');
+      setOrderBy(id);
+    }
   };
 
-  const renderHeader = (
-    <Box
-      component="header"
-      sx={{
-        top: 0,
-        left: 0,
-        width: 1,
-        lineHeight: 0,
-        position: 'fixed',
-        p: (theme) => ({ xs: theme.spacing(3, 3, 0), sm: theme.spacing(5, 5, 0) }),
-      }}
-    >
-      <Logo />
-    </Box>
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setPage(0);
+    setRowsPerPage(parseInt(event.target.value, 10));
+  };
+
+  const handleFilterByName = (event) => {
+    setPage(0);
+    setFilterName(event.target.value);
+  };
+
+  const dataFiltered = applyFilter({
+    inputData: pompes,
+    comparator: getComparator(order, orderBy),
+    filterName,
+  });
+
+  const initialFormDataPompes = {
+    id: '',
+    carburants: '',
+    isRunning: ''
+  };
+
+  const [formDataPompes, setFormDataPompes] = useState(initialFormDataPompes);
+
+  const handleChangePompes = (event) => {
+    const { name, value } = event.target;
+    setFormDataPompes(prevFormDataPompes => ({
+      ...prevFormDataPompes,
+      [name]: value
+    }));
+  };
+
+  const clickFormPompes = async () => {
+    console.log(formDataPompes);
+
+    const response = await fetch('http://localhost:3001/api/newPompe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        id: formDataPompes.id_pompes,
+        carburants: formDataPompes.carburants,
+      })
+    });
+
+    if (response.ok) {
+      // Réinitialiser les champs du formulaire à leur valeur initiale vide
+      setFormDataPompes(initialFormDataPompes);
+      console.log("Formulaire soumis avec succès!");
+      window.location.reload(true);
+    } else {
+      console.error("Erreur lors de la soumission du formulaire");
+    }
+  };
+
+  const renderFormPompes = (title) => (
+    <Stack spacing={3} direction="row" alignItems="center">
+      <Typography variant="h6" sx={{ width: '20%' }}>{title}</Typography>
+      <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '55%' }}>
+      <TextField name="id" value={formDataPompes.id} label="ID de la pompe" sx={{ width: '30%' }} onChange={handleChangePompes} />
+      <TextField name="carburants" value={formDataPompes.carburants} label="Carburants proposés" sx={{ width: '70%' }} onChange={handleChangePompes} />
+      </Stack>
+
+      <LoadingButton
+        sx={{ width: '20%' }}
+        size="large"
+        type="submit"
+        variant="contained"
+        color="inherit"
+        onClick={clickFormPompes}
+      >
+        Ajouter
+      </LoadingButton>
+    </Stack>
   );
 
-  
-
-  const renderForm = (
-    <Grid container spacing={2} alignItems="center">
-      <Grid item xs={15} md={10}>
-        <TextField fullWidth name="email" label="Email address" />
-        <TextField fullWidth name="email" label="Email address" />
-        <TextField fullWidth name="email" label="Email address" />
-        <TextField fullWidth name="email" label="Email address" />
-        <Button href="/" size="large" variant="contained" component={RouterLink}>
-            Clear
-        </Button>
-        <LoadingButton
-          fullWidth
-          size="large"
-          type="submit"
-          variant="contained"
-          color="inherit"
-          onClick={handleClick}
-        >
-          Submit
-        </LoadingButton>
-      </Grid>
-    </Grid>
-  );
+  const notFound = !dataFiltered.length && !!filterName;
 
   return (
-    <>
-      {renderHeader}
-
-      <Container>
-        <Box
-          sx={{
-            py: 12,
-            maxWidth: 480,
-            mx: 'auto',
-            display: 'flex',
-            minHeight: '100vh',
-            textAlign: 'center',
-            alignItems: 'center',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography variant="h3" sx={{ mb: 3 }}>
-            Dashboard pompes
-          </Typography>
-
-          <Typography sx={{ color: 'text.secondary' }}>
-          {hello}
-          </Typography>
-          <Grid container spacing={3}>
-            <Stack direction="row" sx={{ width: 1500 }}>
-
-                <Grid xs={12} md={6} lg={8}>
-                    <AppOrderTimeline
-                        title="Transactions passées"
-                        list={[...Array(5)].map((_, index) => ({
-                        id: faker.string.uuid(),
-                        title: [
-                            '1983, orders, $4220',
-                            '12 Invoices have been paid',
-                            'Order #37745 from September',
-                            'New order placed #XF-2356',
-                            'New order placed #XF-2346',
-                        ][index],
-                        type: `order${index + 1}`,
-                        time: faker.date.past(),
-                        }))}
-                    />
-                </Grid>
-
-                <Grid xs={12} md={6} lg={8}>
-                    <AppWebsiteVisits
-                        title="États des Pompes"
-                        subheader="(+43%) than last year"
-                        chart={{
-                        labels: [
-                            '01/01/2003',
-                            '02/01/2003',
-                            '03/01/2003',
-                            '04/01/2003',
-                            '05/01/2003',
-                        ],
-                        series: [
-                            {
-                            name: 'Pompes',
-                            type: 'column',
-                            fill: 'solid',
-                            data: [23000, 11000, 22000, 22000, 30000],
-                            },
-                        ],
-                        }}
-                    />
-                </Grid>
-            </Stack>
-          </Grid>
-
-          <Button href="/dashboard" size="large" variant="contained" component={RouterLink}>
-            Retour à l&apos;accueil
-          </Button>
+    <Container>
+      <Grid item xs={36} sm={12} md={7} xl={7}>
+          <Stack direction="row" spacing={2} sx={{ p: 2, pt: 5 }}>
+            {navConfig.map((item) => (
+              <NavItem key={item.title} item={item} />
+            ))}
+          </Stack>
+      </Grid>
+      <Box pb={3} pt={3} >
+          { renderFormPompes("Ajouter une pompe") } 
         </Box>
-      </Container>
+      <Card>
+        <PompesTableToolbar
+          numSelected={selected.length}
+          filterName={filterName}
+          onFilterName={handleFilterByName}
+          title="Pompes"
+        />
 
-      {renderForm}
-
+        <Scrollbar>
+          <TableContainer sx={{ overflow: 'unset' }}>
+            <Table sx={{ minWidth: 800 }}>
+              <PompesTableHead
+                order={order}
+                orderBy={orderBy}
+                rowCount={pompes.length}
+                numSelected={selected.length}
+                onRequestSort={handleSort}
+                headLabel={[
+                  { id: 'id', label: 'ID' },
+                  { id: 'carburants', label: 'Carburants' },
+                  { id: 'isRunning', label: 'Status' },
+                  { id: '' },
+                ]}
+              />
+              <TableBody>
+                {dataFiltered
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((row) => (
+                    <PompesTableRow
+                    id={row.id}
+                    carburants={row.carburants}
+                    isRunning={row.isRunning}
+                    selected={selected.indexOf(row.name) !== -1}
+                    />
+                    ))}
   
-    </>
-  );
-}
+                  <TableEmptyRows
+                    height={77}
+                    emptyRows={emptyRows(page, rowsPerPage, pompes.length)}
+                  />
+  
+                  {notFound && <TableNoData query={filterName} />}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Scrollbar>
+  
+          <TablePagination
+            page={page}
+            component="div"
+            count={pompes.length}
+            rowsPerPage={rowsPerPage}
+            onPageChange={handleChangePage}
+            rowsPerPageOptions={[5, 10, 25]}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Card>
+
+        
+      </Container>
+    );
+  }
+
+  // ----------------------------------------------------------------------
+  
+  function NavItem({ item }) {
+    const pathname = usePathname();
+  
+    const active = item.path === pathname;
+  
+    return (
+      <ListItemButton
+        component={RouterLink}
+        href={item.path}
+        sx={{
+          minHeight: 44,
+          borderRadius: 0.75,
+          typography: 'body2',
+          color: 'text.secondary',
+          textTransform: 'capitalize',
+          fontWeight: 'fontWeightMedium',
+          ...(active && {
+            color: 'primary.main',
+            fontWeight: 'fontWeightSemiBold',
+            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
+            '&:hover': {
+              bgcolor: (theme) => alpha(theme.palette.primary.main, 0.16),
+            },
+          }),
+        }}
+      >
+        <Box component="span" sx={{ width: 24, height: 24, mr: 2 }}>
+          {item.icon}
+        </Box>
+  
+        <Box component="span">{item.title} </Box>
+      </ListItemButton>
+    );
+  }
+  
+  NavItem.propTypes = {
+    item: PropTypes.object,
+  };

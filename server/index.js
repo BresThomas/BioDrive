@@ -17,6 +17,7 @@ const reapproRoute = require('./routes/reapproRoute.js');
 const horairesBoutiqueRoute = require('./routes/horairesBoutiqueRoute.js');
 const table_TransactionsRoute = require('./routes/tableTransactionsRoute.js')
 const table_IncidentsRoute = require('./routes/tableIncidentsRoute.js')
+const userRoute = require('./routes/userRoute.js');
 
 const app = express();
 
@@ -39,6 +40,7 @@ app.use('/api', reapproRoute);
 app.use('/api', horairesBoutiqueRoute);
 app.use('/api', table_TransactionsRoute);
 app.use('/api', table_IncidentsRoute);
+app.use('/api', userRoute);
 
 app.get('/hello', (req, res) => {
   res.json({ message: 'Hello from server!' });

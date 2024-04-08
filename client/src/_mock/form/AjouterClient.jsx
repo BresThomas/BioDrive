@@ -122,7 +122,6 @@ const AjouterClient = () => {
         <Card
           sx={{
             position: 'absolute',
-            width: 200,
             p: 4,
             top: '50%',
             left: '50%',
@@ -130,7 +129,7 @@ const AjouterClient = () => {
           }}
         >
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Horaires mis à jour
+            Client ajouté
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             Le client a été ajouté avec succès.

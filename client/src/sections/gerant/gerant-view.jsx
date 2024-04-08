@@ -562,12 +562,12 @@ export default function DashboardView() {
     
         <Stack spacing={3} direction="row" alignItems="center">
           
-          <Typography variant="h8">Montant Bonus Actuel : <b>{carteEnergies.montantBonus}%</b></Typography>
-          <TextField name="montantBonus" value={formCarteEnergie.montantBonus} label="Montant Bonus" onChange={handleChangeCarteEnergie}/>
-          <Typography variant="h8">Tranches Bonus Actuel : <b>{carteEnergies.tranchesBonus}%</b></Typography>
-          <TextField name="tranchesBonus" value={formCarteEnergie.tranchesBonus} label="Tranches Bonus" onChange={handleChangeCarteEnergie}/>
-          <Typography variant="h8">Montant Minimum Actuel : <b>{carteEnergies.montantMin}€</b></Typography>
-          <TextField name="montantMin" value={formCarteEnergie.montantMin} label="Montant Minimum" onChange={handleChangeCarteEnergie}/>
+          <Typography variant="h8">Montant Bonus : </Typography>
+          <TextField name="montantBonus" value={formCarteEnergie.montantBonus} label={`${carteEnergies.montantBonus}%`} onChange={handleChangeCarteEnergie}/>
+          <Typography variant="h8">Tranches Bonus : </Typography>
+          <TextField name="tranchesBonus" value={formCarteEnergie.tranchesBonus} label={`${carteEnergies.tranchesBonus}%`} onChange={handleChangeCarteEnergie}/>
+          <Typography variant="h8">Montant Min : </Typography>
+          <TextField name="montantMin" value={formCarteEnergie.montantMin} label={`${carteEnergies.montantMin}€`} onChange={handleChangeCarteEnergie}/>
         </Stack>
     
         <LoadingButton

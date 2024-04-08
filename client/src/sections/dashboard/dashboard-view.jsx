@@ -512,169 +512,145 @@ export default function DashboardView() {
                     </Grid>
                 </Grid>
                 <Grid item xs={36} sm={12} md={7} xl={7}>
-                    <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-                        ERP 👋
-                    </Typography>
-                    <Stack direction="row" spacing={2} sx={{ p: 2 }}>
-                        {navConfig.map((item) => (
-                            <NavItem key={item.title} item={item} />
-                        ))}
-                    </Stack>
+          <Box sx={{ pb: 10 }}>
+            <Header />
+          </Box>
+          <Stack direction="row" spacing={2} sx={{ p: 2 }}>
+            {navConfig.map((item) => (
+              <NavItem key={item.title} item={item} />
+            ))}
+          </Stack>
+          
+        <Grid container spacing={3}>
 
-                    <Grid container spacing={3}>
-                        <Grid xs={12} sm={6} md={3}>
-                            <Stack
-                                alignItems="center"
-                                justifyContent="center"
-                                sx={{ height: 1 }}
-                            >
-                                <Card
-                                    sx={{
-                                        p: 3,
-                                        width: 1,
-                                    }}
-                                >
-                                    {renderFormClient("Ajouter client 👤")}
-                                </Card>
-                            </Stack>
-                        </Grid>
-                        <Grid container spacing={3}>
-                            <Grid xs={12} md={6} lg={4}>
-                                <AppNewsUpdate
-                                    sx={{
-                                        width: 520,
-                                        height: 200,
-                                        overflowY: "auto",
-                                    }}
-                                    title="Derniers incidents ⚠️"
-                                    list={[...Array(5)].map((_, index) => ({
-                                        id: faker.string.uuid(),
-                                        title: faker.person.jobTitle(),
-                                        description:
-                                            faker.commerce.productDescription(),
-                                        image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                                        postedAt: faker.date.recent(),
-                                    }))}
-                                />
-                            </Grid>
-                            <Grid xs={12} md={6} lg={4}>
-                                <AppNewsUpdate
-                                    sx={{
-                                        width: 520,
-                                        height: 200,
-                                        overflowY: "auto",
-                                    }}
-                                    title="Consulter les stocks 📦"
-                                    list={[...Array(5)].map((_, index) => ({
-                                        id: faker.string.uuid(),
-                                        title: faker.person.jobTitle(),
-                                        description:
-                                            faker.commerce.productDescription(),
-                                        image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                                        postedAt: faker.date.recent(),
-                                    }))}
-                                />
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={3}>
-                            <Grid xs={12} md={6} lg={4}>
-                                <AppNewsUpdate
-                                    sx={{
-                                        width: 520,
-                                        height: 200,
-                                        overflowY: "auto",
-                                    }}
-                                    title="Pompes ⛽"
-                                    list={[...Array(5)].map((_, index) => ({
-                                        id: faker.string.uuid(),
-                                        title: faker.person.jobTitle(),
-                                        description:
-                                            faker.commerce.productDescription(),
-                                        image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                                        postedAt: faker.date.recent(),
-                                    }))}
-                                />
-                            </Grid>
-                            <Grid xs={12} md={6} lg={4}>
-                                <AppNewsUpdate
-                                    sx={{
-                                        width: 520,
-                                        height: 200,
-                                        overflowY: "auto",
-                                    }}
-                                    title="Rechercher client 👤"
-                                    list={[...Array(5)].map((_, index) => ({
-                                        id: faker.string.uuid(),
-                                        title: faker.person.jobTitle(),
-                                        description:
-                                            faker.commerce.productDescription(),
-                                        image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                                        postedAt: faker.date.recent(),
-                                    }))}
-                                />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid xs={12} sm={6} md={3} pt={3}>
-                        <Stack
-                            alignItems="center"
-                            justifyContent="center"
-                            sx={{ height: 1 }}
-                        >
-                            <Card
-                                sx={{
-                                    p: 3,
-                                    width: 1,
-                                }}
-                            >
-                                {renderFormIncident("Créer un incident ⚠️")}
-                            </Card>
-                        </Stack>
-                    </Grid>
-                </Grid>
+          <Grid xs={12} sm={6} md={3}>
+            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
+                {renderFormClient('Ajouter client 👤')}
+            </Stack>
+          </Grid>
+
+          <Grid container spacing={3}>
+          <Grid container spacing={3}> 
+          <Grid xs={12} md={6} lg={4}>
+            <AppNewsUpdate 
+              sx={{ width: 520, height: 200, overflowY: 'auto' }}
+              title="Incidents ⚠️"
+              path="/incidents"
+              list={incidents.slice(0,5).map((incident, index) => ({
+                id: incident.id_incident,
+                title: incident.intitule,
+                description: `${incident.description}, Gravité : ${incident.gravite}`, // Utilisez une description appropriée si disponible
+                image: '/assets/icons/incident.png',
+                postedAt: `${incident.date}`,
+              }))}             
+            />
+          </Grid>
+          
+            <Grid xs={12} md={6} lg={4}>
+            <AppNewsUpdate
+              sx={{ width: 520, height: 200, overflowY: 'auto' }}
+              title="Stocks 📦"
+              path="/stocks"
+              list={stocks.slice(0,5).map(stock => ({
+                id: stock.id_stock,
+                title: `ID stock : ${stock.id_stock}`,
+                description: `Contenu : ${stock.details ? stock.details.join(", ") : ', '}`,
+                image: `/assets/icons/stock.png`,
+              }))}
+            />
             </Grid>
-        </Container>
-    );
+          </Grid>
+        <Grid container spacing={3}> 
+          <Grid xs={12} md={6} lg={4}>
+            <AppNewsUpdate sx={{ width: 520, height: 200, overflowY: 'auto' }}
+              title="Pompes ⛽"
+              path="/pompes"
+              list={pompes.slice(0,5).map(pompe => ({
+                id: pompe.id_pompe,
+                title: `ID pompe : ${pompe.id_pompe}`,
+                description: `Carburants : ${pompe.carburants.join(", ")}`,
+                isRunning: `${pompe.isRunning}`,
+                image: `/assets/icons/borne.png`,
+                postedAt: "02/03/2023",
+              }))}
+
+            />
+          </Grid>
+            <Grid xs={12} md={6} lg={4}>
+              <AppNewsUpdate
+                sx={{ width: 520, height: 200, overflowY: 'auto' }}
+                title="Clients 👤"
+                path="/user"
+                list={clients.slice(0,5).map((client) => ({
+                  id: client.id_client,
+                  title: ` ${client.nom} ${client.prenom}`,
+                  description: `Adresse : ${client.adresse} Num : ${client.numero_portable} Date de naissance : ${client.date_naissance}`, // Utilisez une description appropriée si disponible
+                  image: `/assets/images/avatars/avatar_2.jpg`,
+                }))}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid>
+            <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }} pt={3}>
+              <Card
+                sx={{
+                  p: 3,
+                  width: 1,
+                }}
+              >
+                {renderFormIncident('Créer un incident ⚠️')}
+              </Card>
+            <Card sx={{p: 2, width: 1, mt: 3, }}>
+              <AjouterCompteEnergie />
+            </Card>
+            </Stack>
+          </Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+  </Container>
+
+  );
 }
 
 // ----------------------------------------------------------------------
 
 function NavItem({ item }) {
-    const pathname = usePathname();
+  const pathname = usePathname();
 
-    const active = item.path === pathname;
+  const active = item.path === pathname;
 
-    return (
-        <ListItemButton
-            component={RouterLink}
-            href={item.path}
-            sx={{
-                minHeight: 44,
-                borderRadius: 0.75,
-                typography: "body2",
-                color: "text.secondary",
-                textTransform: "capitalize",
-                fontWeight: "fontWeightMedium",
-                ...(active && {
-                    color: "primary.main",
-                    fontWeight: "fontWeightSemiBold",
-                    bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
-                    "&:hover": {
-                        bgcolor: (theme) =>
-                            alpha(theme.palette.primary.main, 0.16),
-                    },
-                }),
-            }}
-        >
-            <Box component="span" sx={{ width: 24, height: 24, mr: 2 }}>
-                {item.icon}
-            </Box>
+  return (
+    <ListItemButton
+      component={RouterLink}
+      href={item.path}
+      sx={{
+        minHeight: 44,
+        borderRadius: 0.75,
+        typography: 'body2',
+        color: 'text.secondary',
+        textTransform: 'capitalize',
+        fontWeight: 'fontWeightMedium',
+        ...(active && {
+          color: 'primary.main',
+          fontWeight: 'fontWeightSemiBold',
+          bgcolor: (theme) => alpha(theme.palette.primary.main, 0.08),
+          '&:hover': {
+            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.16),
+          },
+        }),
+      }}
+    >
+      <Box component="span" sx={{ width: 24, height: 24, mr: 2 }}>
+        {item.icon}
+      </Box>
 
-            <Box component="span">{item.title} </Box>
-        </ListItemButton>
-    );
+      <Box component="span">{item.title} </Box>
+    </ListItemButton>
+  );
 }
 
 NavItem.propTypes = {
-    item: PropTypes.object,
+  item: PropTypes.object,
 };

@@ -160,7 +160,7 @@ export default function UserPage() {
           color="inherit"
           onClick={clickFormClient}
         >
-          Submit
+          Ajouter
         </LoadingButton>
       </Stack>
     </Card>
@@ -199,6 +199,7 @@ export default function UserPage() {
                 onRequestSort={handleSort}
                 headLabel={[
                   { id: 'name', label: 'Nom et prénom' },
+                  { id: 'id_compte_energie', label: 'ID Compte énergie', align: 'center' },
                   { id: 'phone', label: 'Numero de téléphone' },
                   { id: 'adresse', label: 'Adresse' },
                   { id: 'date_naissance', label: 'Date de naissance', align: 'center' },
@@ -211,6 +212,7 @@ export default function UserPage() {
                   .map((row) => (
                     <UserTableRow
                     name={row.name}
+                    id_compte_energie={row.id_compte_energie}
                     phone={row.phone}
                     adresse={row.adresse}
                     avatarUrl={row.avatarUrl}

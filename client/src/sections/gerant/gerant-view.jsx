@@ -8,6 +8,7 @@ import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import TextField from '@mui/material/TextField';
@@ -16,6 +17,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 
+import AppChangeUpdate from '../overview/app-change-update';
 import { posts } from '../../_mock/blog';
 import PostSearch from '../blog/post-search';
 import { RouterLink } from '../../routes/components';
@@ -25,6 +27,7 @@ import navConfig from '../../layouts/dashboard/config-navigation';
 import Boutique from '../../_mock/form/Boutique';
 import AjouterTache from '../../_mock/form/AjouterTache';
 import AjouterClient from '../../_mock/form/AjouterClient';
+import Header from '../../layouts/dashboard/header';
 
 // ----------------------------------------------------------------------
 
@@ -51,10 +54,10 @@ export default function DashboardView() {
         });
     }, []);  
 
-  const [pompes, setPompe] = useState([]);
+  const [taches, setTaches] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/pompes')
+    fetch('http://localhost:3001/api/taches')
       .then(response => {
         if (!response.ok) {
           throw new Error('Erreur lors de la récupération des données');
@@ -62,7 +65,7 @@ export default function DashboardView() {
         return response.json();
       })
       .then(data => {
-        setPompe(data);
+        setTaches(data);
       })
       .catch(error => {
         console.error("Erreur lors de la récupération des données:", error);
@@ -88,9 +91,43 @@ export default function DashboardView() {
   }, []);
 
 
+  const handleIncrement = async (value) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/updateCarburant/NnYGtIeHfVN6tHSrAJJZ`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(
+          {
+            "prix": value,
+          }
+        )
+      });
+      if (!response.ok) {
+        throw new Error('Erreur lors de la mise à jour des données');
+      }
+      console.log('Données mises à jour avec succès');
+      window.location.reload(true);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
-  
-
+  const handleDeleteTache = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/deleteTache/CBTqgnapkm48xoq8hNX0 `, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error('Erreur lors de la mise à jour des données');
+      }
+      console.log('Données mises à jour avec succès');
+      window.location.reload(true);
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
 
     const theme = useTheme();
     const router = useRouter();
@@ -448,16 +485,19 @@ export default function DashboardView() {
                     />
                   </Grid>
                   <Grid xs={6} md={6} lg={4}>
-                      <AppNewsUpdate
-                        sx={{ width: 500, height: 300, overflowY: 'auto', marginLeft: 2 }}
+                      <AppChangeUpdate
+                        sx={{ width: 540, height: 200, overflowY: 'auto'}}
                         title="Tâches 📝"
-                        list={[...Array(5)].map((_, index) => ({
-                          id: faker.string.uuid(),
-                          title: faker.person.jobTitle(),
-                          description: faker.commerce.productDescription(),
-                          image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                          postedAt: faker.date.recent(),
+                        path="/taches"
+                        list={taches.slice(0,5).map(tache => ({
+                          id: tache.id_tache,
+                          title: tache.libelle,
+                          description: tache.assigne,
+                          image: `/assets/icons/glass/ic_glass_message.png`,
+                          postedAt: tache.dateButoire,
+                          button1: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={handleDeleteTache} >Supprimer</Button>,
                         }))}
+                        /* TODO Le niveau des pompes n'existe pas l'ajouter dans firebase  */
                       />
                   </Grid>
                 </Grid>
@@ -466,14 +506,9 @@ export default function DashboardView() {
       </Grid>
       </Grid>
     <Grid item xs={36} sm={12} md={7} xl={7}>
-      <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-        ERP 👋
-      </Typography>
-      <Stack direction="row" spacing={2} sx={{ p: 2 }}>
-        {navConfig.map((item) => (
-        <NavItem key={item.title} item={item} />
-        ))}
-      </Stack>
+      <Box sx={{ pb: 10 }}>
+        <Header />
+      </Box>
       <Grid container spacing={5}>
         <Grid item >
           <Stack alignItems="center" justifyContent="center" sx={{ height: 1 ,}}>
@@ -518,10 +553,11 @@ export default function DashboardView() {
                   <AppNewsUpdate
                     sx={{ width: 540, height: 200, overflowY: 'auto'}}
                     title="Niveaux des cuves 🛢️"
-                    path="/pompes"
-                    list={pompes.slice(0,5).map(pompe => ({
-                      id: pompe.id_pompe,
-                      title: `Carburant : ${pompe.carburants.join(", ")}   ${random(0, 150)}/150L`,
+                    path="/carburants"
+                    list={carburants.slice(0,5).map(carburant => ({
+                      id: carburant.id_carburant,
+                      title: `Carburant : ${carburant.carburant} ` ,
+                      description:`Stock restant : ${carburant.stock_carburant}/150L`,
                       image: `/assets/icons/borne.png`,
                       postedAt: new Date(Date.now() - 5 * 60 * 1000),
 
@@ -530,26 +566,19 @@ export default function DashboardView() {
                   />
               </Grid>
               <Grid xs={6} md={6} lg={6}>
-              <AppNewsUpdate
-                      sx={{ width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
-                      title="Modification des prix du carburant ⛽️"
-                      path="/carburants"
-                      list={carburants.slice(0,5).map(carburant => ({
-                        id: carburant.id_carburant,
-                        title: ` ${carburant.carburant}`,
-                        description: ` ${carburant.prix}€/L`,
-                        image: `/assets/icons/borne.png`,
-                        button: <LoadingButton
-                          size="small"
-                          type="submit"
-                          variant="contained"
-                          color="inherit"
-                          onClick={handleClick}
-                        > Modifier</LoadingButton>,
-                    
-                      }))}
-                      
-                />
+                <AppChangeUpdate
+                    sx={{ width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
+                    title="Modification des prix du carburant ⛽️"
+                    path="/carburants"
+                    list={carburants.slice(0,5).map(carburant => ({
+                      id: carburant.id_carburant,
+                      title: ` ${carburant.carburant}`,
+                      description: ` ${carburant.prix.toFixed(2)}€/L`,
+                      image: `/assets/icons/borne.png`,
+                      button1: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleIncrement(carburant.prix-0.01)} >-</Button>,
+                      button2: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleIncrement(carburant.prix+0.01)} >+</Button>,
+                    }))}
+                  />
                   
               </Grid>
             </Grid>

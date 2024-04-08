@@ -139,7 +139,7 @@ export default function TransactionsView() {
                       color="inherit"
                       onClick={handleClick}
                     >
-                      Submit
+                      Enregistrer
                     </LoadingButton>
                   </Stack>
                 </CardContent>
@@ -161,7 +161,7 @@ export default function TransactionsView() {
           </Grid>
 
           <Button sx={{margin: 1}} href="/dashboard" size="large" variant="contained" component={RouterLink}>
-            Go to Home
+            Retour à l&apos;accueil
           </Button>
         </Box>
         <TablePagination

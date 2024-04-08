@@ -37,6 +37,7 @@ import AppConversionRates from '../overview/app-conversion-rates';
 import { NAV } from '../../layouts/dashboard/config-layout';
 import navConfig from '../../layouts/dashboard/config-navigation';
 import { posts } from '../../_mock/blog';
+import Header from '../../layouts/dashboard/header';
 
 // ----------------------------------------------------------------------
 
@@ -169,7 +170,7 @@ export default function ServicesAndLogistiqueView() {
           color="inherit"
           onClick={handleClick}
         >
-          Submit
+          Vendre un ticket : 1.5€
         </LoadingButton>
       </Stack>
     );  
@@ -187,14 +188,14 @@ export default function ServicesAndLogistiqueView() {
           color="inherit"
           onClick={handleClick}
         >
-          Submit
+          Vendre un Abonnement : 15.0€/mois
         </LoadingButton>
       </Stack>
     );  
 
     const renderForm4 = (
       <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '1000px'}}>
-        <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Réserver un service entre perticulier</Typography>
+        <Typography variant="h6" sx={{ fontSize: '1.5rem', width: '50%' }}>Réserver un service entre particulier</Typography>
     
         <Stack spacing={3} direction="row" alignItems="center">
           
@@ -210,7 +211,7 @@ export default function ServicesAndLogistiqueView() {
           color="inherit"
           onClick={handleClick}
         >
-          Submit
+          Confirmer
         </LoadingButton>
       </Stack>
     );
@@ -230,7 +231,7 @@ export default function ServicesAndLogistiqueView() {
           onClick={handleClick}
           startIcon={<Iconify icon="tabler:reload" />}
           >
-          Clear
+          Rafraichir
         </LoadingButton>        
         <LoadingButton
           sx={{ width: '22.5%' }}
@@ -348,15 +349,9 @@ export default function ServicesAndLogistiqueView() {
 
             
         <Grid item xs={36} sm={12} md={7} xl={7}>
-          <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-            ERP 👋
-          </Typography>
-          <Stack direction="row" spacing={2} sx={{ p: 2 }}>
-            {navConfig.map((item) => (
-              <NavItem key={item.title} item={item} />
-            ))}
-          </Stack>
-
+        <Box sx={{ pb: 10 }}>
+          <Header />
+        </Box>
 
         <Grid container spacing={3}>
 

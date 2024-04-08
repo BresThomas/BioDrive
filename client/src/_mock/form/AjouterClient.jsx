@@ -23,6 +23,7 @@ const AjouterClient = () => {
         body: JSON.stringify({
           email: formDataClient.email,
           nom: formDataClient.nom,
+          id_compte_energie: "",
           prenom: formDataClient.prenom,
           date_naissance: formDataClient.date_naissance,
           numero_portable: formDataClient.tel,
@@ -81,7 +82,7 @@ const AjouterClient = () => {
             variant="contained"
             color="inherit"
           >
-            Submit
+            Ajouter
           </LoadingButton>
         </Stack>
       </form>

@@ -1,5 +1,5 @@
 class Client {
-    constructor(id_client, email, nom, prenom, adresse, date_naissance, numero_portable, id_compte_energie) {
+    constructor(id_client, email, nom, prenom, adresse, date_naissance, numero_portable, id_compte_energie, historique_transactions) {
         this.id_client = id_client;
         this.email = email;
         this.nom = nom;

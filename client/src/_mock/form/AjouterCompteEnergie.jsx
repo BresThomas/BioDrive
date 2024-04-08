@@ -26,7 +26,7 @@ const AjouterCompteEnergieForm = () => {
       // Réinitialise le formulaire après l'ajout réussi
       setNewCompteEnergie({
         solde: '',
-        id_avantage: ''
+        id_avantage: 'nUfLHqvPEszwbzBZkenP'
       });
     } catch (error) {
       console.error(error.message);

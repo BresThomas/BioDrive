@@ -8,12 +8,13 @@ const db = getFirestore(firebase);
 exports.createCompteEnergie = async (req, res, next) => {
   try {
     const data = req.body;
-    await addDoc(collection(db, 'comptesEnergie'), data);
-    res.status(200).send('Compte énergie créé avec succès');
+    const compteEnergie = await addDoc(collection(db, 'comptesEnergie'), data);
+    res.status(200).json({ id: compteEnergie.id }); // Renvoie un objet JSON avec l'ID du compte énergie
   } catch (error) {
-    res.status(400).send(error.message);
+    res.status(400).json({ error: error.message }); // Renvoie un objet JSON avec le message d'erreur en cas d'échec
   }
 };
+
 
 // Récupérer tous les comptes énergie
 exports.getComptesEnergie = async (req, res, next) => {
@@ -29,7 +30,7 @@ exports.getComptesEnergie = async (req, res, next) => {
           doc.id,
           doc.data().solde,
           doc.data().transactions,
-          doc.data().id_avantage
+          doc.data().id_avantage,
         );
         compteEnergieArray.push(compteEnergie);
       });

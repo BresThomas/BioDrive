@@ -33,7 +33,8 @@ exports.getClients = async (req, res, next) => {
           doc.data().adresse,
           doc.data().date_naissance,
           doc.data().numero_portable,
-          doc.data().id_compte_energie
+          doc.data().id_compte_energie,
+          doc.data().historique_transactions,
         );
         clientArray.push(client);
       });

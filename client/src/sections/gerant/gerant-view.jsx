@@ -465,9 +465,7 @@ export default function DashboardView() {
                       <Card sx={{p: 2, width: 1, mt:3, }}>
                         <Boutique />
                       </Card>
-                      <Card sx={{p: 2, width: 1, mt:3, }}>
-                        <AjouterClient />
-                      </Card>
+                      
                   </Stack>
                 </Grid>
                 <Grid container spacing={1}> 
@@ -610,6 +608,9 @@ export default function DashboardView() {
                     }))} 
                   />
               </Grid>
+            <Card sx={{p: 2, width: 1, mt:3, }}>
+              <AjouterClient />
+            </Card>
             </Grid>
           </Stack>
         </Grid>

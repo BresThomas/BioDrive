@@ -87,6 +87,24 @@ export default function DashboardView() {
       </Stack>
     );
 
+    const [clients, setClient] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/clients')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setClient(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);  
+
     const ajouterCredit = (title) => (
       <Stack spacing={3} direction="row" alignItems="center">
         <Typography variant="h6" sx={{ width: '20%' }}>{title}</Typography>
@@ -205,12 +223,12 @@ export default function DashboardView() {
                         <AppNewsUpdate
                           sx={{ width: 400, height: 400, overflowY: 'auto', marginLeft: 10 }}
                           title="Rechercher Client 👤"
-                          list={[...Array(5)].map((_, index) => ({
-                            id: faker.string.uuid(),
-                            title: faker.person.jobTitle(),
-                            description: faker.commerce.productDescription(),
-                            image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                            postedAt: faker.date.recent(),
+                          path="/clients"
+                          list={clients.slice(0,5).map(client => ({
+                            title: ` ${client.nom} ${client.prenom}` ,
+                            description:`${client.email} <br> ${client.adresse}  ${client.numero_portable}`,
+                            image: `/assets/icons/borne.png`,
+                            postedAt: client.date,
                           }))}
                         />
                     </Grid>

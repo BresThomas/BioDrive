@@ -335,7 +335,6 @@ export default function DashboardView() {
           gravite: formDataIncident.gravite,
           date: getDate(),
           intitule: formDataIncident.intitule,
-          date: getDate(),
           description: formDataIncident.descriptionIncident,
         })
       });

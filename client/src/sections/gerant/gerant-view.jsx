@@ -397,6 +397,97 @@ export default function DashboardView() {
           </Stack>
         );    
 
+    // ==================== CHANGEMENT PRIX CREDIT ENERGIE ==========================//
+
+    const [carteEnergies, setCarteEnergie] = useState([]);
+
+        useEffect(() => {
+          fetch('http://localhost:3001/api/carteEnergie/donneCarteEnergie')
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des données');
+              }
+              return response.json();
+            })
+            .then(data => {
+              setCarteEnergie(data);
+            })
+            .catch(error => {
+              console.error("Erreur lors de la récupération des données:", error);
+            });
+        }, []);
+
+    const initialFormCarteEnergie = {
+      montantBonus: '',
+      tranchesBonus: '',
+      montantMin: '',
+    };
+  
+    const [formCarteEnergie, setFormCarteEnergie] = useState(initialFormCarteEnergie);
+
+    const handleChangeCarteEnergie = (event) => {
+      const { name, value } = event.target;
+      setFormCarteEnergie(prevFormCarteEnergie => ({
+        ...prevFormCarteEnergie,
+        [name]: value
+      }));
+
+      console.log(formCarteEnergie);
+
+    };
+
+    const clickFormCarteEnergie = async () => {
+      console.log(formCarteEnergie);
+
+      const response = await fetch('http://localhost:3001/api/updateCarteEnergie/donneCarteEnergie', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          montantBonus : parseInt(formCarteEnergie.montantBonus, 10),
+          tranchesBonus : parseInt(formCarteEnergie.tranchesBonus, 10),
+          montantMin : parseInt(formCarteEnergie.montantMin, 10)
+        })
+      });
+
+      if (response.ok) {
+        // Réinitialiser les champs du formulaire à leur valeur initiale vide
+        setFormCarteEnergie(initialFormCarteEnergie);
+        console.log("Formulaire soumis avec succès!");
+        window.location.reload(true);
+      } else {
+        console.error("Erreur lors de la soumission du formulaire");
+      }
+    };
+
+    const renderFormCreditEnergie = (
+      <Stack spacing={3} direction="row" alignItems="center">
+        <Typography variant="h6">Carte Crédit Energie</Typography>
+    
+        <Stack spacing={3} direction="row" alignItems="center">
+          
+          <Typography variant="h8">Montant Bonus Actuel : <b>{carteEnergies.montantBonus}%</b></Typography>
+          <TextField name="montantBonus" value={formCarteEnergie.montantBonus} label="Montant Bonus" onChange={handleChangeCarteEnergie}/>
+          <Typography variant="h8">Tranches Bonus Actuel : <b>{carteEnergies.tranchesBonus}%</b></Typography>
+          <TextField name="tranchesBonus" value={formCarteEnergie.tranchesBonus} label="Tranches Bonus" onChange={handleChangeCarteEnergie}/>
+          <Typography variant="h8">Montant Minimum Actuel : <b>{carteEnergies.montantMin}€</b></Typography>
+          <TextField name="montantMin" value={formCarteEnergie.montantMin} label="Montant Minimum" onChange={handleChangeCarteEnergie}/>
+        </Stack>
+    
+        <LoadingButton
+          sx={{ width: '10%' }}
+          size="large"
+          type="submit"
+          variant="contained"
+          color="inherit"
+          onClick={clickFormCarteEnergie}
+        >
+          Valider
+        </LoadingButton>
+      </Stack>
+    ); 
+
     // ========================================================================================== //
 
   return (
@@ -417,6 +508,11 @@ export default function DashboardView() {
                 <Grid xs={12.4} md={12.6} lg={12.4}>
                     <Card sx={{ p: 0, width: 1, height: 150, }}>
                       {listStock}
+                    </Card>
+                </Grid>
+                <Grid xs={12.4} md={12.6} lg={12.4}>
+                    <Card sx={{ p: 3, width: 1 }}>
+                      {renderFormCreditEnergie}
                     </Card>
                 </Grid>
                 <Grid  xs={12.4} md={12.6} lg={12.4}>

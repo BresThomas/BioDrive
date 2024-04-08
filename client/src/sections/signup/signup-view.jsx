@@ -36,11 +36,28 @@ const SignupView = () => {
       .then((userCredential) => {
         // Account created successfully
         const user = userCredential.user;
+        const uid = user.uid;
+
+        // Create user in Firestore
         const displayName = `${firstName} ${lastName}`;
 
         return updateProfile(user, {
           displayName,
           role
+        });
+      })
+      .then(() => {
+        // Add user with admin role
+        const userData = {
+          admin: role === 'gerant',
+        };
+
+        return fetch('http://localhost:3001/api/newuser', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(userData)
         });
       })
       .then(() => {

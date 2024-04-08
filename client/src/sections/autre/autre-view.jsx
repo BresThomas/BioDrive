@@ -294,17 +294,7 @@ export default function DashboardView() {
                   description: faker.commerce.productDescription(),
                   postedAt: faker.date.recent(),
                 }))}
-              >
-                {({ list }) =>
-                  list.map((item) => (
-                    <div key={item.id} style={{ display: 'inline-block' }}>
-                      <h2>{item.title}</h2>
-                      <p>{item.description}</p>
-                      <p>{item.postedAt.toString()}</p>
-                    </div>
-                  ))
-                }
-              </AppNewsUpdate>
+              />
             </Grid>
 
           </Grid>

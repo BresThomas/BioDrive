@@ -16,10 +16,10 @@ import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
-export default function StockTableRow({
+export default function PompesTableRow({
   id,
-  produit,
-  quantité,
+  carburants,
+  isRunning,
   selected
 }) {
   const [open, setOpen] = useState(null);
@@ -32,9 +32,10 @@ export default function StockTableRow({
     setOpen(null);
   };
   
-  const handleDeleteStock = async (id_stock) => {
+  const handleDeletePompes = async (id_pompe) => {
     setOpen(null);
-    const response = await fetch(`http://localhost:3001/api/deleteStock/${id_stock}`, {
+  
+    const response = await fetch(`http://localhost:3001/api/deletePompe/${id_pompe}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -45,25 +46,27 @@ export default function StockTableRow({
       console.log("Suppression réussie !");
       window.location.reload(true);
     } else {
-      console.error("Erreur lors de la suppression du stock");
+      console.error("Erreur lors de la suppression de l'incident");
     }
   };
   
 
   return (
     <>
-    <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
+      <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
 
-      <TableCell>{id}</TableCell>
-      <TableCell>{produit}</TableCell>
-      <TableCell>{quantité}</TableCell>
+        <TableCell>{id}</TableCell>
 
-      <TableCell align="right">
-        <IconButton onClick={handleOpenMenu}>
-          <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
-      </TableCell>
-    </TableRow>
+        <TableCell>{carburants}</TableCell>
+
+        <TableCell>{isRunning ? 'Actif' : 'Inactif'}</TableCell>
+
+        <TableCell align="right">
+          <IconButton onClick={handleOpenMenu}>
+            <Iconify icon="eva:more-vertical-fill" />
+          </IconButton>
+        </TableCell>
+      </TableRow>
 
       <Popover
         open={!!open}
@@ -77,7 +80,7 @@ export default function StockTableRow({
           Edit
         </MenuItem>
 
-        <MenuItem onClick={() => handleDeleteStock(id)} sx={{ color: 'error.main' }}>
+        <MenuItem onClick={() => handleDeletePompes(id)} sx={{ color: 'error.main' }}>
           <Iconify icon="eva:trash-2-outline" sx={{ mr: 2 }} />
           Delete
         </MenuItem>
@@ -87,10 +90,9 @@ export default function StockTableRow({
   );
 }
 
-
-StockTableRow.propTypes = {
+PompesTableRow.propTypes = {
   id: PropTypes.any,
-  produit : PropTypes.any,
-  quantité : PropTypes.any,
+  carburants: PropTypes.any,
+  isRunning: PropTypes.any,
   selected: PropTypes.any
 };

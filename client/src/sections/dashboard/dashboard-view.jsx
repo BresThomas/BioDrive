@@ -642,9 +642,20 @@ export default function DashboardView() {
                             <Stack
                                 alignItems="center"
                                 justifyContent="center"
-                                sx={{ height: 1 }}
+                                sx={{ height: 1, width: "120%"}}
                             >
-                                {renderFormClient("Ajouter client 👤")}
+                                {/* {renderFormClient("Ajouter client 👤")} */}
+                            <Card
+                                    sx={{
+                                        p: 3,
+                                        width: 1,
+                                    }}
+                                    >
+                                    {renderFormIncident("Créer un incident ⚠️")}
+                                </Card>
+                                <Card sx={{ p: 2, width: 1, mt: 3 }}>
+                                    <AjouterCompteEnergie />
+                                </Card>
                             </Stack>
                         </Grid>
 
@@ -733,26 +744,6 @@ export default function DashboardView() {
                                     />
                                 </Grid>
                             </Grid>
-                        </Grid>
-                        <Grid>
-                            <Stack
-                                alignItems="center"
-                                justifyContent="center"
-                                sx={{ height: 1 }}
-                                pt={3}
-                            >
-                                <Card
-                                    sx={{
-                                        p: 3,
-                                        width: 1,
-                                    }}
-                                >
-                                    {renderFormIncident("Créer un incident ⚠️")}
-                                </Card>
-                                <Card sx={{ p: 2, width: 1, mt: 3 }}>
-                                    <AjouterCompteEnergie />
-                                </Card>
-                            </Stack>
                         </Grid>
                     </Grid>
                 </Grid>

@@ -70,7 +70,6 @@ const Boutique = () => {
         <Card
           sx={{
             position: 'absolute',
-            width: 400,
             p: 4,
             top: '50%',
             left: '50%',

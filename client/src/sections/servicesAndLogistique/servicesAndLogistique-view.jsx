@@ -299,9 +299,9 @@ export default function ServicesAndLogistiqueView() {
 
       <Grid container spacing={3}>
           <Grid item xs={12} sm={12} md={5} xl={5}>
-                <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
-                Caisse 💶
-                </Typography>
+              <Typography variant="h4" sx={{ mb: 2, mt: 5 }}>
+              Caisse 💶
+              </Typography>
             <Grid container spacing={3}>
               <Grid item >
                 <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
@@ -349,9 +349,14 @@ export default function ServicesAndLogistiqueView() {
 
             
         <Grid item xs={36} sm={12} md={7} xl={7}>
-        <Box sx={{ pb: 10 }}>
-          <Header />
-        </Box>
+            <Box sx={{ pb: 10 }}>
+                <Header />
+            </Box>
+            <Stack direction="row" spacing={2} sx={{ p: 2 }}>
+                {navConfig.map((item) => (
+                    <NavItem key={item.title} item={item} />
+                ))}
+            </Stack>
 
         <Grid container spacing={3}>
 

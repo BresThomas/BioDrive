@@ -542,7 +542,6 @@ export default function DashboardView() {
                         title="Tâches 📝"
                         path="/taches"
                         list={taches.slice(0,5).map(tache => ({
-                          id: tache.id_tache,
                           title: tache.libelle,
                           description: tache.assigne,
                           image: `/assets/icons/glass/ic_glass_message.png`,
@@ -557,14 +556,14 @@ export default function DashboardView() {
       </Grid>
       </Grid>
     <Grid item xs={36} sm={12} md={7} xl={7}>
-    <Box sx={{ pb: 10 }}>
-            <Header />
-          </Box>
-          <Stack direction="row" spacing={2} sx={{ p: 2 }}>
-            {navConfig.map((item) => (
-              <NavItem key={item.title} item={item} />
-            ))}
-          </Stack>
+      <Box sx={{ pb: 10 }}>
+        <Header />
+      </Box>
+      <Stack direction="row" spacing={2} sx={{ p: 2 }}>
+        {navConfig.map((item) => (
+          <NavItem key={item.title} item={item} />
+        ))}
+      </Stack>
       <Grid container spacing={5}>
         <Grid item >
           <Stack alignItems="center" justifyContent="center" sx={{ height: 1 ,}}>
@@ -611,14 +610,11 @@ export default function DashboardView() {
                     title="Niveaux des cuves 🛢️"
                     path="/carburants"
                     list={carburants.slice(0,5).map(carburant => ({
-                      id: carburant.id_carburant,
                       title: `Carburant : ${carburant.carburant} ` ,
                       description:`Stock restant : ${carburant.stock_carburant}/150L`,
                       image: `/assets/icons/borne.png`,
                       postedAt: new Date(Date.now() - 5 * 60 * 1000),
-
                     }))}
-                    /* TODO Le niveau des pompes n'existe pas l'ajouter dans firebase  */
                   />
               </Grid>
               <Grid xs={6} md={6} lg={6}>
@@ -627,7 +623,6 @@ export default function DashboardView() {
                     title="Modification des prix du carburant ⛽️"
                     path="/carburants"
                     list={carburants.slice(0,5).map(carburant => ({
-                      id: carburant.id_carburant,
                       title: ` ${carburant.carburant}`,
                       description: ` ${carburant.prix.toFixed(2)}€/L`,
                       image: `/assets/icons/borne.png`,

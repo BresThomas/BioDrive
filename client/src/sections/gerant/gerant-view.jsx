@@ -90,6 +90,24 @@ export default function DashboardView() {
       });
   }, []);
 
+  const [stocks, setStocks] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/stocks')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des données');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setStocks(data);
+      })
+      .catch(error => {
+        console.error("Erreur lors de la récupération des données:", error);
+      });
+  }, []);
+
 
   const handleIncrement = async (value) => {
     try {
@@ -158,6 +176,24 @@ export default function DashboardView() {
         </LoadingButton>
       </Stack>
     );
+
+    const [reappros, setReappros] = useState([]);
+
+    useEffect(() => {
+      fetch('http://localhost:3001/api/reappros')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setReappros(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+    }, []);    
 
     const [table_incidents, setTable_incidents] = useState([]);
 
@@ -452,9 +488,17 @@ export default function DashboardView() {
                     </Card>
                 </Grid>
                 <Grid xs={12.4} md={12.6} lg={12.4}>
-                    <Card sx={{ p: 0, width: 1, height: 150, }}>
-                      {listStock}
-                    </Card>
+                  <AppNewsUpdate
+                      sx={{ width: 250, height: 300, overflowY: 'auto'}}
+                      title="Stocks"
+                      list={stocks.slice(0,5).map((stock, index) => ({
+                        id: stock.id_stock,
+                        title: `Stock : ${stock.produit}`,
+                        description: `Quantité : ${stock.quantité}`, // Utilisez une description appropriée si disponible
+                        image: '/assets/icons/incident.png',
+                        postedAt: `05/04/2024`,
+                      }))}
+                    />
                 </Grid>
                 <Grid  xs={12.4} md={12.6} lg={12.4}>
                   <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
@@ -465,9 +509,7 @@ export default function DashboardView() {
                       <Card sx={{p: 2, width: 1, mt:3, }}>
                         <Boutique />
                       </Card>
-                      <Card sx={{p: 2, width: 1, mt:3, }}>
-                        <AjouterClient />
-                      </Card>
+                      
                   </Stack>
                 </Grid>
                 <Grid container spacing={1}> 
@@ -525,12 +567,12 @@ export default function DashboardView() {
                   <AppNewsUpdate
                     sx={{  width: 540, height: 200, overflowY: 'auto'}}
                     title="Stocks à réapprovisionner 📦"
-                    list={[...Array(5)].map((_, index) => ({
-                    id: faker.string.uuid(),
-                    title: faker.person.jobTitle(),
-                    description: faker.commerce.productDescription(),
-                    image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                    postedAt: faker.date.recent(),
+                    list={stocks.slice(0,5).map((stock, index) => ({
+                      id: stock.id_stock,
+                      title: `Stock : ${stock.produit}`,
+                      description: `Quantité : ${stock.quantité}`, // Utilisez une description appropriée si disponible
+                      image: '/assets/icons/incident.png',
+                      postedAt: `05/04/2024`,
                     }))}
                   />
               </Grid>
@@ -538,12 +580,12 @@ export default function DashboardView() {
                   <AppNewsUpdate
                     sx={{  width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
                     title="Derniers réapprovisionnements 📦"
-                    list={[...Array(5)].map((_, index) => ({
-                    id: faker.string.uuid(),
-                    title: faker.person.jobTitle(),
-                    description: faker.commerce.productDescription(),
-                    image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                    postedAt: faker.date.recent(),
+                    list={reappros.slice(0,5).map(reappro => ({
+                      id: reappro.id_reappro,
+                      title: `Réappro de  : ${reappro.produit} ` ,
+                      description:`Quantité : ${reappro.quantite}, Prix : ${reappro.prix}`,
+                      image: `/assets/icons/borne.png`,
+                      postedAt: reappro.date_livraison,
                     }))}
                   />
               </Grid>
@@ -610,6 +652,9 @@ export default function DashboardView() {
                     }))} 
                   />
               </Grid>
+            <Card sx={{p: 2, width: 1, mt:3, }}>
+              <AjouterClient />
+            </Card>
             </Grid>
           </Stack>
         </Grid>

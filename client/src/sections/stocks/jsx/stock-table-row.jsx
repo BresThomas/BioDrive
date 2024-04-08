@@ -18,6 +18,8 @@ import Iconify from '../../../components/iconify';
 
 export default function StockTableRow({
   id,
+  produit,
+  quantité,
   selected
 }) {
   const [open, setOpen] = useState(null);
@@ -53,6 +55,8 @@ export default function StockTableRow({
     <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
 
       <TableCell>{id}</TableCell>
+      <TableCell>{produit}</TableCell>
+      <TableCell>{quantité}</TableCell>
 
       <TableCell align="right">
         <IconButton onClick={handleOpenMenu}>
@@ -86,5 +90,7 @@ export default function StockTableRow({
 
 StockTableRow.propTypes = {
   id: PropTypes.any,
+  produit : PropTypes.any,
+  quantité : PropTypes.any,
   selected: PropTypes.any
 };

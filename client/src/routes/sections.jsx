@@ -26,9 +26,9 @@ export default function Router() {
     {
       element: (
         // <DashboardLayout>
-          // <Suspense>
-            // <Outlet />
-          // </Suspense>
+        //   <Suspense>
+        //     <Outlet />
+        //   </Suspense>
         // </DashboardLayout>
         <DashboardPage />
       ),

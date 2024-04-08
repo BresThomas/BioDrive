@@ -187,7 +187,6 @@ export default function UserPage() {
           onFilterName={handleFilterByName}
           title="Clients 👤"
         />
-
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
@@ -203,6 +202,8 @@ export default function UserPage() {
                   { id: 'phone', label: 'Numero de téléphone' },
                   { id: 'adresse', label: 'Adresse' },
                   { id: 'date_naissance', label: 'Date de naissance', align: 'center' },
+                  { id: 'transactions', label: 'Liste des transactions' }, // Ajout de la colonne transactions
+                  { id: 'paiements', label: 'Paiements' }, // Ajout de la colonne paiements
                   { id: '' },
                 ]}
               />
@@ -211,27 +212,28 @@ export default function UserPage() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <UserTableRow
-                    name={row.name}
-                    id_compte_energie={row.id_compte_energie}
-                    phone={row.phone}
-                    adresse={row.adresse}
-                    avatarUrl={row.avatarUrl}
-                    date_naissance={row.date_naissance}
-                    selected={selected.indexOf(row.name) !== -1}
-                    id={row.id}
+                      name={row.name}
+                      id_compte_energie={row.id_compte_energie}
+                      phone={row.phone}
+                      adresse={row.adresse}
+                      avatarUrl={row.avatarUrl}
+                      date_naissance={row.date_naissance}
+                      transactions={row.transactions}
+                      paiements={row.paiements}
+                      selected={selected.indexOf(row.name) !== -1}
+                      id={row.id}
                     />
-                    ))}
-  
-                  <TableEmptyRows
-                    height={77}
-                    emptyRows={emptyRows(page, rowsPerPage, users.length)}
-                  />
-  
-                  {notFound && <TableNoData query={filterName} />}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Scrollbar>
+                  ))}
+                <TableEmptyRows
+                  height={77}
+                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                />
+                {notFound && <TableNoData query={filterName} />}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Scrollbar>
+
   
           <TablePagination
             page={page}

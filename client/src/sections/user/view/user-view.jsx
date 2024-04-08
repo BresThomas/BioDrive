@@ -19,6 +19,7 @@ import TableContainer from '@mui/material/TableContainer';
 import ListItemButton from '@mui/material/ListItemButton';
 import TablePagination from '@mui/material/TablePagination';
 
+import AjouterClient from '../../../_mock/form/AjouterClient';
 import { auth } from '../../../Firebase';
 import { useUsers } from '../../../_mock/useUsers';
 
@@ -178,7 +179,9 @@ export default function UserPage() {
           </Stack>
       </Grid>
       <Box pb={3} pt={3} >
-          { renderFormClient("Ajouter un client") } 
+          <Card sx={{p: 2, width: 1, mt:3, }}>
+              <AjouterClient />
+            </Card>
         </Box>
       <Card>
         <UserTableToolbar

@@ -81,6 +81,7 @@ const AjouterClient = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     newClient();
+    window.location.reload(true);
   };
 
   const handleCloseModal = () => {

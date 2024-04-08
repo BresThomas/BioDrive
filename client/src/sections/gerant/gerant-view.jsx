@@ -57,20 +57,24 @@ export default function DashboardView() {
   const [taches, setTaches] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:3001/api/taches')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Erreur lors de la récupération des données');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setTaches(data);
-      })
-      .catch(error => {
-        console.error("Erreur lors de la récupération des données:", error);
-      });
+    getTaches();
   }, []);
+
+  const getTaches = async () => {
+    await fetch('http://localhost:3001/api/taches')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Erreur lors de la récupération des données');
+          }
+          return response.json();
+        })
+        .then(data => {
+          setTaches(data);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des données:", error);
+        });
+  };
 
   const [carburants, setCarburants] = useState([]);
 
@@ -131,8 +135,6 @@ export default function DashboardView() {
       }
       console.log('Données mises à jour avec succès');
       getCarburants();
-      
-      // window.location.reload(true);
     } catch (error) {
       console.error(error.message);
     }
@@ -147,7 +149,8 @@ export default function DashboardView() {
         throw new Error('Erreur lors de la mise à jour des données');
       }
       console.log('Données mises à jour avec succès');
-      window.location.reload(true);
+      getTaches();
+      // window.location.reload(true);
     } catch (error) {
       console.error(error.message);
     }
@@ -357,23 +360,6 @@ export default function DashboardView() {
       </Stack>
     ); 
     
-    const modifCarburant = (
-      <AppChangeUpdate
-        sx={{ width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
-        title="Modification des prix du carburant ⛽️"
-        path="/carburants"
-        list={carburants.slice(0,5).map(carburant => ({
-          id: carburant.id_carburant,
-          title: ` ${carburant.carburant}`,
-          description: ` ${carburant.prix.toFixed(2)}€/L`,
-          image: `/assets/icons/borne.png`,
-          button1: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleIncrement(carburant.id_carburant,carburant.prix-0.01)} >-</Button>,
-          button2: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleIncrement(carburant.id_carburant,carburant.prix+0.01)} >+</Button>,
-        }))}
-      />
-    );
-
-
         // ==================DEMANDE DE REAPPRO================ //
 
 
@@ -732,7 +718,19 @@ export default function DashboardView() {
                   />
               </Grid>
               <Grid xs={6} md={6} lg={6}>
-                {modifCarburant}
+                  <AppChangeUpdate
+                    sx={{ width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
+                    title="Modification des prix du carburant ⛽️"
+                    path="/carburants"
+                    list={carburants.slice(0,5).map(carburant => ({
+                      id: carburant.id_carburant,
+                      title: ` ${carburant.carburant}`,
+                      description: ` ${carburant.prix.toFixed(2)}€/L`,
+                      image: `/assets/icons/borne.png`,
+                      button1: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleIncrement(carburant.id_carburant,carburant.prix-0.01)} >-</Button>,
+                      button2: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleIncrement(carburant.id_carburant,carburant.prix+0.01)} >+</Button>,
+                    }))}
+                  />
               </Grid>
             </Grid>
             <Grid container spacing={1} sx={{ marginBottom: 3 }}> 

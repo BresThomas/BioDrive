@@ -25,6 +25,8 @@ export default function UserTableRow({
   phone,
   adresse,
   date_naissance,
+  transactions,
+  paiements,
   handleClick,
 }) {
   const [open, setOpen] = useState(null);
@@ -36,17 +38,17 @@ export default function UserTableRow({
   const handleCloseMenu = () => {
     setOpen(null);
   };
-  
+
   const handleDeleteClient = async (id_client) => {
     setOpen(null);
-  
+
     const response = await fetch(`http://localhost:3001/api/deleteClient/${id_client}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
       },
     });
-  
+
     if (response.ok) {
       console.log("Suppression réussie !");
       window.location.reload(true);
@@ -54,7 +56,6 @@ export default function UserTableRow({
       console.error("Erreur lors de la suppression du client");
     }
   };
-  
 
   return (
     <>
@@ -74,8 +75,12 @@ export default function UserTableRow({
         <TableCell>{phone}</TableCell>
 
         <TableCell>{adresse}</TableCell>
-        
+
         <TableCell align="center">{date_naissance}</TableCell>
+        
+        <TableCell>{transactions}</TableCell>
+
+        <TableCell>{paiements}</TableCell>        
 
         <TableCell align="right">
           <IconButton onClick={handleOpenMenu}>
@@ -113,10 +118,12 @@ UserTableRow.propTypes = {
   id: PropTypes.any,
   avatarUrl: PropTypes.any,
   phone: PropTypes.any,
+  paiements: PropTypes.any,
   id_compte_energie: PropTypes.any,
   adresse: PropTypes.any,
   handleClick: PropTypes.func,
   date_naissance: PropTypes.any,
   name: PropTypes.any,
+  transactions: PropTypes.any,
   selected: PropTypes.any,
 };

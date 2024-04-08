@@ -18,6 +18,7 @@ export default function CartView({ cart }) {
         cartItems.forEach((quantity, product) => {
             infos.push([product.id, product.nom, product.prixClient, quantity]);
         });
+        console.log(infos);
     }
 
     return (
@@ -39,7 +40,7 @@ export default function CartView({ cart }) {
             <Stack spacing={2} sx={{ p: 3 }}>
                 {   cartItems instanceof Map &&
                     infos.map((product, index) => (
-                        <CartItem key={index} infos={{id: product[0], name: product[1], unitPrice: product[2], quantity: product[3]}} cart={cart} />
+                        <CartItem key={index} infos={{id: product[0], name: product[1], unitPrice: product[2], quantity: product[3]}} />
                     ))
                 }
             </Stack>
@@ -64,7 +65,7 @@ CartView.propTypes = {
 
 // ----------------------------------------------------------------------
 
-function CartItem({ infos, cart }) {
+function CartItem({ infos }) {
     const id = infos.id;
     const name = infos.name;
     const unitPrice = infos.unitPrice;
@@ -98,5 +99,4 @@ CartItem.propTypes = {
         unitPrice: PropTypes.number.isRequired,
         quantity: PropTypes.number.isRequired,
     }),
-    cart: PropTypes.instanceOf(Cart).isRequired,
 };

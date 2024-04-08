@@ -105,29 +105,96 @@ export default function DashboardView() {
         });
     }, []);  
 
-    const ajouterCredit = (title) => (
+    // ==================== CHANGEMENT PRIX CREDIT ENERGIE ==========================//
+
+    const [carteEnergies, setCarteEnergie] = useState([]);
+
+        useEffect(() => {
+          fetch('http://localhost:3001/api/carteEnergie/donneCarteEnergie')
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Erreur lors de la récupération des données');
+              }
+              return response.json();
+            })
+            .then(data => {
+              setCarteEnergie(data);
+            })
+            .catch(error => {
+              console.error("Erreur lors de la récupération des données:", error);
+            });
+        }, []);
+
+    const initialFormCarteEnergie = {
+      montantBonus: '',
+      tranchesBonus: '',
+      montantMin: '',
+    };
+  
+    const [formCarteEnergie, setFormCarteEnergie] = useState(initialFormCarteEnergie);
+
+    const handleChangeCarteEnergie = (event) => {
+      const { name, value } = event.target;
+      setFormCarteEnergie(prevFormCarteEnergie => ({
+        ...prevFormCarteEnergie,
+        [name]: value
+      }));
+
+      console.log(formCarteEnergie);
+
+    };
+
+    const clickFormCarteEnergie = async () => {
+      console.log(formCarteEnergie);
+
+      const response = await fetch('http://localhost:3001/api/updateCarteEnergie/donneCarteEnergie', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          montantBonus : parseInt(formCarteEnergie.montantBonus, 10),
+          tranchesBonus : parseInt(formCarteEnergie.tranchesBonus, 10),
+          montantMin : parseInt(formCarteEnergie.montantMin, 10)
+        })
+      });
+
+      if (response.ok) {
+        // Réinitialiser les champs du formulaire à leur valeur initiale vide
+        setFormCarteEnergie(initialFormCarteEnergie);
+        console.log("Formulaire soumis avec succès!");
+        window.location.reload(true);
+      } else {
+        console.error("Erreur lors de la soumission du formulaire");
+      }
+    };
+
+    const renderFormCreditEnergie = (
       <Stack spacing={3} direction="row" alignItems="center">
-        <Typography variant="h6" sx={{ width: '20%' }}>{title}</Typography>
-        <Stack spacing={3} direction="row" alignItems="center" sx={{ width: '55%' }}>
-          <Typography variant="body1">Montant Bonnus</Typography>
-          <TextField name="montant" label="0%" sx={{ width: '20%' }}/>
-          <Typography variant="body1">Tranches Bonnus</Typography>
-          <TextField name="tranches" label="0%" sx={{ width: '20%' }}/>
-          <Typography variant="body1">Montant Minimum</Typography>
-          <TextField name="maximum" label="0%" sx={{ width: '20%' }}/>
+        <Typography variant="h6">Carte Crédit Energie</Typography>
+    
+        <Stack spacing={3} direction="row" alignItems="center">
+          
+          <Typography variant="h8">Montant Bonus : </Typography>
+          <TextField name="montantBonus" value={formCarteEnergie.montantBonus} label={`${carteEnergies.montantBonus}%`} onChange={handleChangeCarteEnergie}/>
+          <Typography variant="h8">Tranches Bonus : </Typography>
+          <TextField name="tranchesBonus" value={formCarteEnergie.tranchesBonus} label={`${carteEnergies.tranchesBonus}%`} onChange={handleChangeCarteEnergie}/>
+          <Typography variant="h8">Montant Min : </Typography>
+          <TextField name="montantMin" value={formCarteEnergie.montantMin} label={`${carteEnergies.montantMin}€`} onChange={handleChangeCarteEnergie}/>
         </Stack>
+    
         <LoadingButton
-          sx={{ width: '20%' }}
+          sx={{ width: '10%' }}
           size="large"
           type="submit"
           variant="contained"
           color="inherit"
-          onClick={handleClick}
+          onClick={clickFormCarteEnergie}
         >
-          valider
+          Valider
         </LoadingButton>
       </Stack>
-    );
+    ); 
 
     const searchProductFrom = (
       <Stack spacing={3} direction="row" alignItems="center">
@@ -249,7 +316,7 @@ export default function DashboardView() {
           <Grid xs={12} sm={6} md={3} pt={3}>
             <Stack alignItems="center" justifyContent="center" sx={{ height: 1 }}>
               <Card sx={{p: 2, width: 1,}}>
-                {ajouterCredit('Carte Crédit Énergie ⚡️')}
+                {renderFormCreditEnergie}
               </Card>
             </Stack>
           </Grid>

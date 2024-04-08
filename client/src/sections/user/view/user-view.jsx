@@ -19,6 +19,7 @@ import TableContainer from '@mui/material/TableContainer';
 import ListItemButton from '@mui/material/ListItemButton';
 import TablePagination from '@mui/material/TablePagination';
 
+import AjouterClient from '../../../_mock/form/AjouterClient';
 import { auth } from '../../../Firebase';
 import { useUsers } from '../../../_mock/useUsers';
 
@@ -178,7 +179,9 @@ export default function UserPage() {
           </Stack>
       </Grid>
       <Box pb={3} pt={3} >
-          { renderFormClient("Ajouter un client") } 
+          <Card sx={{p: 2, width: 1, mt:3, }}>
+              <AjouterClient />
+            </Card>
         </Box>
       <Card>
         <UserTableToolbar
@@ -187,7 +190,6 @@ export default function UserPage() {
           onFilterName={handleFilterByName}
           title="Clients 👤"
         />
-
         <Scrollbar>
           <TableContainer sx={{ overflow: 'unset' }}>
             <Table sx={{ minWidth: 800 }}>
@@ -203,6 +205,8 @@ export default function UserPage() {
                   { id: 'phone', label: 'Numero de téléphone' },
                   { id: 'adresse', label: 'Adresse' },
                   { id: 'date_naissance', label: 'Date de naissance', align: 'center' },
+                  { id: 'transactions', label: 'Liste des transactions' }, // Ajout de la colonne transactions
+                  { id: 'paiements', label: 'Paiements' }, // Ajout de la colonne paiements
                   { id: '' },
                 ]}
               />
@@ -211,27 +215,28 @@ export default function UserPage() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row) => (
                     <UserTableRow
-                    name={row.name}
-                    id_compte_energie={row.id_compte_energie}
-                    phone={row.phone}
-                    adresse={row.adresse}
-                    avatarUrl={row.avatarUrl}
-                    date_naissance={row.date_naissance}
-                    selected={selected.indexOf(row.name) !== -1}
-                    id={row.id}
+                      name={row.name}
+                      id_compte_energie={row.id_compte_energie}
+                      phone={row.phone}
+                      adresse={row.adresse}
+                      avatarUrl={row.avatarUrl}
+                      date_naissance={row.date_naissance}
+                      transactions={row.transactions}
+                      paiements={row.paiements}
+                      selected={selected.indexOf(row.name) !== -1}
+                      id={row.id}
                     />
-                    ))}
-  
-                  <TableEmptyRows
-                    height={77}
-                    emptyRows={emptyRows(page, rowsPerPage, users.length)}
-                  />
-  
-                  {notFound && <TableNoData query={filterName} />}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Scrollbar>
+                  ))}
+                <TableEmptyRows
+                  height={77}
+                  emptyRows={emptyRows(page, rowsPerPage, users.length)}
+                />
+                {notFound && <TableNoData query={filterName} />}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Scrollbar>
+
   
           <TablePagination
             page={page}

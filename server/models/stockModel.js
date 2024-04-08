@@ -1,7 +1,8 @@
 class Stock {
-    constructor(id_stock, details) {
+    constructor(id_stock, produit, quantité) {
         this.id_stock = id_stock;
-        this.details = details;
+        this.produit = produit;
+        this.quantité = quantité;
     }
 }
 

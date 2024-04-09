@@ -69,7 +69,7 @@ const LoginView = () => {
         <TextField
           required 
           name="email"
-          label="Email address"
+          label="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -144,12 +144,12 @@ const LoginView = () => {
             maxWidth: 420,
           }}
         >
-          <Typography variant="h4">Sign in to ERP 👋</Typography>
+          <Typography variant="h4">Connectez-vous 👋</Typography>
 
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
-            Don’t have an account?
+            Vous n&apos;avez pas de compte ?
             <Link href="/signup" variant="subtitle2" sx={{ ml: 0.5 }}>
-              Get started
+              cliquez-ici
             </Link>
           </Typography>
 

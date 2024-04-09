@@ -1,39 +1,43 @@
-import { get, random } from 'lodash';
 import PropTypes from 'prop-types';
-import { base, faker } from '@faker-js/faker';
+import { get, random } from 'lodash';
 import { useState, useEffect } from 'react';
+import { base, faker } from '@faker-js/faker';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import { Table, TableBody, TableCell, TableContainer, TableRow, Paper, Typography } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
+import MenuItem from '@mui/material/MenuItem';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Unstable_Grid2';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
+import CardHeader from '@mui/material/CardHeader';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { alpha, useTheme } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 
-import AppChangeUpdate from '../overview/app-change-update';
 import { posts } from '../../_mock/blog';
 import PostSearch from '../blog/post-search';
-import { RouterLink } from '../../routes/components';
-import AppNewsUpdate from '../overview/app-news-update';
-import { usePathname, useRouter } from '../../routes/hooks';
-import navConfig from '../../layouts/dashboard/config-navigation';
 import Boutique from '../../_mock/form/Boutique';
+import Header from '../../layouts/dashboard/header';
+import { RouterLink } from '../../routes/components';
+import AppLeftLarge from '../overview/app-left-large';
+import AppLeftShort from '../overview/app-left-short';
+import AppNewsUpdate from '../overview/app-news-update';
 import AjouterTache from '../../_mock/form/AjouterTache';
 import AjouterClient from '../../_mock/form/AjouterClient';
-import Header from '../../layouts/dashboard/header';
+import AppChangeUpdate from '../overview/app-change-update';
+import { usePathname, useRouter } from '../../routes/hooks';
+import navConfig from '../../layouts/dashboard/config-navigation';
 
 // ----------------------------------------------------------------------
 
 const filtreRecherche = ['Tous', 'Nom du produit', 'Identifiant', 'Catégorie'];
 
 export default function DashboardView() {
+  const daysOfWeek = ['L', 'M', 'M', 'J', 'V'];
 
 
   const [incidents, setIncident] = useState([]);
@@ -497,9 +501,9 @@ export default function DashboardView() {
                       {searchProductFrom}
                     </Card>
                 </Grid>
-                <Grid xs={12.4} md={12.6} lg={12.4}>
-                  <AppNewsUpdate
-                      sx={{ width: 250, height: 300, overflowY: 'auto'}}
+                <Grid xs={12.4} md={12.6} lg={12.4} sx={{width: 800}}>
+                  <AppLeftLarge
+                      sx={{ width: 650, height: 300, overflowY: 'auto'}}
                       title="Stocks"
                       list={stocks.slice(0,5).map((stock, index) => ({
                         id: stock.id_stock,
@@ -522,25 +526,40 @@ export default function DashboardView() {
                       
                   </Stack>
                 </Grid>
-                <Grid container spacing={1}> 
-                  <Grid xs={6} md={6} lg={4}>
-                    <AppNewsUpdate
-                      sx={{ width: 250, height: 300, overflowY: 'auto'}}
-                      title="Planning 📅"
-                      list={[...Array(5)].map((_, index) => ({
-                        id: faker.string.uuid(),
-                        title: faker.person.jobTitle(),
-                        description: faker.commerce.productDescription(),
-                        image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                        postedAt: faker.date.recent(),
-                      }))}
-                    />
+                <Grid container spacing={19}> 
+                  <Grid xs={6} md={6} lg={5}>
+                  <Card 
+                          sx={{width: 375, height: 275, overflowY: 'auto',}}>
+                              <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between">
+                                <CardHeader title="Planning 📅"/>
+                              </Stack>
+                              <Stack spacing={1} sx={{ p: 1, pr: 0 }}>
+                              <TableContainer component={Paper}>
+                                <Table sx={{ minWidth: 310, maxWidth:310, margin: 2 }} aria-label="simple table">
+                                  <TableBody>
+                                    {Array.from({ length: 5 }).map((_, rowIndex) => (
+                                      <TableRow key={rowIndex}>
+                                        {Array.from({ length: 5 }).map((__, colIndex) => (
+                                          <TableCell key={colIndex} align="center" variant="head" style={{ border: '1px solid black' }}>
+                                            <Typography>
+                                              {rowIndex === 0 ? daysOfWeek[colIndex] : ' '}
+                                            </Typography>
+                                          </TableCell>
+                                        ))}
+                                      </TableRow>
+                                    ))}
+                                  </TableBody>
+                                </Table>
+                              </TableContainer>
+                              </Stack>
+                          </Card>
+                      
+                    
                   </Grid>
-                  <Grid xs={6} md={6} lg={4}>
-                      <AppChangeUpdate
-                        sx={{ width: 540, height: 200, overflowY: 'auto'}}
+                  <Grid xs={10} md={6} lg={5}>
+                      <AppLeftShort
+                        sx={{ width: 800, height: 150, overflowY: 'auto'}}                        
                         title="Tâches 📝"
-                        path="/taches"
                         list={taches.slice(0,5).map(tache => ({
                           title: tache.libelle,
                           description: tache.assigne,
@@ -578,7 +597,7 @@ export default function DashboardView() {
                 </Grid>
               <Grid xs={6} md={6} lg={6} >
                   <AppNewsUpdate
-                    sx={{  width: 540, height: 200, overflowY: 'auto'}}
+                    sx={{  width: 540, height: 200, overflowY: 'auto',marginRight: 2}}
                     title="Stocks à réapprovisionner 📦"
                     list={stocks.slice(0,5).map((stock, index) => ({
                       id: stock.id_stock,
@@ -591,7 +610,7 @@ export default function DashboardView() {
               </Grid>
               <Grid xs={6} md={6} lg={6}>
                   <AppNewsUpdate
-                    sx={{  width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
+                    sx={{  width: 540, height: 200, overflowY: 'auto' }}
                     title="Derniers réapprovisionnements 📦"
                     list={reappros.slice(0,5).map(reappro => ({
                       id: reappro.id_reappro,
@@ -606,7 +625,7 @@ export default function DashboardView() {
             <Grid container spacing={1} sx={{ marginBottom: 3 }}> 
               <Grid xs={6} md={6} lg={6}>
                   <AppNewsUpdate
-                    sx={{ width: 540, height: 200, overflowY: 'auto'}}
+                    sx={{ width: 540, height: 200, overflowY: 'auto',marginRight: 2,marginLeft:0}}
                     title="Niveaux des cuves 🛢️"
                     path="/carburants"
                     list={carburants.slice(0,5).map(carburant => ({
@@ -619,7 +638,7 @@ export default function DashboardView() {
               </Grid>
               <Grid xs={6} md={6} lg={6}>
                   <AppChangeUpdate
-                    sx={{ width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
+                    sx={{ width: 540, height: 200, overflowY: 'auto'}}
                     title="Modification des prix du carburant ⛽️"
                     path="/carburants"
                     list={carburants.slice(0,5).map(carburant => ({
@@ -632,7 +651,7 @@ export default function DashboardView() {
                   />
               </Grid>
             </Grid>
-            <Grid container spacing={1} sx={{ marginBottom: 3 }}> 
+            <Grid container spacing={1} sx={{ marginBottom: 3 }} alignItems='left'> 
               {/* todo modifier ces deux  pour avoiir titre image boutton */}
               <Grid xs={6} md={6} lg={6}>
                   <AppNewsUpdate

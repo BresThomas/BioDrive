@@ -25,7 +25,7 @@ export default function AppChangeUpdate({ title, subheader, list, path, isRunnin
     return (
     <Card 
     sx={{
-        width: 520, height: 175,
+        width: 520, height: 215,
         overflowY: 'auto',
         ...other
     }}>
@@ -126,7 +126,7 @@ return (
         
 
     </Box>
-    <Box style={{ display: 'flex', gap: '5px' }}>
+    <Box style={{ display: 'flex', gap: '5px' ,marginRight:"15px"}}>
         {button1}
         {button2}
     </Box>

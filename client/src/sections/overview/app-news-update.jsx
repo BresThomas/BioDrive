@@ -29,7 +29,7 @@ export default function AppNewsUpdate({ title, subheader, list, path, isRunning,
     sx={{
       // width: '344px',
       // height: '200px',
-      width: 520, height: 175,
+      width: 520, height: 220,
       overflowY: 'auto',
       ...other
     }}>

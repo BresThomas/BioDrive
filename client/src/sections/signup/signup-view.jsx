@@ -193,7 +193,7 @@ const SignupView = () => {
           <Typography variant="body2" sx={{ mt: 2, mb: 5 }}>
             Vous avez déjà un compte ?
             <Link href="/login" variant="subtitle2" sx={{ ml: 0.5 }}>
-              Se connecter
+            cliquez-ici
             </Link>
           </Typography>
 

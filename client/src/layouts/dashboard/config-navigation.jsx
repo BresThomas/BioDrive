@@ -11,37 +11,7 @@ const navConfig = [
     title: 'ERP Employé',
     path: '/dashboard',
     icon: icon('ic_analytics'),
-  },
-  { 
-    title: 'transactions',
-    path: '/transactions',
-    icon: icon('ic_user'),
-  },    
-  {
-    title: 'pompes',
-    path: '/pompes',
-    icon: icon('ic_user'),
-  },  
-  {
-    title: 'stocks',
-    path: '/stocks',
-    icon: icon('ic_user'),
-  },  
-  {
-    title: 'incidents',
-    path: '/incidents',
-    icon: icon('ic_user'),
-  },  
-  {
-    title: 'services et logistique',
-    path: '/servicesAndLogistique',
-    icon: icon('ic_analytics'),
-  },  
-  {
-    title: 'autre',
-    path: '/autre',
-    icon: icon('ic_user'),
-  },
+  },      
   {
     title: 'ERP Gérant',
     path: '/gerant',

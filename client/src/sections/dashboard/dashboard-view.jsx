@@ -19,7 +19,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { onAuthStateChanged } from "firebase/auth";
 
-import PostSearch from "../blog/post-search";
+import ProductSearch from "../products/product-search";
 import Iconify from "../../components/iconify";
 import { RouterLink } from "../../routes/components";
 import { usePathname, useRouter } from "../../routes/hooks";
@@ -53,16 +53,12 @@ import CartView from "../products/view/cart-view";
 
 const paymentModes = ["Cartes bancaire", "Liquide"];
 
-let selectedProduct;
-
-function setSelectedProduct(newValue) {
-    selectedProduct = newValue;
-}
 
 export default function DashboardView() {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [selectedProduct, setSelectedProduct] = useState(null);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (userLogged) => {
@@ -93,11 +89,7 @@ export default function DashboardView() {
         }
     }, [user, loading, navigate]);
 
-    const [cart, setCart] = useState(
-        window.localStorage.getItem("cart")
-            ? new Cart(JSON.parse(window.localStorage.getItem("cart")))
-            : new Cart([])
-    );
+    const [cart, setCart] = useState(new Cart());
 
     console.log("Cart:", cart);
 
@@ -132,51 +124,65 @@ export default function DashboardView() {
         router.push("/dashboard");
     };
 
-    const handlePayment = async () => {
-        if (enteredValue === "") {
-            alert("Veuillez valider le montant à régler");
-        } else {
-            alert("Paiement effectué avec succès");
-            await sendTransaction();
-        }
+    const sendTransaction = async () => {
+        const paymentResponse = await fetch("http://localhost:3001/api/newPaiement", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                somme : cart.getTotal(),
+                type : paymentMode,
+            }),
+        });
+        
+        const paymentResponseData = await paymentResponse.text();
+
+        const transacResponse = await fetch("http://localhost:3001/api/newTransaction", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                paiement: paymentResponseData,
+                contenu: Array.from(cart.getItems(), ([product, quantity]) => ({product, quantity})),
+            }),
+        });
+
+        const transacResponseData = await transacResponse.text();
+
+        return transacResponseData;
     };
 
-    const sendTransaction = async (event) => {
-        const response = await fetch(
-            "http://localhost:3001/api/newTransaction",
+    const sendTransactionToCompteEnergie = async (idTransaction) => {
+        await fetch(
+            `http://localhost:3001/api/updateCompteEnergieTransaction/${idCompteEnergie}`,
             {
-                method: "POST",
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    paymentMode,
-                    value: enteredValue,
+                    id: idTransaction,
                 }),
             }
         );
     };
 
-    const handleAddProduct = () => {
-        if (selectedProduct) {
+    const addProduct = () => {
+        if (selectedProduct !== null) {
             const updatedCart = new Cart(cart.getItems());
             updatedCart.addItem(selectedProduct);
             setCart(updatedCart);
-            window.localStorage.setItem(
-                "cart",
-                JSON.stringify(updatedCart.getItems())
-            );
         }
-        console.log("Cart:", cart);
     };
 
-    const handleClearCart = () => {
-        const updatedCart = new Cart();
-        setCart(updatedCart);
-        window.localStorage.setItem(
-            "cart",
-            JSON.stringify(updatedCart.getItems())
-        );
+    const clear = () => {
+        setCart(new Cart());
+        setEnteredValue("");
+        setEmailClient("");
+        setPaymentMode("");
+        setIdCompteEnergie("");
     };
 
     const [incidents, setIncident] = useState([]);
@@ -501,9 +507,12 @@ export default function DashboardView() {
             <Typography variant="h6">Ajout d&apos;un produit</Typography>
 
             <Stack spacing={3} direction="row" alignItems="center">
-                <PostSearch
-                    posts={products}
-                    onChange={setSelectedProduct}
+                <ProductSearch
+                    items={products}
+                    onValueChange={(selected) =>
+                        setSelectedProduct(selected)
+                    }
+
                 />
                 <Button
                     sx={{ width: "22.5%" }}
@@ -511,7 +520,7 @@ export default function DashboardView() {
                     type="submit"
                     variant="outlined"
                     color="inherit"
-                    onClick={handleClearCart}
+                    onClick={clear}
                     startIcon={<Iconify icon="tabler:reload" />}
                 >
                     Clear
@@ -522,7 +531,7 @@ export default function DashboardView() {
                     type="submit"
                     variant="contained"
                     color="inherit"
-                    onClick={handleAddProduct}
+                    onClick={addProduct}
                     startIcon={<Iconify icon="fluent:add-12-regular" />}
                 >
                     Ajouter
@@ -531,17 +540,66 @@ export default function DashboardView() {
         </Stack>
     );
 
-    const cashRegisterForm = (
+    const [idCompteEnergie, setIdCompteEnergie] = useState("");
+
+    const [emailClient, setEmailClient] = useState("");
+
+    const handleChangeEmail = (event) => {
+        const { value } = event.target;
+        setEmailClient(value);
+    };
+
+    const handleLinkClient = async () => {
+        const clientResponse = await fetch(`http://localhost:3001/api/client/email/${emailClient}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        }).then((response) => response.json());
+        if (clientResponse.error) {
+            alert("Client non trouvé");
+            return;
+        }
+        alert("Client ajouté avec succès");
+        setIdCompteEnergie(clientResponse.id_compte_energie);
+    };
+
+    const linkClientForm = (
         <Stack spacing={3} alignItems="left">
-            <Typography variant="h6">
-                Enregistrement d&apos;un paiement 🧾
+            <Typography variant="h6">Lier un compte client</Typography>
+            <Stack spacing={3} direction="row" alignItems="center">
+                <TextField sx={{ width: "80%" }} label="Adresse e-mail" value={emailClient} onChange={handleChangeEmail}/>
+                <Button variant="contained" color="primary" onClick={handleLinkClient}>
+                    Ajouter
+                </Button>
+            </Stack>
+        </Stack>
+    );
+    
+    const handlePayment = async () => {
+        if (cart.getTotal() === 0) {
+            alert("Veuillez valider le montant à régler");
+        } else if(paymentMode === "") {
+            alert("Veuillez choisir un mode de paiement");
+        } else {
+            alert("Paiement effectué avec succès");
+            const transactionResponse = await sendTransaction();
+            if(idCompteEnergie !== "") {
+                await sendTransactionToCompteEnergie(transactionResponse);
+            }
+            clear();
+        }
+    };
+
+    const cashRegisterForm = (
+        <Stack spacing={3} alignItems="left" sx={{ width: "100%" }} >
+            <Typography variant="h6" >
+                Enregistrement du paiement 🧾
             </Typography>
 
-            <Stack spacing={3} direction="row" alignItems="center">
-                <Typography variant="h6">Somme total à régler:</Typography>
-                <Typography variant="h6">{cart.getTotal()} €</Typography>
-
+            <Stack spacing={3} direction="row" alignItems="center" >
                 <Select
+                    sx={{ width: "240px", }}
                     value={paymentMode}
                     onChange={(event) => setPaymentMode(event.target.value)}
                     displayEmpty
@@ -562,14 +620,13 @@ export default function DashboardView() {
                 </Select>
 
                 <LoadingButton
-                    sx={{ width: "22.5%" }}
                     size="large"
                     type="submit"
                     variant="contained"
                     color="inherit"
                     onClick={handlePayment}
                 >
-                    Procéder au paiement
+                    Payer
                 </LoadingButton>
             </Stack>
         </Stack>
@@ -588,8 +645,8 @@ export default function DashboardView() {
                                 alignItems="center"
                                 justifyContent="center"
                                 sx={{ height: 1, width: "750px" }}
-                            >
-                                <Grid xs={12.4} md={12.6} lg={12.4}>
+                            >   
+                                <Grid xs={12} md={12.4} lg={12}>
                                     <Card
                                         sx={{
                                             p: 3,
@@ -599,7 +656,21 @@ export default function DashboardView() {
                                         {addProductForm}
                                     </Card>
                                 </Grid>
-                                <Grid xs={12.4} md={12.6} lg={12.4}>
+                                <Stack
+                                    direction="row"
+                                    justifyContent="space-between"
+                                >
+                                <Grid>
+                                    <Card
+                                        sx={{
+                                            p: 3,
+                                            width: 1,
+                                        }}
+                                    >
+                                        {linkClientForm}
+                                    </Card>
+                                </Grid>
+                                <Grid>
                                     <Card
                                         sx={{
                                             p: 3,
@@ -609,6 +680,7 @@ export default function DashboardView() {
                                         {cashRegisterForm}
                                     </Card>
                                 </Grid>
+                                </Stack>
                                 <Grid
                                     container
                                     spacing={3}
@@ -616,6 +688,10 @@ export default function DashboardView() {
                                 >
                                     <Grid>
                                         <AppNumPad
+                                            sx={{
+                                                p: 3,
+                                                width: 1,
+                                            }}
                                             onValueChange={handleValueChange}
                                         />
                                     </Grid>

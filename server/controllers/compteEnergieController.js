@@ -71,6 +71,26 @@ exports.updateCompteEnergie = async (req, res, next) => {
   }
 };
 
+// Mettre à jour un compte énergie avec une nouvelle transaction
+exports.updateCompteEnergieTransaction = async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    const data = req.body;
+    const compteEnergie = doc(db, 'comptesEnergie', id);
+    const compteEnergieData = await getDoc(compteEnergie);
+    if (compteEnergieData.exists()) {
+      const transactions = compteEnergieData.data().transactions;
+      transactions.push(data);
+      await updateDoc(compteEnergie, { transactions });
+      res.status(200).send('Transaction ajoutée avec succès');
+    } else {
+      res.status(404).send('Compte énergie non trouvé');
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+}
+
 // Supprimer un compte énergie
 exports.deleteCompteEnergie = async (req, res, next) => {
   try {

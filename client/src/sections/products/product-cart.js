@@ -1,5 +1,5 @@
 export default class Cart {
-  constructor(cart = JSON.parse(window.localStorage.getItem('cart')) || new Map()) {
+  constructor(cart = new Map()) {
     this.items = cart;
     if (cart.size === 0) {
       this.itemCount = 0;
@@ -7,6 +7,7 @@ export default class Cart {
     } else {
       this.updateCart();
     }
+    this.reductions = [];
   }
 
   hasItem(productId) {
@@ -60,6 +61,10 @@ export default class Cart {
 
   getTotal() {
     return this.total;
+  }
+
+  getReductions() {
+    return this.reductions;
   }
 
   getSize() {

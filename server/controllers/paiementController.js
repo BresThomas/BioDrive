@@ -8,8 +8,8 @@ const db = getFirestore(firebase);
 const createPaiement = async (req, res, next) => {
   try {
     const data = req.body;
-    await addDoc(collection(db, 'paiements'), data);
-    res.status(200).send('Paiement créé avec succès');
+    const docRef = await addDoc(collection(db, 'paiements'), data);
+    res.status(200).send(docRef.id);
   } catch (error) {
     res.status(400).send(error.message);
   }

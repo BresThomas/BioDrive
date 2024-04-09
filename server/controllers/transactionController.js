@@ -17,8 +17,8 @@ const db = getFirestore(firebase);
 exports.createTransaction = async (req, res, next) => {
   try {
     const data = req.body;
-    await addDoc(collection(db, 'transactions'), data);
-    res.status(200).send('Transaction créée avec succès');
+    const doc = await addDoc(collection(db, 'transactions'), data);
+    res.status(200).send(doc.id);
   } catch (error) {
     res.status(400).send(error.message);
   }

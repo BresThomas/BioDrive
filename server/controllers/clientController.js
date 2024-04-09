@@ -62,6 +62,32 @@ exports.getClient = async (req, res, next) => {
   }
 };
 
+// Récupérer un client par son email
+exports.getClientByEmail = async (req, res, next) => {
+  try {
+    const email = req.params.email;
+    const clients = await getDocs(collection(db, 'clients'));
+    let clientFound = false;
+
+    if (clients.empty) {
+      res.status(400).send('Aucun client trouvé');
+    } else {
+      clients.forEach((doc) => {
+        if (doc.data().email === email) {
+          clientFound = true;
+          res.status(200).send(doc.data());
+        }
+      });
+
+      if (!clientFound) {
+        res.status(404).send('Client non trouvé');
+      }
+    }
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 // Mettre à jour un client
 exports.updateClient = async (req, res, next) => {
   try {

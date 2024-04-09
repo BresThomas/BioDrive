@@ -14,45 +14,51 @@ export default function CartView({ cart }) {
     const cartItems = cart.getItems();
 
     const infos = [];
-    if(cartItems instanceof Map){
-        cartItems.forEach((quantity, product) => {
-            infos.push([product.id, product.nom, product.prixClient, quantity]);
-        });
-        console.log(infos);
-    }
+    cartItems.forEach((quantity, product) => {
+        infos.push([product.id, product.nom, product.prixClient, quantity]);
+    });
 
     return (
         <Card
             sx={{
                 height: 400,
-                width: 380,
-                overflowY: "auto",
-                "& .MuiCardHeader-root": {
-                    position: "sticky",
-                    top: 0,
-                    backgroundColor: "white",
-                    zIndex: 1,
-                    paddingBottom: "20px",
-                },
+                width: 360,
+                display: "flex",
+                flexDirection: "column",
             }}
         >
-            <CardHeader title="Panier du client 🛒"/>
-            <Stack spacing={2} sx={{ p: 3 }}>
-                {   cartItems instanceof Map &&
+            <CardHeader title="Panier du client 🛒" />
+            <Stack spacing={2} sx={{ p: 3, flexGrow: 1, overflowY: "auto" }}>
+                {cartItems instanceof Map &&
                     infos.map((product, index) => (
-                        <CartItem key={index} infos={{id: product[0], name: product[1], unitPrice: product[2], quantity: product[3]}} />
-                    ))
-                }
+                        <CartItem
+                            key={index}
+                            infos={{
+                                id: product[0],
+                                name: product[1],
+                                unitPrice: product[2],
+                                quantity: product[3],
+                            }}
+                        />
+                    ))}
             </Stack>
             <Divider sx={{ mt: 0 }} />
-            <Box sx={{ p: 3, pt: 0 }} style={{position: "sticky", bottom: 0, backgroundColor: "white"}}>
+            <Box sx={{ p: 3 }}>
                 <Stack direction="row" justifyContent="space-between">
-                <Typography variant="subtitle1" sx={{ color: "inherit" }} style={{textAlign: "left"}}>
-                    Articles : {cart.getItemCount()}
-                </Typography>
-                <Typography variant="subtitle1" sx={{ color: "inherit" }} style={{textAlign: "right"}}>
-                    Total : {cart.getTotal()} €
-                </Typography>
+                    <Typography
+                        variant="subtitle1"
+                        sx={{ color: "inherit" }}
+                        style={{ textAlign: "left" }}
+                    >
+                        Articles : {cart.getItemCount()}
+                    </Typography>
+                    <Typography
+                        variant="subtitle1"
+                        sx={{ color: "inherit" }}
+                        style={{ textAlign: "right" }}
+                    >
+                        Total : {cart.getTotal()} €
+                    </Typography>
                 </Stack>
             </Box>
         </Card>
@@ -73,15 +79,23 @@ function CartItem({ infos }) {
     const totalPrice = quantity * unitPrice;
 
     return (
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Stack direction="column" alignItems="left" >
+        <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+        >
+            <Stack direction="column" alignItems="left">
                 <Typography
                     variant="subtitle1"
                     sx={{ color: "inherit" }}
-                    noWrap>
+                    noWrap
+                >
                     {name}
                 </Typography>
-                <Typography variant="subtitle2" sx={{ color: "text.secondary" }}>
+                <Typography
+                    variant="subtitle2"
+                    sx={{ color: "text.secondary" }}
+                >
                     {unitPrice} € x {quantity}
                 </Typography>
             </Stack>

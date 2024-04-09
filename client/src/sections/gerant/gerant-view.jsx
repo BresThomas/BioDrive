@@ -37,7 +37,7 @@ import navConfig from '../../layouts/dashboard/config-navigation';
 const filtreRecherche = ['Tous', 'Nom du produit', 'Identifiant', 'Catégorie'];
 
 export default function DashboardView() {
-  const daysOfWeek = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+  const daysOfWeek = ['L', 'M', 'M', 'J', 'V'];
 
 
   const [incidents, setIncident] = useState([]);
@@ -535,11 +535,11 @@ export default function DashboardView() {
                               </Stack>
                               <Stack spacing={1} sx={{ p: 1, pr: 0 }}>
                               <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 310 }} aria-label="simple table">
+                                <Table sx={{ minWidth: 310, maxWidth:310, margin: 2 }} aria-label="simple table">
                                   <TableBody>
                                     {Array.from({ length: 5 }).map((_, rowIndex) => (
                                       <TableRow key={rowIndex}>
-                                        {Array.from({ length: 7 }).map((__, colIndex) => (
+                                        {Array.from({ length: 5 }).map((__, colIndex) => (
                                           <TableCell key={colIndex} align="center" variant="head" style={{ border: '1px solid black' }}>
                                             <Typography>
                                               {rowIndex === 0 ? daysOfWeek[colIndex] : ' '}
@@ -597,7 +597,7 @@ export default function DashboardView() {
                 </Grid>
               <Grid xs={6} md={6} lg={6} >
                   <AppNewsUpdate
-                    sx={{  width: 540, height: 200, overflowY: 'auto'}}
+                    sx={{  width: 540, height: 200, overflowY: 'auto',marginRight: 2}}
                     title="Stocks à réapprovisionner 📦"
                     list={stocks.slice(0,5).map((stock, index) => ({
                       id: stock.id_stock,
@@ -610,7 +610,7 @@ export default function DashboardView() {
               </Grid>
               <Grid xs={6} md={6} lg={6}>
                   <AppNewsUpdate
-                    sx={{  width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
+                    sx={{  width: 540, height: 200, overflowY: 'auto' }}
                     title="Derniers réapprovisionnements 📦"
                     list={reappros.slice(0,5).map(reappro => ({
                       id: reappro.id_reappro,
@@ -625,7 +625,7 @@ export default function DashboardView() {
             <Grid container spacing={1} sx={{ marginBottom: 3 }}> 
               <Grid xs={6} md={6} lg={6}>
                   <AppNewsUpdate
-                    sx={{ width: 540, height: 200, overflowY: 'auto'}}
+                    sx={{ width: 540, height: 200, overflowY: 'auto',marginRight: 2,marginLeft:0}}
                     title="Niveaux des cuves 🛢️"
                     path="/carburants"
                     list={carburants.slice(0,5).map(carburant => ({
@@ -638,7 +638,7 @@ export default function DashboardView() {
               </Grid>
               <Grid xs={6} md={6} lg={6}>
                   <AppChangeUpdate
-                    sx={{ width: 540, height: 200, overflowY: 'auto', marginLeft: 2 }}
+                    sx={{ width: 540, height: 200, overflowY: 'auto'}}
                     title="Modification des prix du carburant ⛽️"
                     path="/carburants"
                     list={carburants.slice(0,5).map(carburant => ({
@@ -651,7 +651,7 @@ export default function DashboardView() {
                   />
               </Grid>
             </Grid>
-            <Grid container spacing={1} sx={{ marginBottom: 3 }}> 
+            <Grid container spacing={1} sx={{ marginBottom: 3 }} alignItems='left'> 
               {/* todo modifier ces deux  pour avoiir titre image boutton */}
               <Grid xs={6} md={6} lg={6}>
                   <AppNewsUpdate

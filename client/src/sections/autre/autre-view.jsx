@@ -129,6 +129,25 @@ export default function DashboardView() {
             });
     }, []);
 
+    
+  const [stocks, setStocks] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:3001/api/stocks')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des données');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setStocks(data);
+      })
+      .catch(error => {
+        console.error("Erreur lors de la récupération des données:", error);
+      });
+  }, []);
+
     const handleClick = () => {
       router.push('/dashboard');
     };
@@ -289,21 +308,23 @@ export default function DashboardView() {
     );
 
     const listStock = (
-      <Stack alignItems="left">
-        <Stack direction="row" alignItems="center">
         <AppNewsUpdate
-                sx={{ width: 920, height: 200, overflowY: 'auto' }}
-                title="Stocks"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
-                }))}
-              />
-        </Stack>
-      </Stack>
+              sx={{
+                  width: 720,
+                  height: 200,
+                  overflowY: "auto",
+              }}
+              title="Stocks 📦"
+              path="/stocks"
+              list={stocks
+                  .slice(0, 5)
+                  .map((stock) => ({
+                      id: stock.id_stock,
+                      title: `ID stock : ${stock.id_stock}`,
+                      description: `Contenu : ${stock.details ? stock.details.join(", ") : ", "}`,
+                      image: `/assets/icons/stock.png`,
+                  }))}
+          />
     );  
 
     const listClient = (
@@ -334,45 +355,51 @@ export default function DashboardView() {
                       {searchProductFrom}
                     </Card>
                   </Grid>
-                <Grid xs={12.4} md={12.6} lg={12.4}>
-                  <Card sx={{ p: 3, width: 1,}}>
-                      {listStock}
-                    </Card>
-                  </Grid>
                   <Grid container spacing={19}> 
-                  <Grid xs={6} md={6} lg={5}>
-                  <Card 
-                          sx={{width: 375, height: 275, overflowY: 'auto',}}>
-                              <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between">
-                                <CardHeader title="Planning 📅"/>
-                              </Stack>
-                              <Stack spacing={1} sx={{ p: 1, pr: 0 }}>
-                              <TableContainer component={Paper}>
-                                <Table sx={{ minWidth: 310, maxWidth:310, margin: 2 }} aria-label="simple table">
-                                  <TableBody>
-                                    {Array.from({ length: 5 }).map((_, rowIndex) => (
-                                      <TableRow key={rowIndex}>
-                                        {Array.from({ length: 5 }).map((__, colIndex) => (
-                                          <TableCell key={colIndex} align="center" variant="head" style={{ border: '1px solid black' }}>
-                                            <Typography>
-                                              {rowIndex === 0 ? daysOfWeek[colIndex] : ' '}
-                                            </Typography>
-                                          </TableCell>
-                                        ))}
-                                      </TableRow>
-                                    ))}
-                                  </TableBody>
-                                </Table>
-                              </TableContainer>
-                              </Stack>
-                          </Card>
-                      
-                    
-                  </Grid>
+                    <Stack orientation="vertical" spacing={-15} justifyContent="space-between">
+                  <Grid xs={6} md={6} lg={5} sx={{ pl:25 }}>
+                    <Card 
+                            sx={{width: 750, height: 300, overflowY: 'auto' }}>
+                                <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between">
+                                  <CardHeader title="Planning 📅"/>
+                                </Stack>
+                                <Stack spacing={1} sx={{ p: 1, pr: 0 }}>
+                                <TableContainer component={Paper}>
+                                  <Table sx={{ minWidth: 500, maxWidth:500, margin: 2 }} aria-label="simple table">
+                                    <TableBody>
+                                      {Array.from({ length: 5 }).map((_, rowIndex) => (
+                                        <TableRow key={rowIndex}>
+                                          {Array.from({ length: 5 }).map((__, colIndex) => (
+                                            <TableCell key={colIndex} align="center" variant="head" style={{ border: '1px solid black' }}>
+                                              <Typography>
+                                                {rowIndex === 0 ? daysOfWeek[colIndex] : ' '}
+                                              </Typography>
+                                            </TableCell>
+                                          ))}
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                </TableContainer>
+                                </Stack>
+                            </Card>
+                  </Grid>          
+                  <Stack direction="row" spacing={-4} sx={{ pl: 15 }}>      
                   <Grid xs={10} md={6} lg={5}>
                       <AppLeftShort
-                        sx={{ width: 800, height: 150, overflowY: 'auto'}}                        
-                        title="Tâches 📝"
+                        title="Tâches futures 📝"
+                        list={taches.slice(0,5).map(tache => ({
+                          title: tache.libelle,
+                          description: tache.assigne,
+                          image: `/assets/icons/glass/ic_glass_message.png`,
+                          postedAt: tache.dateButoire,
+                          button1: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleDeleteTache(tache.id_tache)} >Supprimer</Button>,
+                        }))}
+                      />
+                  </Grid>                  
+                  <Grid xs={10} md={6} lg={5}>
+                      <AppLeftShort
+                        title="Tâches passées 📝"
                         list={taches.slice(0,5).map(tache => ({
                           title: tache.libelle,
                           description: tache.assigne,
@@ -382,6 +409,8 @@ export default function DashboardView() {
                         }))}
                       />
                   </Grid>
+                  </Stack>
+                  </Stack>
                 </Grid>
                   </Stack>    
                 </Grid>  
@@ -463,34 +492,6 @@ export default function DashboardView() {
                   }))}
                 />
               </Grid>
-          </Grid>
-          <Grid container spacing={3}>
-            <Grid xs={12} md={6} lg={4}>
-              <AppNewsUpdate sx={{ width: 520, height: 140, overflowY: 'auto' }}
-                title="Servces"
-                path="/users"
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  image: `/assets/images/covers/cover_${index + 1}.jpg`,
-                  postedAt: faker.date.recent(),
-                }))}
-              />
-            </Grid>
-            <Grid xs={12} md={6} lg={4}>
-              <AppNewsUpdate 
-                sx={{ width: 520, height: 140, overflowX: 'auto', overflowY: 'none',
-                  display: 'flex', flexDirection: 'row' }}
-                list={[...Array(5)].map((_, index) => ({
-                  id: faker.string.uuid(),
-                  title: faker.person.jobTitle(),
-                  description: faker.commerce.productDescription(),
-                  postedAt: faker.date.recent(),
-                }))}
-              />
-            </Grid>
-
           </Grid>
         </Grid>
       </Grid>

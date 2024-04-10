@@ -27,7 +27,6 @@ import AppLeftLarge from '../overview/app-left-large';
 import AppLeftShort from '../overview/app-left-short';
 import AppNewsUpdate from '../overview/app-news-update';
 import AjouterTache from '../../_mock/form/AjouterTache';
-import AjouterClient from '../../_mock/form/AjouterClient';
 import AppChangeUpdate from '../overview/app-change-update';
 import { usePathname, useRouter } from '../../routes/hooks';
 import navConfig from '../../layouts/dashboard/config-navigation';
@@ -558,14 +557,14 @@ export default function DashboardView() {
                   </Grid>
                   <Grid xs={10} md={6} lg={5}>
                       <AppLeftShort
-                        sx={{ width: 800, height: 150, overflowY: 'auto'}}                        
+                        sx={{ height: 150, overflowY: 'auto'}}                        
                         title="Tâches 📝"
                         list={taches.slice(0,5).map(tache => ({
                           title: tache.libelle,
                           description: tache.assigne,
                           image: `/assets/icons/glass/ic_glass_message.png`,
                           postedAt: tache.dateButoire,
-                          button1: <Button style={{ backgroundColor: 'black',color: 'white' }} onClick={() => handleDeleteTache(tache.id_tache)} >Supprimer</Button>,
+                          button1: <Button style={{ backgroundColor: 'black',color: 'white'}} onClick={() => handleDeleteTache(tache.id_tache)} >Supprimer</Button>,
                         }))}
                       />
                   </Grid>
@@ -625,7 +624,7 @@ export default function DashboardView() {
             <Grid container spacing={1} sx={{ marginBottom: 3 }}> 
               <Grid xs={6} md={6} lg={6}>
                   <AppNewsUpdate
-                    sx={{ width: 540, height: 200, overflowY: 'auto',marginRight: 2,marginLeft:0}}
+                    sx={{ width: 540, height: 100, overflowY: 'auto',marginRight: 2, marginLeft:0}}
                     title="Niveaux des cuves 🛢️"
                     path="/carburants"
                     list={carburants.slice(0,5).map(carburant => ({
@@ -638,7 +637,7 @@ export default function DashboardView() {
               </Grid>
               <Grid xs={6} md={6} lg={6}>
                   <AppChangeUpdate
-                    sx={{ width: 540, height: 200, overflowY: 'auto'}}
+                    sx={{ width: 540, height: 100, overflowY: 'auto'}}
                     title="Modification des prix du carburant ⛽️"
                     path="/carburants"
                     list={carburants.slice(0,5).map(carburant => ({
@@ -655,7 +654,7 @@ export default function DashboardView() {
               {/* todo modifier ces deux  pour avoiir titre image boutton */}
               <Grid xs={6} md={6} lg={6}>
                   <AppNewsUpdate
-                    sx={{ width: 540, height: 280, overflowY: 'auto'}}
+                    sx={{ width: 540, height: 180, overflowY: 'auto'}}
                     title="Table Relevé des Transactions Journalières"
                     list={table_transactions.slice(0,5).map((table_transaction, index) => ({
                       id: table_transaction.id_table_releve,
@@ -679,9 +678,6 @@ export default function DashboardView() {
                     }))} 
                   />
               </Grid>
-            <Card sx={{p: 2, width: 1, mt:3, }}>
-              <AjouterClient />
-            </Card>
             </Grid>
           </Stack>
         </Grid>

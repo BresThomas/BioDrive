@@ -147,7 +147,14 @@ export default function PompesView() {
           </Stack>
       </Grid>
       <Box pb={3} pt={3} >
+        <Card
+            sx={{
+                p: 2,
+                mb: 1,
+                width: 1,
+            }}>
           { renderFormPompes("Ajouter une pompe") } 
+          </Card>
         </Box>
       <Card>
         <PompesTableToolbar

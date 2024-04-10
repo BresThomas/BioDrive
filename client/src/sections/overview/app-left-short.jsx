@@ -25,7 +25,7 @@ export default function AppLeftShort({ title, subheader, list, path, isRunning, 
     return (
     <Card 
     sx={{
-        width: 380, height: 275,
+        width: 375, height: 275,
         overflowY: 'auto',
         ...other
     }}>

@@ -21,7 +21,7 @@ export default function CartView({ cart }) {
     return (
         <Card
             sx={{
-                height: 400,
+                height: 500,
                 width: 360,
                 display: "flex",
                 flexDirection: "column",

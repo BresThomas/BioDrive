@@ -39,6 +39,7 @@ import AppCurrentSubject from "../overview/app-current-subject";
 import AppConversionRates from "../overview/app-conversion-rates";
 import AppNumPad from "../overview/app-numpad";
 
+import AjouterClient from '../../_mock/form/AjouterClient'; 
 import { NAV } from "../../layouts/dashboard/config-layout";
 import navConfig from "../../layouts/dashboard/config-navigation";
 import { posts } from "../../_mock/blog";
@@ -742,7 +743,7 @@ export default function DashboardView() {
                                         sx={{
                                             width: 520,
                                             height: 200,
-                                            overflowY: "auto",
+                                            overflowY: 'auto',
                                         }}
                                         title="Incidents ⚠️"
                                         path="/incidents"
@@ -819,6 +820,9 @@ export default function DashboardView() {
                                             }))}
                                     />
                                 </Grid>
+                                <Card sx={{p: 2, width: 1, mt:3, }}>
+                                    <AjouterClient />
+                                </Card>
                             </Grid>
                         </Grid>
                     </Grid>

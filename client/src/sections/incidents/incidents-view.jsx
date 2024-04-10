@@ -163,8 +163,15 @@ export default function IncidentsView() {
           </Stack>
       </Grid>
       <Box pb={3} pt={3} >
+        <Card
+            sx={{
+                p: 2,
+                mb: 1,
+                width: 1,
+            }}>
           { renderFormIncident("Ajouter un incident") } 
-        </Box>
+        </Card>
+      </Box>
       <Card>
         <UserTableToolbar
           numSelected={selected.length}

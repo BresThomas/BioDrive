@@ -32,7 +32,7 @@ export default function AppNumPad({ onValueChange }) {
   };
 
   return (
-    <Card sx={{ width: '340px', height: '400px' }}>
+    <Card sx={{ width: '340px', height: '500px' }}>
       <Grid container spacing={2} alignItems="center" ml={1} mt={2} mr={1}>
         <Grid item mr={-1}>
           <TextField
@@ -41,7 +41,7 @@ export default function AppNumPad({ onValueChange }) {
             variant="outlined"
             value={value}
             onChange={(e)=>handleChange(e)}
-            sx={{ width: '285px', height: '60px' }}
+            sx={{ width: '285px', height: '100px' }}
           />
         </Grid>
         <Grid item>

@@ -27,8 +27,8 @@ export default function AppNewsUpdate({ title, subheader, list, path, isRunning,
   return (
     <Card 
     sx={{
-      // width: '344px',
-      // height: '200px',
+      // width: '520px',
+      // height: '150px',
       width: 520, height: 220,
       overflowY: 'auto',
       ...other

@@ -149,7 +149,14 @@ export default function StocksView() {
           </Stack>
       </Grid>
       <Box pb={3} pt={3} >
+        <Card
+            sx={{
+                p: 2,
+                mb: 1,
+                width: 1,
+            }}>
           { renderFormStock("Ajouter un stock") } 
+          </Card>
         </Box>
       <Card>
         <UserTableToolbar

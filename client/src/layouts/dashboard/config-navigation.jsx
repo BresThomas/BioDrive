@@ -16,6 +16,11 @@ const navConfig = [
     title: 'ERP Gérant',
     path: '/gerant',
     icon: icon('ic_user'),
+  },
+  {
+    title: 'ERP Gérant Suite',
+    path: '/autre',
+    icon: icon('ic_analytics'),
   }
 ];
 
